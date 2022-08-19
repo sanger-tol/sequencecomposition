@@ -34,15 +34,16 @@ workflow FASTA_WINDOWS {
     FASTAWINDOWS ( fasta )
     ch_versions       = ch_versions.mix(FASTAWINDOWS.out.versions)
 
-    ch_mono_bed_input = FASTAWINDOWS.out.mononuc.map { [it] } . combine(ch_mono_config)
-    ch_mono_beds      = COLUMN_TO_BEDGRAPH (
-        ch_mono_bed_input.map { [it[0][0] + [id: it[0][0].id + "." + it[3], dir: it[2]], it[0][1]] },
-        ch_mono_bed_input.map { it[1] }
-    ).bed
+    // Make the bedgraphs out of the frequency file
+    ch_mono_bed_input = FASTAWINDOWS.out.mononuc.combine(ch_mono_config)
+    ch_mono_bed       = COLUMN_TO_BEDGRAPH (
+        ch_mono_bed_input.map { [it[0] + [id: it[0].id + "." + it[4], dir: it[3]], it[1]] },
+        ch_mono_bed_input.map { it[2] }
+    ).bedgraph
     ch_versions       = ch_versions.mix(COLUMN_TO_BEDGRAPH.out.versions)
 
     // Compress the BED file
-    ch_compressed_bed = TABIX_BGZIP ( ch_mono_beds ).output
+    ch_compressed_bed = TABIX_BGZIP ( ch_mono_bed ).output
     ch_versions       = ch_versions.mix(TABIX_BGZIP.out.versions)
 
     // Index the BED file
