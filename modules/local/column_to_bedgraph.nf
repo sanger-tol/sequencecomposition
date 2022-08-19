@@ -1,5 +1,5 @@
 process COLUMN_TO_BEDGRAPH {
-    tag "$genome"
+    tag "$meta.id"
     label 'process_single'
 
     conda (params.enable_conda ? "conda-forge::python=3.9.1" : null)
