@@ -36,7 +36,7 @@ workflow FASTA_WINDOWS {
 
     ch_mono_bed_input = FASTAWINDOWS.out.mononuc.map { [it] } . combine(ch_mono_config)
     ch_mono_beds      = COLUMN_TO_BEDGRAPH (
-        ch_mono_bed_input.map { [it[0][0] + [id: it[3], dir: it[2]], "GCA." + it[0][1]] },
+        ch_mono_bed_input.map { [it[0][0] + [id: it[0][0].id + "." + it[3], dir: it[2]], it[0][1]] },
         ch_mono_bed_input.map { it[1] }
     ).bed
     ch_versions       = ch_versions.mix(COLUMN_TO_BEDGRAPH.out.versions)

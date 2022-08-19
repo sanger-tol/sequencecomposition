@@ -43,8 +43,10 @@ workflow SEQUENCECOMPOSITION {
 
     ch_versions = Channel.empty()
 
+    input = [[id: params.id], file(params.fasta)]
+
     // Only flow to gunzip when required
-    Channel.from( [ [[id: "test"], file(params.fasta)] ] )
+    Channel.from( [input] )
     .branch {
         meta, filename ->
             compressed : filename.getExtension().equals('gz')
