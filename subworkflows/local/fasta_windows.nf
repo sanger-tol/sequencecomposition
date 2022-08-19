@@ -21,6 +21,12 @@ ch_mono_config = Channel.from(
     [14, 'base_content/k4', 'tetranucShannon'],
 )
 
+multi_config = [
+    dinuc: ['base_content/k2', 'dinuc'],
+    trinuc: ['base_content/k3', 'trinuc'],
+    tetranuc: ['base_content/k4', 'tetranuc'],
+]
+
 workflow FASTA_WINDOWS {
 
     take:
@@ -42,8 +48,14 @@ workflow FASTA_WINDOWS {
     ).bedgraph
     ch_versions       = ch_versions.mix(COLUMN_TO_BEDGRAPH.out.versions)
 
+    // Add meta information to the tsv files
+    ch_bed_like       = ch_mono_bed
+        .mix( FASTAWINDOWS.out.dinuc.map { [it[0] + [id: it[0].id + "." + multi_config.dinuc[1], dir: multi_config.dinuc[0]], it[1]] } )
+        .mix( FASTAWINDOWS.out.trinuc.map { [it[0] + [id: it[0].id + "." + multi_config.trinuc[1], dir: multi_config.trinuc[0]], it[1]] } )
+        .mix( FASTAWINDOWS.out.tetranuc.map { [it[0] + [id: it[0].id + "." + multi_config.tetranuc[1], dir: multi_config.tetranuc[0]], it[1]] } )
+
     // Compress the BED file
-    ch_compressed_bed = TABIX_BGZIP ( ch_mono_bed ).output
+    ch_compressed_bed = TABIX_BGZIP ( ch_bed_like ).output
     ch_versions       = ch_versions.mix(TABIX_BGZIP.out.versions)
 
     // Index the BED file
