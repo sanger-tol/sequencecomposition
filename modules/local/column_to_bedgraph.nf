@@ -12,8 +12,8 @@ process COLUMN_TO_BEDGRAPH {
     val(column_number)
 
     output:
-    tuple val(meta), path("*.bed"), emit: bed
-    path "versions.yml"           , emit: versions
+    tuple val(meta), path("*.bedGraph"), emit: bedgraph
+    path "versions.yml"                , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -21,7 +21,7 @@ process COLUMN_TO_BEDGRAPH {
     script:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    cut -f1-3,$column_number $tsv | tail -n +2 > ${prefix}.bed
+    cut -f1-3,$column_number $tsv | tail -n +2 > ${prefix}.bedGraph
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
