@@ -3,14 +3,21 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v1.0dev - [date]
+## v1.0.0 - [date]
 
 Initial release of sanger-tol/sequencecomposition, created with the [nf-core](https://nf-co.re/) template.
 
 ### `Added`
 
-### `Fixed`
+- Run `fasta_windows` on an assembly
+- Convert all outputs to TSV and bedGraph files
+- Index all output files with `tabix`
 
 ### `Dependencies`
 
-### `Deprecated`
+All dependencies are automatically fetched by Singularity.
+
+- bgzip
+- fasta\_windows
+- tabix
+- python3
