@@ -7,7 +7,7 @@ include { FASTAWINDOWS            } from '../../modules/local/fastawindows'
 include { TABIX_BGZIP             } from '../../modules/local/tabix_bgzip'
 include { TABIX_TABIX             } from '../../modules/nf-core/modules/tabix/tabix/main'
 
-ch_mono_config = Channel.from(
+ch_freq_config = Channel.from(
     [4,  'base_content/k1', 'GC'],
     [5,  'base_content/k1', 'GC_skew'],
     [6,  'base_content/k1', 'nucShannon'],
@@ -22,8 +22,9 @@ ch_mono_config = Channel.from(
 )
 
 multi_config = [
-    dinuc: ['base_content/k2', 'dinuc'],
-    trinuc: ['base_content/k3', 'trinuc'],
+    mononuc:  ['base_content/k1', 'mononuc'],
+    dinuc:    ['base_content/k2', 'dinuc'],
+    trinuc:   ['base_content/k3', 'trinuc'],
     tetranuc: ['base_content/k4', 'tetranuc'],
 ]
 
@@ -41,15 +42,16 @@ workflow FASTA_WINDOWS {
     ch_versions       = ch_versions.mix(FASTAWINDOWS.out.versions)
 
     // Make the bedgraphs out of the frequency file
-    ch_mono_bed_input = FASTAWINDOWS.out.mononuc.combine(ch_mono_config)
-    ch_mono_bed       = COLUMN_TO_BEDGRAPH (
-        ch_mono_bed_input.map { [it[0] + [id: it[0].id + "." + it[4], dir: it[3]], it[1]] },
-        ch_mono_bed_input.map { it[2] }
+    ch_freq_bed_input = FASTAWINDOWS.out.freq.combine(ch_freq_config)
+    ch_freq_bed       = COLUMN_TO_BEDGRAPH (
+        ch_freq_bed_input.map { [it[0] + [id: it[0].id + "." + it[4], dir: it[3]], it[1]] },
+        ch_freq_bed_input.map { it[2] }
     ).bedgraph
     ch_versions       = ch_versions.mix(COLUMN_TO_BEDGRAPH.out.versions)
 
     // Add meta information to the tsv files
-    ch_bed_like       = ch_mono_bed
+    ch_bed_like       = ch_freq_bed
+        .mix( FASTAWINDOWS.out.mononuc.map { [it[0] + [id: it[0].id + "." + multi_config.mononuc[1], dir: multi_config.mononuc[0]], it[1]] } )
         .mix( FASTAWINDOWS.out.dinuc.map { [it[0] + [id: it[0].id + "." + multi_config.dinuc[1], dir: multi_config.dinuc[0]], it[1]] } )
         .mix( FASTAWINDOWS.out.trinuc.map { [it[0] + [id: it[0].id + "." + multi_config.trinuc[1], dir: multi_config.trinuc[0]], it[1]] } )
         .mix( FASTAWINDOWS.out.tetranuc.map { [it[0] + [id: it[0].id + "." + multi_config.tetranuc[1], dir: multi_config.tetranuc[0]], it[1]] } )
