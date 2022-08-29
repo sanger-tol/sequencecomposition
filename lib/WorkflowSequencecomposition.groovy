@@ -8,11 +8,19 @@ class WorkflowSequencecomposition {
     // Check and validate parameters
     //
     public static void initialise(params, log) {
-        
 
-        if (!params.fasta) {
-            log.error "Genome fasta file not specified with e.g. '--fasta genome.fa' or via a detectable config file."
-            System.exit(1)
+        // Check input has been provided
+        if (params.input) {
+            def f = new File(params.input);
+            if (!f.exists()) {
+                log.error "'${params.input}' doesn't exist"
+                System.exit(1)
+            }
+        } else {
+            if (!params.assembly_accession || !params.fasta || !params.outdir) {
+                log.error "Either --input, or --assembly_accession, --fasta, and --outdir must be provided"
+                System.exit(1)
+            }
         }
     }
 

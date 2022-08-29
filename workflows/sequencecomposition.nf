@@ -15,7 +15,7 @@ WorkflowSequencecomposition.initialise(params, log)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-//include { SAMPLESHEET_CHECK             } from '../modules/local/samplesheet_check'
+include { SAMPLESHEET_CHECK             } from '../modules/local/samplesheet_check'
 
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
@@ -43,22 +43,55 @@ workflow SEQUENCECOMPOSITION {
 
     ch_versions = Channel.empty()
 
-    input = [
+    ch_inputs = Channel.empty()
+    if (params.input) {
+
+        SAMPLESHEET_CHECK ( file(params.input, checkIfExists: true) )
+            .csv
+            // Provides species_dir and assembly_name
+            .splitCsv ( header:true, sep:',' )
+            // Add assembly_path, following the Tree of Life directory structure
+            .map {
+                it + [
+                    assembly_path: "${it["species_dir"]}/assembly/release/${it["assembly_name"]}/insdc",
+                    ]
+            }
+            // Load the accession number from file, following the Tree of Life directory structure
+            .map {
+                it + [
+                    assembly_accession: file("${it["assembly_path"]}/ACCESSION", checkIfExists: true).text.trim(),
+                    ]
+            }
+            // Convert to tuple(meta,file) as required by GUNZIP and FASTAWINDOWS
+            .map { [
+                [
+                    id: it["assembly_accession"],
+                    outdir: "${it["species_dir"]}/analysis/${it["assembly_name"]}",
+                ],
+                file("${it["assembly_path"]}/${it["assembly_accession"]}.fa.gz", checkIfExists: true),
+            ] }
+            .set { ch_inputs }
+
+    } else {
+
+        ch_inputs = Channel.from( [
+            [
                 [
                     id: params.assembly_accession,
                     outdir: params.outdir,
                 ],
                 file(params.fasta),
             ]
+        ] )
+
+    }
 
     // Only flow to gunzip when required
-    Channel.from( [input] )
-    .branch {
+    ch_parsed_fasta_name = ch_inputs.branch {
         meta, filename ->
             compressed : filename.getExtension().equals('gz')
             uncompressed : true
     }
-    .set { ch_parsed_fasta_name }
 
     // gunzip .fa.gz files
     ch_unzipped_fasta   = GUNZIP ( ch_parsed_fasta_name.compressed ).gunzip
