@@ -43,7 +43,13 @@ workflow SEQUENCECOMPOSITION {
 
     ch_versions = Channel.empty()
 
-    input = [[id: params.id], file(params.fasta)]
+    input = [
+                [
+                    id: params.id,
+                    outdir: params.outdir,
+                ],
+                file(params.fasta),
+            ]
 
     // Only flow to gunzip when required
     Channel.from( [input] )
