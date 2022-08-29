@@ -45,7 +45,7 @@ workflow SEQUENCECOMPOSITION {
 
     input = [
                 [
-                    id: params.id,
+                    id: params.assembly_accession,
                     outdir: params.outdir,
                 ],
                 file(params.fasta),
