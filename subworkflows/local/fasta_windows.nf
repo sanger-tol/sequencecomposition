@@ -28,6 +28,8 @@ multi_config = [
     tetranuc: ['base_content/k4', 'tetranuc'],
 ]
 
+window_size_info = ".1k"
+
 workflow FASTA_WINDOWS {
 
     take:
@@ -44,17 +46,17 @@ workflow FASTA_WINDOWS {
     // Make the bedgraphs out of the frequency file
     ch_freq_bed_input = FASTAWINDOWS.out.freq.combine(ch_freq_config)
     ch_freq_bed       = COLUMN_TO_BEDGRAPH (
-        ch_freq_bed_input.map { [it[0] + [id: it[0].id + "." + it[4], subdir: it[3]], it[1]] },
+        ch_freq_bed_input.map { [it[0] + [id: it[0].id + "." + it[4] + window_size_info, subdir: it[3]], it[1]] },
         ch_freq_bed_input.map { it[2] }
     ).bedgraph
     ch_versions       = ch_versions.mix(COLUMN_TO_BEDGRAPH.out.versions)
 
     // Add meta information to the tsv files
     ch_bed_like       = ch_freq_bed
-        .mix( FASTAWINDOWS.out.mononuc.map { [it[0] + [id: it[0].id + "." + multi_config.mononuc[1], subdir: multi_config.mononuc[0]], it[1]] } )
-        .mix( FASTAWINDOWS.out.dinuc.map { [it[0] + [id: it[0].id + "." + multi_config.dinuc[1], subdir: multi_config.dinuc[0]], it[1]] } )
-        .mix( FASTAWINDOWS.out.trinuc.map { [it[0] + [id: it[0].id + "." + multi_config.trinuc[1], subdir: multi_config.trinuc[0]], it[1]] } )
-        .mix( FASTAWINDOWS.out.tetranuc.map { [it[0] + [id: it[0].id + "." + multi_config.tetranuc[1], subdir: multi_config.tetranuc[0]], it[1]] } )
+        .mix( FASTAWINDOWS.out.mononuc.map { [it[0] + [id: it[0].id + "." + multi_config.mononuc[1] + window_size_info, subdir: multi_config.mononuc[0]], it[1]] } )
+        .mix( FASTAWINDOWS.out.dinuc.map { [it[0] + [id: it[0].id + "." + multi_config.dinuc[1] + window_size_info, subdir: multi_config.dinuc[0]], it[1]] } )
+        .mix( FASTAWINDOWS.out.trinuc.map { [it[0] + [id: it[0].id + "." + multi_config.trinuc[1] + window_size_info, subdir: multi_config.trinuc[0]], it[1]] } )
+        .mix( FASTAWINDOWS.out.tetranuc.map { [it[0] + [id: it[0].id + "." + multi_config.tetranuc[1] + window_size_info, subdir: multi_config.tetranuc[0]], it[1]] } )
 
     // Compress the BED file
     ch_compressed_bed = TABIX_BGZIP ( ch_bed_like ).output
