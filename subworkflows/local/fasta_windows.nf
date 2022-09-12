@@ -5,7 +5,8 @@
 include { COLUMN_TO_BEDGRAPH      } from '../../modules/local/column_to_bedgraph'
 include { FASTAWINDOWS            } from '../../modules/nf-core/modules/fastawindows/main'
 include { TABIX_BGZIP             } from '../../modules/nf-core/modules/tabix/bgzip/main'
-include { TABIX_TABIX             } from '../../modules/nf-core/modules/tabix/tabix/main'
+include { TABIX_TABIX as TABIX_TABIX_CSI   } from '../../modules/nf-core/modules/tabix/tabix/main'
+include { TABIX_TABIX as TABIX_TABIX_TBI   } from '../../modules/nf-core/modules/tabix/tabix/main'
 
 ch_freq_config = Channel.of(
     [4,  'base_content/k1', 'GC'],
@@ -62,9 +63,11 @@ workflow FASTA_WINDOWS {
     ch_compressed_bed = TABIX_BGZIP ( ch_bed_like ).output
     ch_versions       = ch_versions.mix(TABIX_BGZIP.out.versions)
 
-    // Index the BED file
-    ch_indexed_bed    = TABIX_TABIX ( ch_compressed_bed ).tbi
-    ch_versions       = ch_versions.mix(TABIX_TABIX.out.versions)
+    // Index the BED file in two formats for maximum compatibility
+    ch_indexed_bed_csi= TABIX_TABIX_CSI ( ch_compressed_bed ).csi
+    ch_versions       = ch_versions.mix(TABIX_TABIX_CSI.out.versions)
+    ch_indexed_bed_tbi= TABIX_TABIX_TBI ( ch_compressed_bed ).tbi
+    ch_versions       = ch_versions.mix(TABIX_TABIX_TBI.out.versions)
 
 
     emit:
