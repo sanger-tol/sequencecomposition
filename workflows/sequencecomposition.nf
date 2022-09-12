@@ -74,7 +74,7 @@ workflow SEQUENCECOMPOSITION {
 
     } else {
 
-        ch_inputs = Channel.from( [
+        ch_inputs = Channel.of(
             [
                 [
                     id: params.assembly_accession,
@@ -82,7 +82,7 @@ workflow SEQUENCECOMPOSITION {
                 ],
                 file(params.fasta),
             ]
-        ] )
+        )
 
     }
 

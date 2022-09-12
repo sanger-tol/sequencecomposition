@@ -7,7 +7,7 @@ include { FASTAWINDOWS            } from '../../modules/nf-core/modules/fastawin
 include { TABIX_BGZIP             } from '../../modules/nf-core/modules/tabix/bgzip/main'
 include { TABIX_TABIX             } from '../../modules/nf-core/modules/tabix/tabix/main'
 
-ch_freq_config = Channel.from(
+ch_freq_config = Channel.of(
     [4,  'base_content/k1', 'GC'],
     [5,  'base_content/k1', 'GC_skew'],
     [6,  'base_content/k1', 'nucShannon'],
