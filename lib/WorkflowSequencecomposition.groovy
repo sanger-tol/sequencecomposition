@@ -17,8 +17,8 @@ class WorkflowSequencecomposition {
                 System.exit(1)
             }
         } else {
-            if (!params.assembly_accession || !params.fasta || !params.outdir) {
-                log.error "Either --input, or --assembly_accession, --fasta, and --outdir must be provided"
+            if (!params.fasta || !params.outdir) {
+                log.error "Either --input, or --fasta and--outdir must be provided"
                 System.exit(1)
             }
         }

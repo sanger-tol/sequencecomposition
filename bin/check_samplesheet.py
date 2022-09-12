@@ -28,7 +28,6 @@ class RowChecker:
     def __init__(
         self,
         dir_col="species_dir",
-        accession_col="assembly_accession",
         name_col="assembly_name",
         **kwargs,
     ):
@@ -38,19 +37,15 @@ class RowChecker:
         Args:
             dir_col (str): The name of the column that contains the species directory
                 (default "species_dir").
-            accession_col (str): The name of the column that contains the accession
-                number (default "assembly_accession").
             name_col (str): The name of the column that contains the assembly name
                 (default "assembly_name").
 
         """
         super().__init__(**kwargs)
         self._dir_col = dir_col
-        self._accession_col = accession_col
         self._name_col = name_col
         self._seen = set()
         self.modified = []
-        self._regex_accession = re.compile(r"^GCA_[0-9]{9}\.[0-9]+$")
 
     def validate_and_transform(self, row):
         """
@@ -62,18 +57,9 @@ class RowChecker:
 
         """
         self._validate_dir(row)
-        #self._validate_accession(row)
         self._validate_name(row)
-        #self._seen.add(row[self._accession_col])
         self._seen.add( (row[self._name_col], row[self._dir_col]) )
         self.modified.append(row)
-
-    def _validate_accession(self, row):
-        """Assert that the accession number exists and matches the expected nomenclature."""
-        assert len(row[self._accession_col]) > 0, "Accession number is required."
-        assert self._regex_accession.match(row[self._accession_col]), (
-            "Accession numbers must match %s." % self._regex_accession
-        )
 
     def _validate_dir(self, row):
         """Assert that the species directory is non-empty."""
@@ -86,9 +72,9 @@ class RowChecker:
             " " not in row[self._name_col]
         ), "Accession names must not contain whitespace."
 
-    def validate_unique_accessions(self):
+    def validate_unique_assemblies(self):
         """
-        Assert that the accession numbers are unique.
+        Assert that the assembly parameters are unique.
         """
         assert len(self._seen) == len(
             self.modified
@@ -145,13 +131,12 @@ def check_samplesheet(file_in, file_out):
     Example:
         This function checks that the samplesheet follows the following structure::
 
-            species_dir,assembly_name,assembly_accession
-            darwin/data/fungi/Laetiporus_sulphureus,gfLaeSulp1.1,GCA_927399515.1
-            darwin/data/mammals/Meles_meles,mMelMel3.2_paternal_haplotype,GCA_922984935.2
+            species_dir,assembly_name
+            darwin/data/fungi/Laetiporus_sulphureus,gfLaeSulp1.1
+            darwin/data/mammals/Meles_meles,mMelMel3.2_paternal_haplotype
     """
     required_columns = {
         "species_dir",
-        #"assembly_accession",
         "assembly_name",
     }
     # See https://docs.python.org/3.9/library/csv.html#id3 to read up on `newline=""`.
@@ -171,7 +156,7 @@ def check_samplesheet(file_in, file_out):
             except AssertionError as error:
                 logger.critical(f"{str(error)} On line {i + 2}.")
                 sys.exit(1)
-        checker.validate_unique_accessions()
+        checker.validate_unique_assemblies()
     header = list(reader.fieldnames)
     # See https://docs.python.org/3.9/library/csv.html#id3 to read up on `newline=""`.
     with file_out.open(mode="w", newline="") as out_handle:

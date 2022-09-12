@@ -77,7 +77,7 @@ workflow SEQUENCECOMPOSITION {
         ch_inputs = Channel.of(
             [
                 [
-                    id: params.assembly_accession,
+                    id: file(params.fasta).baseName,
                     outdir: params.outdir,
                 ],
                 file(params.fasta),
