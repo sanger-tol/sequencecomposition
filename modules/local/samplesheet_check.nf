@@ -15,6 +15,9 @@ process SAMPLESHEET_CHECK {
     path '*.csv'       , emit: csv
     path "versions.yml", emit: versions
 
+    when:
+    task.ext.when == null || task.ext.when
+
     script: // This script is bundled with the pipeline, in sanger-tol/insdcdownload/bin/
     """
     check_samplesheet.py \\
