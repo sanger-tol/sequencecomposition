@@ -3,8 +3,8 @@
 //
 
 include { COLUMN_TO_BEDGRAPH      } from '../../modules/local/column_to_bedgraph'
-include { FASTAWINDOWS            } from '../../modules/local/fastawindows'
-include { TABIX_BGZIP             } from '../../modules/local/tabix_bgzip'
+include { FASTAWINDOWS            } from '../../modules/nf-core/modules/fastawindows/main'
+include { TABIX_BGZIP             } from '../../modules/nf-core/modules/tabix/bgzip/main'
 include { TABIX_TABIX             } from '../../modules/nf-core/modules/tabix/tabix/main'
 
 ch_freq_config = Channel.from(

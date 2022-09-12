@@ -1,7 +1,5 @@
-// Modified version of the nf-core module tabix/bgzip that creates the .gzi
-// index as well. For simplicity, it's not able to uncompress files anymore.
 process TABIX_BGZIP {
-    tag "$input"
+    tag "$meta.id"
     label 'process_single'
 
     conda (params.enable_conda ? 'bioconda::tabix=1.11' : null)
@@ -13,9 +11,9 @@ process TABIX_BGZIP {
     tuple val(meta), path(input)
 
     output:
-    tuple val(meta), path("*.gz") , emit: output
-    tuple val(meta), path("*.gzi"), emit: index
-    path  "versions.yml"          , emit: versions
+    tuple val(meta), path("${prefix}*"), emit: output
+    tuple val(meta), path("*gzi")      , emit: gzi, optional: true
+    path  "versions.yml"               , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -23,11 +21,12 @@ process TABIX_BGZIP {
     script:
     def args = task.ext.args ?: ''
     prefix   = task.ext.prefix ?: "${meta.id}"
+    in_bgzip = input.toString().endsWith(".gz")
+    command1 = in_bgzip ? '-d' : '-c'
+    command2 = in_bgzip ? ''   : " > ${prefix}.${input.getExtension()}.gz"
+    gzi_args = args.matches("(^| )-i\\b") ? "-I ${prefix}.${input.getExtension()}.gz.gzi" : ''
     """
-    bgzip \
-        -i -I ${prefix}.${input.getExtension()}.gz.gzi \
-        $args -@${task.cpus} \
-        -c $input > ${prefix}.${input.getExtension()}.gz
+    bgzip $command1 $args $gzi_args -@${task.cpus} $input $command2
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
