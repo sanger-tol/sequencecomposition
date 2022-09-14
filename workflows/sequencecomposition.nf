@@ -66,7 +66,7 @@ workflow SEQUENCECOMPOSITION {
             .map { [
                 [
                     id: it["assembly_accession"],
-                    outdir: "${it["species_dir"]}/analysis/${it["assembly_name"]}",
+                    analysis_dir: "${it["species_dir"]}/analysis/${it["assembly_name"]}",
                 ],
                 file("${it["assembly_path"]}/${it["assembly_accession"]}.fa.gz", checkIfExists: true),
             ] }
@@ -78,7 +78,7 @@ workflow SEQUENCECOMPOSITION {
             [
                 [
                     id: file(params.fasta).baseName,
-                    outdir: params.outdir,
+                    analysis_dir: params.outdir,
                 ],
                 file(params.fasta),
             ]
