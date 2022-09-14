@@ -27,10 +27,10 @@ analysis
         │   ├── GCA_927399515.1.A.1k.bedGraph.gz
         │   ├── GCA_927399515.1.A.1k.bedGraph.gz.csi
         │   ├── GCA_927399515.1.A.1k.bedGraph.gz.tbi
-        │   ├── ATA_927399515.1.AT_skew.1k.bedGraph.gz
-        │   ├── ATA_927399515.1.AT_skew.1k.bedGraph.gz.csi
-        │   ├── ATA_927399515.1.AT_skew.1k.bedGraph.gz.tbi
-        │   ├── ATA_927399515.1.C.1k.bedGraph.gz
+        │   ├── GCA_927399515.1.AT_skew.1k.bedGraph.gz
+        │   ├── GCA_927399515.1.AT_skew.1k.bedGraph.gz.csi
+        │   ├── GCA_927399515.1.AT_skew.1k.bedGraph.gz.tbi
+        │   ├── GCA_927399515.1.C.1k.bedGraph.gz
         │   ├── GCA_927399515.1.C.1k.bedGraph.gz.csi
         │   ├── GCA_927399515.1.C.1k.bedGraph.gz.tbi
         │   ├── GCA_927399515.1.G.1k.bedGraph.gz
@@ -80,18 +80,18 @@ analysis
             └── GCA_927399515.1.tetranucShannon.1k.bedGraph.gz.tbi
 ```
 
-They all correspond to the various results of the pipelines. Like for the `assembly/` sub-directory,
+They all correspond to the various results of the pipelines. Following the convention,
 the directory structure includes the assembly name, e.g. `gfLaeSulp1.1`, and all files are named after the assembly accession, e.g. `GCA_927399515.1`.
 
-All outputs are in bedGraph and TSV (BED3+) formats, compressed with `bgzip` (`.gzi` index), and indexed with `tabix` (`.csi` and `.tbi` indices).
+All outputs are in bedGraph and TSV (BED3+) formats, compressed with `bgzip` and indexed with `tabix` (`.csi` and `.tbi` indices).
 
-For each k from 1 to 4, the k-mer counts are in `k${k}/GCA_*.*nuc.1k.tsv.gz`,
+For each _k_ from 1 to 4, the _k_-mer counts are in `k${k}/GCA_*.*nuc.1k.tsv.gz`,
 and the resulting Shannon diversity metrics in `k${k}/GCA_*.*nucShannon.1k.bedGraph.gz`.
 
 Additionally, these frequencies are extracted in bedGraph files:
 
 - each nucleotide, and N
-- GC, GC skew, and AT skew
+- GC content, GC skew, and AT skew
 - CpG
 
 ### Pipeline information

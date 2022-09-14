@@ -10,11 +10,17 @@ It also builds a set of common indices (such as `tabix`) to make search faster.
 The typical command for running the pipeline is as follows:
 
 ```console
-nextflow run sanger-tol/sequencecomposition --fasta https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/927/399/515/GCA_927399515.1_gfLaeSulp1.1/GCA_927399515.1_gfLaeSulp1.1_genomic.fna.gz --outdir <OUTDIR>
+nextflow run sanger-tol/sequencecomposition --fasta path/to/GCA_927399515.1_gfLaeSulp1.1_genomic.fa --outdir <OUTDIR>
 ```
 
-This will launch the pipeline, download the Fasta file from the NCBI, uncompress it, and run the sequence composition analysis on it into the `<OUTDIR>/` directory,
+This will launch the pipeline and run the sequence composition analysis on the Fasta file into the `<OUTDIR>/` directory,
 which will be created if needed.
+
+The pipeline can read Fasta files compressed by gzip, and also accepts remote files (Nextflow automatically download these), e.g.:
+
+```console
+nextflow run sanger-tol/sequencecomposition --fasta https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/927/399/515/GCA_927399515.1_gfLaeSulp1.1/GCA_927399515.1_gfLaeSulp1.1_genomic.fna.gz --outdir <OUTDIR>
+```
 
 Note that the pipeline will create the following files in your working directory:
 
@@ -98,9 +104,11 @@ If `-profile` is not specified, the pipeline will run locally and expect all sof
 - `conda`
   - A generic configuration profile to be used with [Conda](https://conda.io/docs/). Please only use Conda as a last resort i.e. when it's not possible to run the pipeline with Docker, Singularity, Podman, Shifter or Charliecloud.
 - `test`
-  - A profile with a complete configuration for automated testing. Corresponds to defining the assembly to download as command-line parameters
+  - A profile with a minimal configuration for automated testing
+  - Corresponds to defining the assembly to download as command-line parameters so needs no other parameters
 - `test_full`
-  - A profile with a complete, CSV-based, configuration for automated testing. Corresponds to defining the assembly to download as a CSV file
+  - A profile with a complete configuration for automated testing
+  - Corresponds to defining the assembly to download as a CSV file so needs no other parameters
 
 ### `-resume`
 
