@@ -25,7 +25,6 @@ process COLUMN_TO_BEDGRAPH {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        masking_to_bed: \$(md5sum \$(which masking_to_bed.py) | cut -d' ' -f1)
         python: \$(python --version | sed 's/Python //g')
     END_VERSIONS
     """
