@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# This script is modified from nf-core's default check_samplesheet.py
 
 
 """Provide a command line tool to validate and transform tabular samplesheets."""
@@ -63,22 +64,22 @@ class RowChecker:
 
     def _validate_dir(self, row):
         """Assert that the species directory is non-empty."""
-        assert len(row[self._dir_col]) > 0, "Species directory is required."
+        if not row[self._dir_col]:
+            raise AssertionError("Species directory is required.")
 
     def _validate_name(self, row):
         """Assert that the assembly name is non-empty and has no space."""
-        assert len(row[self._name_col]) > 0, "Accession name is required."
-        assert (
-            " " not in row[self._name_col]
-        ), "Accession names must not contain whitespace."
+        if not row[self._name_col]:
+            raise AssertionError("Assembly name is required.")
+        if " " in row[self._name_col]:
+            raise AssertionError("Accession names must not contain whitespace.")
 
     def validate_unique_assemblies(self):
         """
         Assert that the assembly parameters are unique.
         """
-        assert len(self._seen) == len(
-            self.modified
-        ), "The pair of sample name and FASTQ must be unique."
+        if len(self._seen) != len(self.modified):
+            raise AssertionError("The pair of species directories and assembly names must be unique.")
 
 
 def read_head(handle, num_lines=10):
