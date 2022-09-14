@@ -24,13 +24,6 @@ ch_freq_config = Channel.of(
     [16, 'base_content/k4', 'tetranucShannon'],
 )
 
-multi_config = [
-    mononuc:  ['base_content/k1', 'mononuc'],
-    dinuc:    ['base_content/k2', 'dinuc'],
-    trinuc:   ['base_content/k3', 'trinuc'],
-    tetranuc: ['base_content/k4', 'tetranuc'],
-]
-
 window_size_info = ".1k"
 
 workflow FASTA_WINDOWS {
@@ -59,10 +52,10 @@ workflow FASTA_WINDOWS {
     // Add meta information to the tsv files
     ch_bed_like       = ch_freq_bed
         // Like above, extend meta.id to name output files appropriately, and add meta.analysis_subdir
-        .mix( FASTAWINDOWS.out.mononuc.map { [it[0] + [id: it[0].id + "." + multi_config.mononuc[1] + window_size_info, analysis_subdir: multi_config.mononuc[0]], it[1]] } )
-        .mix( FASTAWINDOWS.out.dinuc.map { [it[0] + [id: it[0].id + "." + multi_config.dinuc[1] + window_size_info, analysis_subdir: multi_config.dinuc[0]], it[1]] } )
-        .mix( FASTAWINDOWS.out.trinuc.map { [it[0] + [id: it[0].id + "." + multi_config.trinuc[1] + window_size_info, analysis_subdir: multi_config.trinuc[0]], it[1]] } )
-        .mix( FASTAWINDOWS.out.tetranuc.map { [it[0] + [id: it[0].id + "." + multi_config.tetranuc[1] + window_size_info, analysis_subdir: multi_config.tetranuc[0]], it[1]] } )
+        .mix( FASTAWINDOWS.out.mononuc.map  { [it[0] + [id: it[0].id + ".mononuc"  + window_size_info, analysis_subdir: "base_content/k1"], it[1]] } )
+        .mix( FASTAWINDOWS.out.dinuc.map    { [it[0] + [id: it[0].id + ".dinuc"    + window_size_info, analysis_subdir: "base_content/k2"], it[1]] } )
+        .mix( FASTAWINDOWS.out.trinuc.map   { [it[0] + [id: it[0].id + ".trinuc"   + window_size_info, analysis_subdir: "base_content/k3"], it[1]] } )
+        .mix( FASTAWINDOWS.out.tetranuc.map { [it[0] + [id: it[0].id + ".tetranuc" + window_size_info, analysis_subdir: "base_content/k4"], it[1]] } )
 
     // Compress the BED file
     ch_compressed_bed = TABIX_BGZIP ( ch_bed_like ).output
