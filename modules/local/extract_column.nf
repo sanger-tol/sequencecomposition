@@ -1,4 +1,4 @@
-process COLUMN_TO_BEDGRAPH {
+process EXTRACT_COLUMN {
     tag "$meta.id"
     label 'process_single'
 

@@ -2,7 +2,7 @@
 // Run fasta_windows and prepare all the output files
 //
 
-include { COLUMN_TO_BEDGRAPH      } from '../../modules/local/column_to_bedgraph'
+include { EXTRACT_COLUMN          } from '../../modules/local/extract_column'
 include { FASTAWINDOWS            } from '../../modules/nf-core/modules/fastawindows/main'
 include { TABIX_BGZIP             } from '../../modules/nf-core/modules/tabix/bgzip/main'
 include { TABIX_TABIX as TABIX_TABIX_CSI   } from '../../modules/nf-core/modules/tabix/tabix/main'
@@ -44,13 +44,13 @@ workflow FASTA_WINDOWS {
 
     // Make the bedgraphs out of the frequency file
     ch_freq_bed_input = FASTAWINDOWS.out.freq.combine(ch_freq_config)
-    ch_freq_bed       = COLUMN_TO_BEDGRAPH (
+    ch_freq_bed       = EXTRACT_COLUMN (
         // Extend meta.id to name output files appropriately, and add meta.analysis_subdir
         ch_freq_bed_input.map { [it[0] + [id: it[0].id + "." + it[4] + window_size_info, analysis_subdir: it[3]], it[1]] },
         // config from ch_freq_config
         ch_freq_bed_input.map { it[2] }
     ).bedgraph
-    ch_versions       = ch_versions.mix(COLUMN_TO_BEDGRAPH.out.versions)
+    ch_versions       = ch_versions.mix(EXTRACT_COLUMN.out.versions)
 
     // Add meta information to the tsv files
     ch_bed_like       = ch_freq_bed
