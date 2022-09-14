@@ -8,6 +8,8 @@ include { TABIX_BGZIP             } from '../../modules/nf-core/modules/tabix/bg
 include { TABIX_TABIX as TABIX_TABIX_CSI   } from '../../modules/nf-core/modules/tabix/tabix/main'
 include { TABIX_TABIX as TABIX_TABIX_TBI   } from '../../modules/nf-core/modules/tabix/tabix/main'
 
+// List of the columns we want to extract as bedGraph from the frequency files,
+// with the subdirectory name and the relevant part of the file name
 ch_freq_config = Channel.of(
     [4,  'base_content/k1', 'GC'],
     [5,  'base_content/k1', 'GC_skew'],
@@ -24,6 +26,7 @@ ch_freq_config = Channel.of(
     [16, 'base_content/k4', 'tetranucShannon'],
 )
 
+// TODO: make it a pipeline-wide parameter ?
 window_size_info = ".1k"
 
 workflow FASTA_WINDOWS {
