@@ -31,6 +31,10 @@ jobs:
         with:
           version: "${{ matrix.NXF_VER }}"
 
-      - name: Run pipeline with test data
+      - name: Run the test profile of the pipeline
         run: |
           nextflow run ${GITHUB_WORKSPACE} -profile test,docker --outdir ./results
+
+      - name: Run the full test profile of the pipeline
+        run: |
+          nextflow run ${GITHUB_WORKSPACE} -profile test_full,docker --outdir ./results_full

@@ -8,7 +8,7 @@ include { SAMPLESHEET_CHECK } from '../../modules/local/samplesheet_check'
 workflow PARAMS_CHECK {
 
     take:
-    inputs          // tuple(samplesheet, fasta, outdir)
+    inputs          // tuple, see below
 
 
     main:

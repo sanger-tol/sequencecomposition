@@ -16,6 +16,11 @@
                 "type": "string",
                 "pattern": "^\\S+$",
                 "errorMessage": "Assembly name must be provided and cannot contain spaces"
+            },
+            "assembly_accession": {
+                "type": "string",
+                "pattern": "^GCA_[0-9]{9}\\.[0-9]+$",
+                "errorMessage": "Assembly accession number must be provided and be of the form GCA_*"
             }
         },
         "required": ["species_dir", "assembly_name"]
