@@ -30,21 +30,12 @@ workflow PARAMS_CHECK {
                     assembly_path: "${it["species_dir"]}/assembly/release/${it["assembly_name"]}/insdc",
                     ]
             }
-            .branch {
-                it ->
-                    // Check if there is an assembly_accession in the samplesheet
-                    with_accession: it["assembly_accession"]
-                    without_accession : true
-            }
-            .set { ch_samplesheet }
-
-            // If assembly_accession is missing:
-            // Load the accession number from file, following the Tree of Life directory structure
-            ch_samplesheet.with_accession.mix( ch_samplesheet.without_accession.map {
-                it + [
+            .map {
+                // If assembly_accession is missing, load the accession number from file, following the Tree of Life directory structure
+                it["assembly_accession"] ? it : it + [
                     assembly_accession: file("${it["assembly_path"]}/ACCESSION", checkIfExists: true).text.trim(),
-                    ]
-            } )
+                ]
+            }
             // Convert to tuple(meta,file) as required by GUNZIP and FASTAWINDOWS
             .map { [
                 [
