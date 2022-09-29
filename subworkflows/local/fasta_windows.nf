@@ -40,7 +40,7 @@ workflow FASTA_WINDOWS {
 
     // Run fasta_windows
     FASTAWINDOWS ( fasta )
-    ch_versions       = ch_versions.mix(FASTAWINDOWS.out.versions)
+    ch_versions       = ch_versions.mix(FASTAWINDOWS.out.versions.first())
 
     // Make the bedgraphs out of the frequency file
     ch_freq_bed_input = FASTAWINDOWS.out.freq.combine(ch_freq_config)
@@ -50,7 +50,7 @@ workflow FASTA_WINDOWS {
         // config from ch_freq_config
         ch_freq_bed_input.map { it[2] }
     ).bedgraph
-    ch_versions       = ch_versions.mix(EXTRACT_COLUMN.out.versions)
+    ch_versions       = ch_versions.mix(EXTRACT_COLUMN.out.versions.first())
 
     // Add meta information to the tsv files
     ch_bed_like       = ch_freq_bed
@@ -62,13 +62,13 @@ workflow FASTA_WINDOWS {
 
     // Compress the BED file
     ch_compressed_bed = TABIX_BGZIP ( ch_bed_like ).output
-    ch_versions       = ch_versions.mix(TABIX_BGZIP.out.versions)
+    ch_versions       = ch_versions.mix(TABIX_BGZIP.out.versions.first())
 
     // Index the BED file in two formats for maximum compatibility
     ch_indexed_bed_csi= TABIX_TABIX_CSI ( ch_compressed_bed ).csi
-    ch_versions       = ch_versions.mix(TABIX_TABIX_CSI.out.versions)
+    ch_versions       = ch_versions.mix(TABIX_TABIX_CSI.out.versions.first())
     ch_indexed_bed_tbi= TABIX_TABIX_TBI ( ch_compressed_bed ).tbi
-    ch_versions       = ch_versions.mix(TABIX_TABIX_TBI.out.versions)
+    ch_versions       = ch_versions.mix(TABIX_TABIX_TBI.out.versions.first())
 
 
     emit:

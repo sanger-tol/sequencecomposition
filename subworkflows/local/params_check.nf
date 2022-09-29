@@ -55,7 +55,7 @@ workflow PARAMS_CHECK {
             ] }
             .set { ch_inputs }
 
-        ch_versions = ch_versions.mix(SAMPLESHEET_CHECK.out.versions)
+        ch_versions = ch_versions.mix(SAMPLESHEET_CHECK.out.versions.first())
 
     } else {
 
@@ -81,7 +81,7 @@ workflow PARAMS_CHECK {
 
     // gunzip .fa.gz files
     ch_unzipped_fasta   = GUNZIP ( ch_parsed_fasta_name.compressed ).gunzip
-    ch_versions         = ch_versions.mix(GUNZIP.out.versions)
+    ch_versions         = ch_versions.mix(GUNZIP.out.versions.first())
 
     // Combine with preexisting .fa files
     ch_plain_fasta      = ch_parsed_fasta_name.uncompressed.mix(ch_unzipped_fasta)
