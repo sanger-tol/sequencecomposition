@@ -65,7 +65,7 @@ class RowChecker:
         self._validate_dir(row)
         self._validate_name(row)
         self._validate_accession(row)
-        self._seen.add( (row[self._name_col], row[self._dir_col]) )
+        self._seen.add((row[self._name_col], row[self._dir_col]))
         self.modified.append(row)
 
     def _validate_dir(self, row):
@@ -96,7 +96,9 @@ class RowChecker:
         Assert that the assembly parameters are unique.
         """
         if len(self._seen) != len(self.modified):
-            raise AssertionError("The pair of species directories and assembly names must be unique.")
+            raise AssertionError(
+                "The pair of species directories and assembly names must be unique."
+            )
 
 
 def read_head(handle, num_lines=10):
