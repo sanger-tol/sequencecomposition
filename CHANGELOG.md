@@ -17,7 +17,7 @@ Initial release of sanger-tol/sequencecomposition, created with the [nf-core](ht
 
 All dependencies are automatically fetched by Singularity.
 
-- fasta\_windows
+- fasta_windows
 - bgzip
 - tabix
 - python3
