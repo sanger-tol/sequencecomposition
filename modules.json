@@ -7,7 +7,7 @@
             "modules": {
                 "custom/dumpsoftwareversions": {
                     "branch": "master",
-                    "git_sha": "de7b50fdd07f7f81849d582e731b784ee75b20e5"
+                    "git_sha": "82501fe6d0d12614db67751d30af98d16e63dc59"
                 },
                 "fastawindows": {
                     "branch": "master",
@@ -19,7 +19,7 @@
                 },
                 "tabix/bgzip": {
                     "branch": "master",
-                    "git_sha": "07e2868920201d81e5b99fda47101ce6c67268eb"
+                    "git_sha": "31c0b49f6527ef196e89eca49a36af2de71711f8"
                 },
                 "tabix/tabix": {
                     "branch": "master",
