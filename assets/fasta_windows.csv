@@ -1,0 +1,13 @@
+4,base_content/k1,GC
+5,base_content/k1,GC_skew
+6,base_content/k1,AT_skew
+7,base_content/k1,nucShannon
+8,base_content/k1,G
+9,base_content/k1,C
+10,base_content/k1,A
+11,base_content/k1,T
+12,base_content/k1,N
+13,base_content/k2,CpG
+14,base_content/k2,dinucShannon
+15,base_content/k3,trinucShannon
+16,base_content/k4,tetranucShannon

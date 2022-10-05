@@ -30,6 +30,7 @@ workflow FASTA_WINDOWS {
 
     take:
     fasta               // file: /path/to/genome.fa
+    output_selection    // file: /path/to/fasta_windows.csv
     window_size_info    // value, used to build meta.id and name files
 
 
@@ -40,12 +41,18 @@ workflow FASTA_WINDOWS {
     FASTAWINDOWS ( fasta )
     ch_versions       = ch_versions.mix(FASTAWINDOWS.out.versions.first())
 
-    // Make the bedgraphs out of the frequency file
-    ch_freq_bed_input = FASTAWINDOWS.out.freq.combine(ch_freq_config)
+    Channel.of(output_selection)
+        .splitCsv ( header: false )
+        // tuple (channel_name,column_number,outdir,filename)
+        .map { [it[1], it[2], it[3]] }
+        .set { ch_config }
+
+    // Make a combined channel: tuple(meta, freq_file_tsv, column_number, output_dir, filename),
+    ch_freq_bed_input = FASTAWINDOWS.out.freq.combine(ch_config.freq)
     ch_freq_bed       = EXTRACT_COLUMN (
         // Extend meta.id to name output files appropriately, and add meta.analysis_subdir
         ch_freq_bed_input.map { [it[0] + [id: it[0].id + "." + it[4] + window_size_info, analysis_subdir: it[3]], it[1]] },
-        // config from ch_freq_config
+        // column number
         ch_freq_bed_input.map { it[2] }
     ).bedgraph
     ch_versions       = ch_versions.mix(EXTRACT_COLUMN.out.versions.first())
