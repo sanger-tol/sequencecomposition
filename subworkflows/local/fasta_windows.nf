@@ -8,24 +8,6 @@ include { TABIX_BGZIP             } from '../../modules/nf-core/modules/tabix/bg
 include { TABIX_TABIX as TABIX_TABIX_CSI   } from '../../modules/nf-core/modules/tabix/tabix/main'
 include { TABIX_TABIX as TABIX_TABIX_TBI   } from '../../modules/nf-core/modules/tabix/tabix/main'
 
-// List of the columns we want to extract as bedGraph from the frequency files,
-// with the subdirectory name and the relevant part of the file name
-ch_freq_config = Channel.of(
-    [4,  'base_content/k1', 'GC'],
-    [5,  'base_content/k1', 'GC_skew'],
-    [6,  'base_content/k1', 'AT_skew'],
-    [7,  'base_content/k1', 'nucShannon'],
-    [8,  'base_content/k1', 'G'],
-    [9,  'base_content/k1', 'C'],
-    [10, 'base_content/k1', 'A'],
-    [11, 'base_content/k1', 'T'],
-    [12, 'base_content/k1', 'N'],
-    [13, 'base_content/k2', 'CpG'],
-    [14, 'base_content/k2', 'dinucShannon'],
-    [15, 'base_content/k3', 'trinucShannon'],
-    [16, 'base_content/k4', 'tetranucShannon'],
-)
-
 workflow FASTA_WINDOWS {
 
     take:
@@ -41,6 +23,11 @@ workflow FASTA_WINDOWS {
     FASTAWINDOWS ( fasta )
     ch_versions       = ch_versions.mix(FASTAWINDOWS.out.versions.first())
 
+    // List of:
+    // 1) the columns we want to extract as bedGraph from the frequency files,
+    //    with the subdirectory name and the relevant part of the file name.
+    // 2) the kmer-count files we want to load (the "column_number" column is
+    //    ignored).
     Channel.of(output_selection)
         .splitCsv ( header: false )
         // tuple (channel_name,column_number,outdir,filename)
