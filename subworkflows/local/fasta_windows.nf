@@ -26,13 +26,11 @@ ch_freq_config = Channel.of(
     [16, 'base_content/k4', 'tetranucShannon'],
 )
 
-// TODO: make it a pipeline-wide parameter ?
-window_size_info = ".1k"
-
 workflow FASTA_WINDOWS {
 
     take:
-    fasta  // file: /path/to/genome.fa
+    fasta               // file: /path/to/genome.fa
+    window_size_info    // value, used to build meta.id and name files
 
 
     main:

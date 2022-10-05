@@ -53,7 +53,8 @@ workflow SEQUENCECOMPOSITION {
 
     // Statistics extraction
     FASTA_WINDOWS (
-        PARAMS_CHECK.out.plain_fasta
+        PARAMS_CHECK.out.plain_fasta,
+        params.window_size_info,
     )
     ch_versions         = ch_versions.mix(FASTA_WINDOWS.out.versions)
 
