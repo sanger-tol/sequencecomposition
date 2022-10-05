@@ -44,7 +44,18 @@ workflow FASTA_WINDOWS {
     Channel.of(output_selection)
         .splitCsv ( header: false )
         // tuple (channel_name,column_number,outdir,filename)
-        .map { [it[1], it[2], it[3]] }
+        .branch {
+            freq: it[0] == "freq"
+                return [it[1], it[2], it[3]]
+            mononuc: it[0] == "mononuc"
+                return [it[2], it[3]]
+            dinuc: it[0] == "dinuc"
+                return [it[2], it[3]]
+            trinuc: it[0] == "trinuc"
+                return [it[2], it[3]]
+            tetranuc: it[0] == "tetranuc"
+                return [it[2], it[3]]
+        }
         .set { ch_config }
 
     // Make a combined channel: tuple(meta, freq_file_tsv, column_number, output_dir, filename),
@@ -58,15 +69,15 @@ workflow FASTA_WINDOWS {
     ch_versions       = ch_versions.mix(EXTRACT_COLUMN.out.versions.first())
 
     // Add meta information to the tsv files
-    ch_bed_like       = ch_freq_bed
-        // Like above, extend meta.id to name output files appropriately, and add meta.analysis_subdir
-        .mix( FASTAWINDOWS.out.mononuc.map  { [it[0] + [id: it[0].id + ".mononuc"  + window_size_info, analysis_subdir: "base_content/k1"], it[1]] } )
-        .mix( FASTAWINDOWS.out.dinuc.map    { [it[0] + [id: it[0].id + ".dinuc"    + window_size_info, analysis_subdir: "base_content/k2"], it[1]] } )
-        .mix( FASTAWINDOWS.out.trinuc.map   { [it[0] + [id: it[0].id + ".trinuc"   + window_size_info, analysis_subdir: "base_content/k3"], it[1]] } )
-        .mix( FASTAWINDOWS.out.tetranuc.map { [it[0] + [id: it[0].id + ".tetranuc" + window_size_info, analysis_subdir: "base_content/k4"], it[1]] } )
+    ch_tsv = Channel.empty()
+        .mix( FASTAWINDOWS.out.mononuc .combine(ch_config.mononuc) )
+        .mix( FASTAWINDOWS.out.dinuc   .combine(ch_config.dinuc) )
+        .mix( FASTAWINDOWS.out.trinuc  .combine(ch_config.trinuc) )
+        .mix( FASTAWINDOWS.out.tetranuc.combine(ch_config.tetranuc) )
+        .map { [it[0] + [id: it[0].id + "." + it[3] + window_size_info, analysis_subdir: it[2]], it[1]] }
 
     // Compress the BED file
-    ch_compressed_bed = TABIX_BGZIP ( ch_bed_like ).output
+    ch_compressed_bed = TABIX_BGZIP ( ch_freq_bed.mix(ch_tsv) ).output
     ch_versions       = ch_versions.mix(TABIX_BGZIP.out.versions.first())
 
     // Index the BED file in two formats for maximum compatibility
