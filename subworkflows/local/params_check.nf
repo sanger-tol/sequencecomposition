@@ -46,7 +46,7 @@ workflow PARAMS_CHECK {
             ] }
             .set { ch_inputs }
 
-        ch_versions = ch_versions.mix(SAMPLESHEET_CHECK.out.versions.first())
+        ch_versions = ch_versions.mix(SAMPLESHEET_CHECK.out.versions)
 
     } else {
 
