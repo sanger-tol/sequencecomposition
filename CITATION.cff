@@ -1,56 +1,26 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
 cff-version: 1.2.0
-message: "If you use `nf-core tools` in your work, please cite the `nf-core` publication"
+title: sanger-tol/sequencecomposition v1.0.0 - Apophis
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
 authors:
-  - family-names: Ewels
-    given-names: Philip
-  - family-names: Peltzer
-    given-names: Alexander
-  - family-names: Fillinger
-    given-names: Sven
-  - family-names: Patel
-    given-names: Harshil
-  - family-names: Alneberg
-    given-names: Johannes
-  - family-names: Wilm
-    given-names: Andreas
-  - family-names: Ulysse Garcia
-    given-names: Maxime
-  - family-names: Di Tommaso
-    given-names: Paolo
-  - family-names: Nahnsen
-    given-names: Sven
-title: "The nf-core framework for community-curated bioinformatics pipelines."
-version: 2.4.1
-doi: 10.1038/s41587-020-0439-x
-date-released: 2022-05-16
-url: https://github.com/nf-core/tools
-prefered-citation:
-  type: article
-  authors:
-    - family-names: Ewels
-      given-names: Philip
-    - family-names: Peltzer
-      given-names: Alexander
-    - family-names: Fillinger
-      given-names: Sven
-    - family-names: Patel
-      given-names: Harshil
-    - family-names: Alneberg
-      given-names: Johannes
-    - family-names: Wilm
-      given-names: Andreas
-    - family-names: Ulysse Garcia
-      given-names: Maxime
-    - family-names: Di Tommaso
-      given-names: Paolo
-    - family-names: Nahnsen
-      given-names: Sven
-  doi: 10.1038/s41587-020-0439-x
-  journal: nature biotechnology
-  start: 276
-  end: 278
-  title: "The nf-core framework for community-curated bioinformatics pipelines."
-  issue: 3
-  volume: 38
-  year: 2020
-  url: https://dx.doi.org/10.1038/s41587-020-0439-x
+  - given-names: Matthieu
+    family-names: Muffato
+    affiliation: Wellcome Sanger Institute
+    orcid: "https://orcid.org/0000-0002-7860-3560"
+  - given-names: Priyanka
+    family-names: Surana
+    orcid: "https://orcid.org/0000-0002-7167-0875"
+    affiliation: Wellcome Sanger Institute
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.7155169
+repository-code: "https://github.com/sanger-tol/sequencecomposition"
+license: MIT
+commit: TODO
+version: 1.0.0
+date-released: "2022-10-08"
