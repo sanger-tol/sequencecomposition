@@ -9,14 +9,6 @@ def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
 // Validate input parameters
 WorkflowSequencecomposition.initialise(params, log)
 
-// TODO nf-core: Add all file path parameters for the pipeline to the list below
-// Check input path parameters to see if they exist
-def checkPathParamList = [ params.input, params.fasta ]
-for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
-
-// Check mandatory parameters
-if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
-
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     IMPORT LOCAL MODULES/SUBWORKFLOWS
@@ -26,7 +18,8 @@ if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input sample
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
-include { INPUT_CHECK } from '../subworkflows/local/input_check'
+include { PARAMS_CHECK  } from '../subworkflows/local/params_check'
+include { FASTA_WINDOWS } from '../subworkflows/local/fasta_windows'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -49,13 +42,22 @@ workflow SEQUENCECOMPOSITION {
 
     ch_versions = Channel.empty()
 
-    //
-    // SUBWORKFLOW: Read in samplesheet, validate and stage input files
-    //
-    INPUT_CHECK (
-        ch_input
+    PARAMS_CHECK (
+        [
+            params.input,
+            params.fasta,
+            params.outdir,
+        ]
     )
-    ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
+    ch_versions         = ch_versions.mix(PARAMS_CHECK.out.versions)
+
+    // Statistics extraction
+    FASTA_WINDOWS (
+        PARAMS_CHECK.out.plain_fasta,
+        file(params.selected_fw_output, checkExists: true),
+        params.window_size_info,
+    )
+    ch_versions         = ch_versions.mix(FASTA_WINDOWS.out.versions)
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')

@@ -6,8 +6,24 @@
             "git_url": "https://github.com/nf-core/modules.git",
             "modules": {
                 "custom/dumpsoftwareversions": {
-                    "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d",
-                    "branch": "master"
+                    "branch": "master",
+                    "git_sha": "82501fe6d0d12614db67751d30af98d16e63dc59"
+                },
+                "fastawindows": {
+                    "branch": "master",
+                    "git_sha": "4f78d40b1168d242d4c0db8302e41044b2935964"
+                },
+                "gunzip": {
+                    "branch": "master",
+                    "git_sha": "90aef30f432332bdf0ce9f4b9004aa5d5c4960bb"
+                },
+                "tabix/bgzip": {
+                    "branch": "master",
+                    "git_sha": "31c0b49f6527ef196e89eca49a36af2de71711f8"
+                },
+                "tabix/tabix": {
+                    "branch": "master",
+                    "git_sha": "5e7b1ef9a5a2d9258635bcbf70fcf37dacd1b247"
                 }
             }
         }

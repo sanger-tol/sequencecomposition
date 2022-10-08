@@ -7,30 +7,22 @@
     "items": {
         "type": "object",
         "properties": {
-            "sample": {
+            "species_dir": {
                 "type": "string",
                 "pattern": "^\\S+$",
-                "errorMessage": "Sample name must be provided and cannot contain spaces"
+                "errorMessage": "Species directory must be provided and exist"
             },
-            "fastq_1": {
+            "assembly_name": {
                 "type": "string",
-                "pattern": "^\\S+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+                "pattern": "^\\S+$",
+                "errorMessage": "Assembly name must be provided and cannot contain spaces"
             },
-            "fastq_2": {
-                "errorMessage": "FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'",
-                "anyOf": [
-                    {
-                        "type": "string",
-                        "pattern": "^\\S+\\.f(ast)?q\\.gz$"
-                    },
-                    {
-                        "type": "string",
-                        "maxLength": 0
-                    }
-                ]
+            "assembly_accession": {
+                "type": "string",
+                "pattern": "^GCA_[0-9]{9}\\.[0-9]+$",
+                "errorMessage": "Assembly accession number must be provided and be of the form GCA_*"
             }
         },
-        "required": ["sample", "fastq_1"]
+        "required": ["species_dir", "assembly_name"]
     }
 }

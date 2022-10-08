@@ -20,7 +20,7 @@ jobs:
     strategy:
       matrix:
         NXF_VER:
-          - "21.10.3"
+          - "22.04.0"
           - "latest-everything"
     steps:
       - name: Check out pipeline code
@@ -31,9 +31,13 @@ jobs:
         with:
           version: "${{ matrix.NXF_VER }}"
 
-      - name: Run pipeline with test data
-        # TODO nf-core: You can customise CI pipeline run tests as required
-        # For example: adding multiple test runs with different parameters
-        # Remember that you can parallelise this by using strategy.matrix
+      - name: Run the test profile of the pipeline
         run: |
           nextflow run ${GITHUB_WORKSPACE} -profile test,docker --outdir ./results
+
+      - name: Run the full test profile of the pipeline (requires sanger-tol/insdcdownload)
+        run: |
+          mkdir ${GITHUB_WORKSPACE}/data
+          cd ${GITHUB_WORKSPACE}/data
+          nextflow run sanger-tol/insdcdownload -revision 1.1.0 -profile test_full,docker --outdir ./results_full
+          nextflow run ${GITHUB_WORKSPACE} -profile test_full,docker --outdir ./results_full
