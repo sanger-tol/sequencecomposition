@@ -37,5 +37,7 @@ jobs:
 
       - name: Run the full test profile of the pipeline (requires sanger-tol/insdcdownload)
         run: |
+          mkdir ${GITHUB_WORKSPACE}/data
+          cd ${GITHUB_WORKSPACE}/data
           nextflow run sanger-tol/insdcdownload -revision 1.1.0 -profile test_full,docker --outdir ./results_full
           nextflow run ${GITHUB_WORKSPACE} -profile test_full,docker --outdir ./results_full
