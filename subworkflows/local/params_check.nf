@@ -24,6 +24,12 @@ workflow PARAMS_CHECK {
             .csv
             // Provides species_dir and assembly_name
             .splitCsv ( header:true, sep:',' )
+            // Add outdir to species_dir, if needed
+            .map {
+                it + [
+                    species_dir: (it["species_dir"].startsWith("/") ? "" : outdir + "/") + it["species_dir"],
+                    ]
+            }
             // Add assembly_path, following the Tree of Life directory structure
             .map {
                 it + [
