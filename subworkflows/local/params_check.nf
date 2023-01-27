@@ -8,12 +8,12 @@ include { SAMPLESHEET_CHECK } from '../../modules/local/samplesheet_check'
 workflow PARAMS_CHECK {
 
     take:
-    inputs          // tuple, see below
+    samplesheet  // file
+    cli_params   // tuple, see below
+    outdir       // file output directory
 
 
     main:
-
-    def (samplesheet, fasta, outdir) = inputs
 
     ch_versions = Channel.empty()
 
@@ -56,8 +56,9 @@ workflow PARAMS_CHECK {
 
     } else {
 
-        file_fasta = file(fasta, checkIfExists: true)
-        ch_inputs = Channel.of(
+        ch_inputs = cli_params.map {
+             file(it[0], checkIfExists: true)
+        } .map { file_fasta ->
             [
                 [
                     id: file_fasta.baseName,
@@ -65,7 +66,7 @@ workflow PARAMS_CHECK {
                 ],
                 file_fasta,
             ]
-        )
+        }
 
     }
 
