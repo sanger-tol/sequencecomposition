@@ -23,9 +23,6 @@ workflow FASTA_WINDOWS {
     FASTAWINDOWS ( fasta_fai.map { meta, fasta, fai -> [meta, fasta] } )
     ch_versions       = ch_versions.mix(FASTAWINDOWS.out.versions.first())
 
-    // Get the maximum coordinate used in the output files by scanning the mononuc file
-    ch_max_coord      = FASTAWINDOWS.out.mononuc.map { meta, tsv -> [ meta, get_max_coord(tsv) ] }
-
     // List of:
     // 1) the columns we want to extract as bedGraph from the frequency files,
     //    with the subdirectory name and the relevant part of the file name.
@@ -48,11 +45,11 @@ workflow FASTA_WINDOWS {
         }
         .set { ch_config }
 
-    // Make a combined channel: tuple(meta, freq_file_tsv, column_number, output_dir, filename, max_coord),
-    ch_freq_bed_input = FASTAWINDOWS.out.freq.combine(ch_config.freq).combine(ch_max_coord, by: 0)
+    // Make a combined channel: tuple(meta, freq_file_tsv, column_number, output_dir, filename),
+    ch_freq_bed_input = FASTAWINDOWS.out.freq.combine(ch_config.freq)
     ch_freq_bed       = EXTRACT_COLUMN (
         // Extend meta.id to name output files appropriately, and add meta.analysis_subdir
-        ch_freq_bed_input.map { [it[0] + [id: it[0].id + "." + it[4] + window_size_info, analysis_subdir: it[3], max_coord: it[5]], it[1]] },
+        ch_freq_bed_input.map { [it[0] + [id: it[0].id + "." + it[4] + window_size_info, analysis_subdir: it[3]], it[1]] },
         // column number
         ch_freq_bed_input.map { it[2] }
     ).bedgraph
@@ -65,8 +62,7 @@ workflow FASTA_WINDOWS {
         .mix( FASTAWINDOWS.out.dinuc   .combine(ch_config.dinuc) )
         .mix( FASTAWINDOWS.out.trinuc  .combine(ch_config.trinuc) )
         .mix( FASTAWINDOWS.out.tetranuc.combine(ch_config.tetranuc) )
-        .combine(ch_max_coord, by: 0)
-        .map { [it[0] + [id: it[0].id + "." + it[3] + window_size_info, analysis_subdir: it[2], max_coord: it[4]], it[1]] }
+        .map { [it[0] + [id: it[0].id + "." + it[3] + window_size_info, analysis_subdir: it[2]], it[1]] }
 
     // Compress the BED file
     ch_compressed_bed = TABIX_BGZIP ( ch_freq_bed.mix(ch_tsv) ).output
@@ -75,8 +71,8 @@ workflow FASTA_WINDOWS {
     // Try indexing the BED file in two formats for maximum compatibility
     // but each has its own limitations
     tabix_selector      = ch_compressed_bed.branch { meta, bed ->
-        tbi_and_csi: meta.max_coord < 2**29
-        only_csi:    meta.max_coord < 2**32
+        tbi_and_csi: meta.max_length < 2**29
+        only_csi:    meta.max_length < 2**32
     }
 
     // Do the indexing on the compatible bedGraph files
@@ -91,20 +87,3 @@ workflow FASTA_WINDOWS {
     versions = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
 }
 
-// Inspired from https://github.com/nf-core/rnaseq/blob/3.10.1/lib/WorkflowRnaseq.groovy
-def get_max_coord(tsv_file) {
-    def max_coord = 0
-    tsv_file.withReader { reader ->
-        def line
-        // Skip the first line (header)
-        if ((line = reader.readLine()) != null) {
-            while ((line = reader.readLine()) != null) {
-                def end_coord = line.split()[2].toInteger()
-                if (end_coord > max_coord) {
-                    max_coord = end_coord
-                }
-            }
-        }
-    }
-    return max_coord
-}
