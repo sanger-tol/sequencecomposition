@@ -11,7 +11,7 @@ include { TABIX_TABIX as TABIX_TABIX_TBI   } from '../../modules/nf-core/tabix/t
 workflow FASTA_WINDOWS {
 
     take:
-    fasta               // file: /path/to/genome.fa
+    fasta_fai           // [file: /path/to/genome.fa, file: /path/to/genome.fai]
     output_selection    // file: /path/to/fasta_windows.csv
     window_size_info    // value, used to build meta.id and name files
 
@@ -20,7 +20,7 @@ workflow FASTA_WINDOWS {
     ch_versions = Channel.empty()
 
     // Run fasta_windows
-    FASTAWINDOWS ( fasta )
+    FASTAWINDOWS ( fasta_fai.map { meta, fasta, fai -> [meta, fasta] } )
     ch_versions       = ch_versions.mix(FASTAWINDOWS.out.versions.first())
 
     // Get the maximum coordinate used in the output files by scanning the mononuc file
