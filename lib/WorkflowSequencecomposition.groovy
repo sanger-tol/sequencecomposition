@@ -2,6 +2,7 @@
 // This file holds several functions specific to the workflow/sequencecomposition.nf in the sanger-tol/sequencecomposition pipeline
 //
 
+import nextflow.Nextflow
 import groovy.text.SimpleTemplateEngine
 
 class WorkflowSequencecomposition {
@@ -13,8 +14,7 @@ class WorkflowSequencecomposition {
         
 
         if (!params.fasta) {
-            log.error "Genome fasta file not specified with e.g. '--fasta genome.fa' or via a detectable config file."
-            System.exit(1)
+            Nextflow.error "Genome fasta file not specified with e.g. '--fasta genome.fa' or via a detectable config file."
         }
     }
 
