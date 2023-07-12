@@ -1,22 +1,24 @@
 repository_type: pipeline
 lint:
   files_exist:
-    - CODE_OF_CONDUCT.md
-    - assets/multiqc_config.yml
-    - assets/nf-core-sequencecomposition_logo_light.png
-    - conf/igenomes.config
-    - docs/images/nf-core-sequencecomposition_logo_light.png
-    - docs/images/nf-core-sequencecomposition_logo_dark.png
-    - .github/ISSUE_TEMPLATE/config.yml
-    - .github/workflows/awstest.yml
-    - .github/workflows/awsfulltest.yml
+  - CODE_OF_CONDUCT.md
+  - assets/multiqc_config.yml
+  - assets/nf-core-sequencecomposition_logo_light.png
+  - conf/igenomes.config
+  - docs/images/nf-core-sequencecomposition_logo_light.png
+  - docs/images/nf-core-sequencecomposition_logo_dark.png
+  - .github/ISSUE_TEMPLATE/config.yml
+  - .github/workflows/awstest.yml
+  - .github/workflows/awsfulltest.yml
   files_unchanged:
-    - LICENSE
-    - .github/CONTRIBUTING.md
-    - .github/ISSUE_TEMPLATE/bug_report.yml
-    - .github/workflows/linting.yml
-    - assets/sendmail_template.txt
-    - lib/NfcoreTemplate.groovy
+  - LICENSE
+  - .github/CONTRIBUTING.md
+  - .github/ISSUE_TEMPLATE/bug_report.yml
+  - .github/workflows/linting.yml
+  - assets/sendmail_template.txt
+  - lib/NfcoreTemplate.groovy
   nextflow_config:
-    - manifest.name
-    - manifest.homePage
+  - manifest.name
+  - manifest.homePage
+  multiqc_config:
+  - report_comment
