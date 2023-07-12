@@ -80,9 +80,7 @@ class RowChecker:
             and row[self._accession_col]
             and not self._regex_accession.match(row[self._accession_col])
         ):
-            raise AssertionError(
-                "Accession numbers must match %s." % self._regex_accession
-            )
+            raise AssertionError("Accession numbers must match %s." % self._regex_accession)
 
     def _validate_name(self, row):
         """Assert that the assembly name is non-empty and has no space."""
@@ -96,9 +94,7 @@ class RowChecker:
         Assert that the assembly parameters are unique.
         """
         if len(self._seen) != len(self.modified):
-            raise AssertionError(
-                "The pair of species directories and assembly names must be unique."
-            )
+            raise AssertionError("The pair of species directories and assembly names must be unique.")
 
 
 def read_head(handle, num_lines=10):
