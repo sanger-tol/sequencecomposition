@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "https://raw.githubusercontent.com/nf-core/sanger-tol-sequencecomposition/master/nextflow_schema.json",
-    "title": "nf-core/sanger-tol-sequencecomposition pipeline parameters",
+    "$id": "https://raw.githubusercontent.com/sanger-tol/sequencecomposition/master/nextflow_schema.json",
+    "title": "sanger-tol/sequencecomposition pipeline parameters",
     "description": "Pipeline that extracts statistics from a genome about its sequence composition",
     "type": "object",
     "definitions": {

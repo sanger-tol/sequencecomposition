@@ -1,5 +1,5 @@
 //
-// This file holds several functions specific to the workflow/sanger-tol-sequencecomposition.nf in the nf-core/sanger-tol-sequencecomposition pipeline
+// This file holds several functions specific to the workflow/sanger-tol-sequencecomposition.nf in the sanger-tol/sequencecomposition pipeline
 //
 
 import groovy.text.SimpleTemplateEngine

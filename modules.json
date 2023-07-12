@@ -1,6 +1,6 @@
 {
-    "name": "nf-core/sanger-tol-sequencecomposition",
-    "homePage": "https://github.com/nf-core/sanger-tol-sequencecomposition",
+    "name": "sanger-tol/sequencecomposition",
+    "homePage": "https://github.com/sanger-tol/sequencecomposition",
     "repos": {
         "https://github.com/nf-core/modules.git": {
             "modules": {

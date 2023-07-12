@@ -1,4 +1,4 @@
-# nf-core/sanger-tol-sequencecomposition: Citations
+# sanger-tol/sequencecomposition: Citations
 
 ## [nf-core](https://pubmed.ncbi.nlm.nih.gov/32055031/)
 

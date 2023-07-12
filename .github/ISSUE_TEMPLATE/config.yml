@@ -4,4 +4,4 @@ contact_links:
     about: Please join the nf-core community here
   - name: "Slack #sanger-tol-sequencecomposition channel"
     url: https://nfcore.slack.com/channels/sanger-tol-sequencecomposition
-    about: Discussion about the nf-core/sanger-tol-sequencecomposition pipeline
+    about: Discussion about the sanger-tol/sequencecomposition pipeline
