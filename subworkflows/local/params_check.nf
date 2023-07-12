@@ -2,7 +2,7 @@
 // Check and parse the input parameters
 //
 
-include { GUNZIP            } from '../../modules/nf-core/modules/gunzip/main'
+include { GUNZIP            } from '../../modules/nf-core/gunzip/main'
 include { SAMPLESHEET_CHECK } from '../../modules/local/samplesheet_check'
 
 workflow PARAMS_CHECK {

@@ -3,10 +3,10 @@
 //
 
 include { EXTRACT_COLUMN          } from '../../modules/local/extract_column'
-include { FASTAWINDOWS            } from '../../modules/nf-core/modules/fastawindows/main'
-include { TABIX_BGZIP             } from '../../modules/nf-core/modules/tabix/bgzip/main'
-include { TABIX_TABIX as TABIX_TABIX_CSI   } from '../../modules/nf-core/modules/tabix/tabix/main'
-include { TABIX_TABIX as TABIX_TABIX_TBI   } from '../../modules/nf-core/modules/tabix/tabix/main'
+include { FASTAWINDOWS            } from '../../modules/nf-core/fastawindows/main'
+include { TABIX_BGZIP             } from '../../modules/nf-core/tabix/bgzip/main'
+include { TABIX_TABIX as TABIX_TABIX_CSI   } from '../../modules/nf-core/tabix/tabix/main'
+include { TABIX_TABIX as TABIX_TABIX_TBI   } from '../../modules/nf-core/tabix/tabix/main'
 
 workflow FASTA_WINDOWS {
 
