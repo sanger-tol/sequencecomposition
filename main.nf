@@ -4,21 +4,10 @@
     sanger-tol/sequencecomposition
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Github : https://github.com/sanger-tol/sequencecomposition
-
-    Website: https://nf-co.re/sanger-tol-sequencecomposition
-    Slack  : https://nfcore.slack.com/channels/sanger-tol-sequencecomposition
 ----------------------------------------------------------------------------------------
 */
 
 nextflow.enable.dsl = 2
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    GENOME PARAMETER VALUES
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-params.fasta = WorkflowMain.getGenomeAttribute(params, 'fasta')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -34,13 +23,13 @@ WorkflowMain.initialise(workflow, params, log)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { SANGER-TOL-SEQUENCECOMPOSITION } from './workflows/sanger-tol-sequencecomposition'
+include { SEQUENCECOMPOSITION } from './workflows/sequencecomposition'
 
 //
 // WORKFLOW: Run main sanger-tol/sequencecomposition analysis pipeline
 //
-workflow NFCORE_SANGER-TOL-SEQUENCECOMPOSITION {
-    SANGER-TOL-SEQUENCECOMPOSITION ()
+workflow SANGERTOL_SEQUENCECOMPOSITION {
+    SEQUENCECOMPOSITION ()
 }
 
 /*
@@ -54,7 +43,7 @@ workflow NFCORE_SANGER-TOL-SEQUENCECOMPOSITION {
 // See: https://github.com/nf-core/rnaseq/issues/619
 //
 workflow {
-    NFCORE_SANGER-TOL-SEQUENCECOMPOSITION ()
+    SANGERTOL_SEQUENCECOMPOSITION ()
 }
 
 /*

@@ -7,7 +7,7 @@
 def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
 
 // Validate input parameters
-WorkflowSanger-tol-sequencecomposition.initialise(params, log)
+WorkflowSequencecomposition.initialise(params, log)
 
 // TODO nf-core: Add all file path parameters for the pipeline to the list below
 // Check input path parameters to see if they exist
@@ -61,7 +61,7 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoft
 // Info required for completion email and summary
 def multiqc_report = []
 
-workflow SANGER-TOL-SEQUENCECOMPOSITION {
+workflow SEQUENCECOMPOSITION {
 
     ch_versions = Channel.empty()
 
@@ -88,10 +88,10 @@ workflow SANGER-TOL-SEQUENCECOMPOSITION {
     //
     // MODULE: MultiQC
     //
-    workflow_summary    = WorkflowSanger-tol-sequencecomposition.paramsSummaryMultiqc(workflow, summary_params)
+    workflow_summary    = WorkflowSequencecomposition.paramsSummaryMultiqc(workflow, summary_params)
     ch_workflow_summary = Channel.value(workflow_summary)
 
-    methods_description    = WorkflowSanger-tol-sequencecomposition.methodsDescriptionText(workflow, ch_multiqc_custom_methods_description)
+    methods_description    = WorkflowSequencecomposition.methodsDescriptionText(workflow, ch_multiqc_custom_methods_description)
     ch_methods_description = Channel.value(methods_description)
 
     ch_multiqc_files = Channel.empty()

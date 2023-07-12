@@ -1,7 +1,5 @@
 # sanger-tol/sequencecomposition: Usage
 
-## :warning: Please read this documentation on the nf-core website: [https://nf-co.re/sanger-tol-sequencecomposition/usage](https://nf-co.re/sanger-tol-sequencecomposition/usage)
-
 > _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
 
 ## Introduction
