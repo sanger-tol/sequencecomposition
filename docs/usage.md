@@ -115,12 +115,6 @@ They are loaded in sequence, so later profiles can overwrite earlier profiles.
 
 If `-profile` is not specified, the pipeline will run locally and expect all software to be installed and available on the `PATH`. This is _not_ recommended, since it can lead to different results on different machines dependent on the computer enviroment.
 
-- `test`
-  - A profile with a minimal configuration for automated testing
-  - Corresponds to defining the assembly to download as command-line parameters so needs no other parameters
-- `test_full`
-  - A profile with a complete configuration for automated testing
-  - Corresponds to defining the assembly to download as a CSV file so needs no other parameters
 - `docker`
   - A generic configuration profile to be used with [Docker](https://docker.com/)
 - `singularity`
@@ -135,6 +129,12 @@ If `-profile` is not specified, the pipeline will run locally and expect all sof
   - A generic configuration profile to be used with [Apptainer](https://apptainer.org/)
 - `conda`
   - A generic configuration profile to be used with [Conda](https://conda.io/docs/). Please only use Conda as a last resort i.e. when it's not possible to run the pipeline with Docker, Singularity, Podman, Shifter, Charliecloud, or Apptainer.
+- `test`
+  - A profile with a minimal configuration for automated testing
+  - Corresponds to defining the assembly to download as command-line parameters so needs no other parameters
+- `test_full`
+  - A profile with a complete configuration for automated testing
+  - Corresponds to defining the assembly to download as a CSV file so needs no other parameters
 
 ### `-resume`
 
