@@ -45,11 +45,8 @@ nextflow run sanger-tol/sequencecomposition -profile docker -params-file params.
 with `params.yaml` containing:
 
 ```yaml
-input: './samplesheet.csv'
-outdir: './results/'
-genome: 'GRCh37'
-input: 'data'
-<...>
+fasta: "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/927/399/515/GCA_927399515.1_gfLaeSulp1.1/GCA_927399515.1_gfLaeSulp1.1_genomic.fna.gz"
+outdir: "./results/"
 ```
 
 You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-co.re/launch).
