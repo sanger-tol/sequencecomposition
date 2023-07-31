@@ -1,5 +1,9 @@
 # sanger-tol/sequencecomposition: Usage
 
+## :warning: Please read this documentation on the nf-core website: [https://pipelines.tol.sanger.ac.uk/sequencecomposition/usage](https://pipelines.tol.sanger.ac.uk/sequencecomposition/usage)
+
+> _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
+
 ## Introduction
 
 The pipeline takes a Fasta file, and computes all the sequence composition metrics on it.
