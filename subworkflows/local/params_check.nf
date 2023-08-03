@@ -24,32 +24,11 @@ workflow PARAMS_CHECK {
             .csv
             // Provides species_dir and assembly_name
             .splitCsv ( header:true, sep:',' )
-            // Add outdir to species_dir, if needed
             .map {
                 it + [
-                    species_dir: (it["species_dir"].startsWith("/") ? "" : outdir + "/") + it["species_dir"],
                     ]
             }
-            // Add assembly_path, following the Tree of Life directory structure
-            .map {
-                it + [
-                    assembly_path: "${it["species_dir"]}/assembly/release/${it["assembly_name"]}/insdc",
-                    ]
-            }
-            .map {
-                // If assembly_accession is missing, load the accession number from file, following the Tree of Life directory structure
-                it["assembly_accession"] ? it : it + [
-                    assembly_accession: file("${it["assembly_path"]}/ACCESSION", checkIfExists: true).text.trim(),
-                ]
-            }
-            // Convert to tuple(meta,file) as required by GUNZIP and FASTAWINDOWS
-            .map { [
-                [
-                    id: it["assembly_accession"],
-                    analysis_dir: "${it["species_dir"]}/analysis/${it["assembly_name"]}",
-                ],
-                file("${it["assembly_path"]}/${it["assembly_accession"]}.fa.gz", checkIfExists: true),
-            ] }
+            .map { make_input_tuple(it, outdir) }
             .set { ch_inputs }
 
         ch_versions = ch_versions.mix(SAMPLESHEET_CHECK.out.versions)
@@ -90,3 +69,40 @@ workflow PARAMS_CHECK {
     versions    = ch_versions          // channel: versions.yml
 }
 
+
+// Generate a tuple(meta,file) as required by GUNZIP and FASTAWINDOWS
+def make_input_tuple(row, outdir) {
+
+    if (row.fasta && row.assembly_accession) {
+        Nextflow.error "Fasta and accession can't be provided at the same time"
+    }
+
+    // Add outdir to species_dir, if needed
+    def species_dir = (row.species_dir.startsWith("/") ? "" : outdir + "/") + row.species_dir
+    // Derive the analysis directory
+    def analysis_dir = "${species_dir}/analysis/${row.assembly_name}"
+
+    // If a Fasta is provided, just use it
+    if (row.fasta) {
+        return [
+            [
+                id: row.assembly_name,
+                analysis_dir: analysis_dir,
+            ],
+            file(row.fasta, checkIfExists: true),
+        ]
+
+    } else {
+        // Assembly path, following the Tree of Life directory structure
+        def assembly_path = "${species_dir}/assembly/release/${row.assembly_name}/insdc"
+        // If assembly_accession is missing, load the accession number from file, following the Tree of Life directory structure
+        def assembly_accession = row.assembly_accession ?: file("${assembly_path}/ACCESSION", checkIfExists: true).text.trim()
+        return [
+            [
+                id: assembly_accession,
+                analysis_dir: analysis_dir,
+            ],
+            file("${assembly_path}/${assembly_accession}.fa.gz", checkIfExists: true),
+        ]
+    }
+}

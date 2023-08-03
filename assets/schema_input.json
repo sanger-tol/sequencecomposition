@@ -21,6 +21,11 @@
                 "type": "string",
                 "pattern": "^GCA_[0-9]{9}\\.[0-9]+$",
                 "errorMessage": "Assembly accession number must be provided and be of the form GCA_*"
+            },
+            "fasta": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "errorMessage": "Assembly path is optional"
             }
         },
         "required": ["species_dir", "assembly_name"]

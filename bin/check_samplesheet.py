@@ -31,6 +31,7 @@ class RowChecker:
         dir_col="species_dir",
         name_col="assembly_name",
         accession_col="assembly_accession",
+        fasta_col="fasta",
         **kwargs,
     ):
         """
@@ -43,12 +44,15 @@ class RowChecker:
                 (default "assembly_name").
             accession_col (str): The name of the column that contains the accession
                 number (default "assembly_accession").
+            fasta_col (str): The name of the column that contains the path to the
+                Fasta (default "fasta").
 
         """
         super().__init__(**kwargs)
         self._dir_col = dir_col
         self._name_col = name_col
         self._accession_col = accession_col
+        self._fasta_col = fasta_col
         self._seen = set()
         self.modified = []
         self._regex_accession = re.compile(r"^GCA_[0-9]{9}\.[0-9]+$")
@@ -65,6 +69,7 @@ class RowChecker:
         self._validate_dir(row)
         self._validate_name(row)
         self._validate_accession(row)
+        self._validate_fasta(row)
         self._seen.add((row[self._name_col], row[self._dir_col]))
         self.modified.append(row)
 
@@ -96,6 +101,10 @@ class RowChecker:
         if len(self._seen) != len(self.modified):
             raise AssertionError("The pair of species directories and assembly names must be unique.")
 
+    def _validate_fasta(self, row):
+        """Assert that the fasta path is not only white space."""
+        if set(row[self._fasta_col]) == set(" "):
+            raise AssertionError("Paths cannot only be whitespace.")
 
 def read_head(handle, num_lines=10):
     """Read the specified number of lines from the current position in the file."""
