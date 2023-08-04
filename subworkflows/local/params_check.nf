@@ -37,9 +37,11 @@ workflow PARAMS_CHECK {
 
     ch_input_files = ch_inputs.map { outdir, fasta ->
         file_fasta = file(fasta, checkIfExists: true)
+        // Trick to strip the Fasta extension for gzipped files too, without having to list all possible extensions
+        id = file(fasta.replace(".gz", "")).baseName
         return [
             [
-                id: file_fasta.baseName,
+                id: id,
                 outdir: outdir,
             ],
             file_fasta,
