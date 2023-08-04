@@ -18,14 +18,6 @@
 
 **sanger-tol/sequencecomposition** is a bioinformatics analysis pipeline that extracts statistics from a genome about its sequence composition.
 
-The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It uses Docker/Singularity containers making installation trivial and results highly reproducible. The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. Where possible, these processes have been submitted to and installed from [nf-core/modules](https://github.com/nf-core/modules) in order to make them available to all nf-core pipelines, and to everyone within the Nextflow community!
-
-On release, automated continuous integration tests run the pipeline on a full-sized dataset on the GitHub CI infrastructure. This ensures that the pipeline runs in a third-party environment, and has sensible resource allocation defaults set to run on real-world datasets.
-
-## Pipeline summary
-
-## Overview
-
 The pipeline takes an assembly Fasta file (possibly compressed), runs `fasta_windows` on it, and transforms the outputs into files more practical for downstream use.
 
 Steps involved:
@@ -42,13 +34,10 @@ Steps involved:
 > to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline)
 > with `-profile test` before running the workflow on actual data.
 
-You can run the pipeline using:
+The easiest is to provide the path of the Fasta file to analyse like this:
 
-```bash
-nextflow run sanger-tol/sequencecomposition \
-   -profile <docker/singularity/.../institute> \
-   --fasta /path/to/genome.fa \
-   --outdir <OUTDIR>
+```console
+nextflow run sanger-tol/sequencecomposition --fasta /path/to/genome.fa
 ```
 
 > **Warning:**
@@ -56,10 +45,16 @@ nextflow run sanger-tol/sequencecomposition \
 > provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_;
 > see [docs](https://nf-co.re/usage/configuration#custom-configuration-files).
 
+The pipeline also supports bulk downloads through a sample-sheet.
+More information about this mode on our [pipeline website](https://pipelines.tol.sanger.ac.uk/sequencecomposition/usage).
+
 ## Credits
 
-sanger-tol/sequencecomposition was originally written by @muffato, with
-help from @priyanka-surana.
+sanger-tol/sequencecomposition was originally written by [Matthieu Muffato](https://github.com/muffato).
+
+We thank the following people for their assistance in the development of this pipeline:
+
+- [Priyanka Surana](https://github.com/priyanka-surana) for providing reviews.
 
 ## Contributions and Support
 
