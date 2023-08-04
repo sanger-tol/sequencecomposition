@@ -7,27 +7,17 @@
     "items": {
         "type": "object",
         "properties": {
-            "species_dir": {
+            "outdir": {
                 "type": "string",
                 "pattern": "^\\S+$",
                 "errorMessage": "Species directory must be provided and exist"
             },
-            "assembly_name": {
-                "type": "string",
-                "pattern": "^\\S+$",
-                "errorMessage": "Assembly name must be provided and cannot contain spaces"
-            },
-            "assembly_accession": {
-                "type": "string",
-                "pattern": "^GCA_[0-9]{9}\\.[0-9]+$",
-                "errorMessage": "Assembly accession number must be provided and be of the form GCA_*"
-            },
             "fasta": {
                 "type": "string",
                 "pattern": "^\\S+$",
-                "errorMessage": "Assembly path is optional"
+                "errorMessage": "Assembly path is mandatory"
             }
         },
-        "required": ["species_dir", "assembly_name"]
+        "required": ["outdir", "fasta"]
     }
 }

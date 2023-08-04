@@ -28,9 +28,7 @@ class RowChecker:
 
     def __init__(
         self,
-        dir_col="species_dir",
-        name_col="assembly_name",
-        accession_col="assembly_accession",
+        dir_col="outdir",
         fasta_col="fasta",
         **kwargs,
     ):
@@ -39,23 +37,16 @@ class RowChecker:
 
         Args:
             dir_col (str): The name of the column that contains the species directory
-                (default "species_dir").
-            name_col (str): The name of the column that contains the assembly name
-                (default "assembly_name").
-            accession_col (str): The name of the column that contains the accession
-                number (default "assembly_accession").
+                (default "outdir").
             fasta_col (str): The name of the column that contains the path to the
                 Fasta (default "fasta").
 
         """
         super().__init__(**kwargs)
         self._dir_col = dir_col
-        self._name_col = name_col
-        self._accession_col = accession_col
         self._fasta_col = fasta_col
         self._seen = set()
         self.modified = []
-        self._regex_accession = re.compile(r"^GCA_[0-9]{9}\.[0-9]+$")
 
     def validate_and_transform(self, row):
         """
@@ -67,32 +58,14 @@ class RowChecker:
 
         """
         self._validate_dir(row)
-        self._validate_name(row)
-        self._validate_accession(row)
         self._validate_fasta(row)
-        self._seen.add((row[self._name_col], row[self._dir_col]))
+        self._seen.add(row[self._fasta_col])
         self.modified.append(row)
 
     def _validate_dir(self, row):
         """Assert that the species directory is non-empty."""
         if not row[self._dir_col]:
             raise AssertionError("Species directory is required.")
-
-    def _validate_accession(self, row):
-        """Assert that the accession number exists and matches the expected nomenclature."""
-        if (
-            self._accession_col in row
-            and row[self._accession_col]
-            and not self._regex_accession.match(row[self._accession_col])
-        ):
-            raise AssertionError("Accession numbers must match %s." % self._regex_accession)
-
-    def _validate_name(self, row):
-        """Assert that the assembly name is non-empty and has no space."""
-        if not row[self._name_col]:
-            raise AssertionError("Assembly name is required.")
-        if " " in row[self._name_col]:
-            raise AssertionError("Accession names must not contain whitespace.")
 
     def validate_unique_assemblies(self):
         """
@@ -153,13 +126,13 @@ def check_samplesheet(file_in, file_out):
     Example:
         This function checks that the samplesheet follows the following structure::
 
-            species_dir,assembly_name
-            darwin/data/fungi/Laetiporus_sulphureus,gfLaeSulp1.1
-            darwin/data/mammals/Meles_meles,mMelMel3.2_paternal_haplotype
+            outdir,fasta
+            Asterias_rubens/eAstRub1.3,https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/902/459/465/GCA_902459465.3_eAstRub1.3/GCA_902459465.3_eAstRub1.3_genomic.fna.gz
+            Osmia_bicornis/iOsmBic2.1,https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/907/164/935/GCA_907164935.1_iOsmBic2.1/GCA_907164935.1_iOsmBic2.1_genomic.fna.gz
     """
     required_columns = {
-        "species_dir",
-        "assembly_name",
+        "outdir",
+        "fasta",
     }
     # See https://docs.python.org/3.9/library/csv.html#id3 to read up on `newline=""`.
     with file_in.open(newline="") as in_handle:

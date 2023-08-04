@@ -23,8 +23,7 @@ class WorkflowSequencecomposition {
             }
         }
         if (!params.outdir) {
-            log.error "--outdir is mandatory"
-            System.exit(1)
+            Nextflow.error "--outdir is mandatory"
         }
     }
 
