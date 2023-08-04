@@ -79,6 +79,7 @@ class RowChecker:
         if set(row[self._fasta_col]) == set(" "):
             raise AssertionError("Paths cannot only be whitespace.")
 
+
 def read_head(handle, num_lines=10):
     """Read the specified number of lines from the current position in the file."""
     lines = []
