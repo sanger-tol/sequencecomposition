@@ -1,7 +1,6 @@
 repository_type: pipeline
 lint:
   files_exist:
-    - CODE_OF_CONDUCT.md
     - assets/multiqc_config.yml
     - assets/nf-core-sequencecomposition_logo_light.png
     - conf/igenomes.config
@@ -20,3 +19,5 @@ lint:
   nextflow_config:
     - manifest.name
     - manifest.homePage
+  multiqc_config:
+    - report_comment

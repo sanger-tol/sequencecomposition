@@ -80,9 +80,7 @@ class RowChecker:
             and row[self._accession_col]
             and not self._regex_accession.match(row[self._accession_col])
         ):
-            raise AssertionError(
-                "Accession numbers must match %s." % self._regex_accession
-            )
+            raise AssertionError("Accession numbers must match %s." % self._regex_accession)
 
     def _validate_name(self, row):
         """Assert that the assembly name is non-empty and has no space."""
@@ -96,9 +94,7 @@ class RowChecker:
         Assert that the assembly parameters are unique.
         """
         if len(self._seen) != len(self.modified):
-            raise AssertionError(
-                "The pair of species directories and assembly names must be unique."
-            )
+            raise AssertionError("The pair of species directories and assembly names must be unique.")
 
 
 def read_head(handle, num_lines=10):
@@ -129,9 +125,6 @@ def sniff_format(handle):
     peek = read_head(handle)
     handle.seek(0)
     sniffer = csv.Sniffer()
-    # if not sniffer.has_header(peek):
-    #     logger.critical(f"The given sample sheet does not appear to contain a header.")
-    #     sys.exit(1)
     dialect = sniffer.sniff(peek)
     return dialect
 
@@ -164,9 +157,8 @@ def check_samplesheet(file_in, file_out):
         reader = csv.DictReader(in_handle, dialect=sniff_format(in_handle))
         # Validate the existence of the expected header columns.
         if not required_columns.issubset(reader.fieldnames):
-            logger.critical(
-                f"The sample sheet **must** contain the column headers: {', '.join(required_columns)}."
-            )
+            req_cols = ", ".join(required_columns)
+            logger.critical(f"The sample sheet **must** contain these column headers: {req_cols}.")
             sys.exit(1)
         # Validate each row.
         checker = RowChecker()
