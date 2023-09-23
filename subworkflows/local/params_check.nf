@@ -53,13 +53,15 @@ workflow PARAMS_CHECK {
     // Identify the Fasta files that are compressed
     ch_parsed_fasta_name = ch_input_files.branch {
         meta, fasta, fai ->
-            compressed : fasta.getExtension().equals('gz')
-            uncompressed : true
+            compressed : fasta.getExtension().equals('gz')      // (meta, fasta_gz, fai)
+            uncompressed : true                                 // (meta, fasta, fai)
     }
 
-    // uncompress them, with some channel manipulations to maintain the triplet (meta, fasta_fai)
-    ch_unzipped_fasta   = GUNZIP ( ch_parsed_fasta_name.compressed.map { meta, fasta_gz, fai -> [meta, fasta_gz] } ).gunzip
-                            .join(ch_parsed_fasta_name.compressed).map { meta, fasta, fasta_gz, fai -> [meta, fasta, fai] }
+    // uncompress them, with some channel manipulations to maintain the triplet (meta, fasta, fai)
+    gunzip_input        = ch_parsed_fasta_name.compressed.map { meta, fasta_gz, fai -> [meta, fasta_gz] }
+    ch_unzipped_fasta   = GUNZIP(gunzip_input).gunzip                   // (meta, fasta)
+                            .join(ch_parsed_fasta_name.compressed)      // joined with (meta, fasta_gz, fai) makes (meta, fasta, fasta_gz, fai)
+                            .map { meta, fasta, fasta_gz, fai -> [meta, fasta, fai] }
     ch_versions         = ch_versions.mix(GUNZIP.out.versions.first())
 
     // Check if the faidx index is present
@@ -67,11 +69,12 @@ workflow PARAMS_CHECK {
         meta, fasta, fai ->
             indexed : fai.exists()
             notindexed : true
+                return [meta, fasta]    // remove fai from the channel because it will be added by CUSTOM_GETCHROMSIZES below
     } . set { ch_inputs_checked }
 
     // Generate Samtools index and chromosome sizes file, again with some channel manipulations
-    ch_samtools_faidx   = CUSTOM_GETCHROMSIZES (ch_inputs_checked.notindexed.map { meta, fasta, missing_fai -> [meta, fasta] }).fai
-                            .join(ch_inputs_checked.notindexed).map { meta, fai, fasta, missing_fai -> [meta, fasta, fai] }
+    ch_samtools_faidx   = ch_inputs_checked.notindexed                                          // (meta, fasta)
+                            .join( CUSTOM_GETCHROMSIZES (ch_inputs_checked.notindexed).fai )    // joined with (meta, fai) makes (meta, fasta, fai)
     ch_versions         = ch_versions.mix(CUSTOM_GETCHROMSIZES.out.versions)
 
     // Read the .fai file, extract sequence statistics, and make an extended meta map
