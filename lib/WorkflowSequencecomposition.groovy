@@ -18,9 +18,12 @@ class WorkflowSequencecomposition {
                 Nextflow.error "'${params.input}' doesn't exist"
             }
         } else {
-            if (!params.fasta || !params.outdir) {
-                Nextflow.error "Either --input, or --fasta and--outdir must be provided"
+            if (!params.fasta) {
+                Nextflow.error "Either --input or --fasta must be provided"
             }
+        }
+        if (!params.outdir) {
+            Nextflow.error "--outdir is mandatory"
         }
     }
 

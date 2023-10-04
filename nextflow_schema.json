@@ -22,7 +22,8 @@
                 "outdir": {
                     "type": "string",
                     "format": "directory-path",
-                    "description": "The output directory where the results will be saved. Not considered when running the pipeline with a .csv file as input.",
+                    "description": "The output directory where the results will be saved. Not considered for sample-sheet entries that have an absolute path.",
+                    "default": "results",
                     "fa_icon": "fas fa-folder-open"
                 },
                 "selected_fw_output": {
@@ -46,7 +47,7 @@
                     "pattern": "^\\S+\\.csv$",
                     "schema": "assets/schema_input.json",
                     "description": "Path to comma-separated file containing information about the genomes to analyse. Used for bulk analysis of many genomes.",
-                    "help_text": "The file has to be a comma-separated file with two columns, and a header row. The columns names must be `species_dir` and `assembly_name`. An additional `assembly_accession` column can be provided too.",
+                    "help_text": "The file has to be a comma-separated file with two columns, and a header row. The columns names must be `outdir` and `fasta`.",
                     "fa_icon": "fas fa-file-csv"
                 },
                 "email": {

@@ -64,19 +64,18 @@ It has to be a comma-separated file with 2 columns, and a header row as shown in
 nextflow run sanger-tol/sequencecomposition --input '[path to samplesheet file]' --outdir <OUTDIR>
 ```
 
-The values in the file are used to make up the paths under which the Fasta files can be found,
-and the outputs be written.
+The values in the file are used to make up the `--fasta` and `--outdir` parameters.
 
 ```console
-species_dir,assembly_name
-darwin/data/fungi/Laetiporus_sulphureus,gfLaeSulp1.1
-darwin/data/mammals/Meles_meles,mMelMel3.2_paternal_haplotype
+outdir,fasta
+Laetiporus_sulphureus/gfLaeSulp1.1,/path/to/gfLaeSulp1.1.fasta
+Meles_meles/mMelMel3.2_paternal_haplotype,/path/to/mMelMel3.2_paternal_haplotype.fasta
 ```
 
-| Column          | Description                                                                                   |
-| --------------- | --------------------------------------------------------------------------------------------- |
-| `species_dir`   | Base directory of that species, which is expected to comply with the ToL directory structure. |
-| `assembly_name` | Name of the assembly, as on the NCBI website, e.g. `gfLaeSulp1.1`.                            |
+| Column   | Description                                                                                                                                     |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `outdir` | Output directory for this pipeline (evaluated from `--outdir` if a relative path). Analysis results are in a sub-directory `gene/base_content`. |
+| `fasta`  | Path to the Fasta file of this assembly (can be a remote file).                                                                                 |
 
 An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
 

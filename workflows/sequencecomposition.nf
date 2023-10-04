@@ -43,11 +43,13 @@ workflow SEQUENCECOMPOSITION {
     ch_versions = Channel.empty()
 
     PARAMS_CHECK (
-        [
-            params.input,
-            params.fasta,
-            params.outdir,
-        ]
+        params.input,
+        Channel.of(
+            [
+                params.fasta,
+            ]
+        ),
+        params.outdir,
     )
     ch_versions         = ch_versions.mix(PARAMS_CHECK.out.versions)
 

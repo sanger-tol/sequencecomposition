@@ -8,63 +8,48 @@ include { SAMPLESHEET_CHECK } from '../../modules/local/samplesheet_check'
 workflow PARAMS_CHECK {
 
     take:
-    inputs          // tuple, see below
+    samplesheet  // file
+    cli_params   // tuple, see below
+    outdir       // file output directory
 
 
     main:
-
-    def (samplesheet, fasta, outdir) = inputs
-
     ch_versions = Channel.empty()
 
     ch_inputs = Channel.empty()
     if (samplesheet) {
-
         SAMPLESHEET_CHECK ( file(samplesheet, checkIfExists: true) )
             .csv
-            // Provides species_dir and assembly_name
+            // Provides outdir and fasta
             .splitCsv ( header:true, sep:',' )
-            // Add assembly_path, following the Tree of Life directory structure
-            .map {
-                it + [
-                    assembly_path: "${it["species_dir"]}/assembly/release/${it["assembly_name"]}/insdc",
-                    ]
-            }
-            .map {
-                // If assembly_accession is missing, load the accession number from file, following the Tree of Life directory structure
-                it["assembly_accession"] ? it : it + [
-                    assembly_accession: file("${it["assembly_path"]}/ACCESSION", checkIfExists: true).text.trim(),
-                ]
-            }
-            // Convert to tuple(meta,file) as required by GUNZIP and FASTAWINDOWS
             .map { [
-                [
-                    id: it["assembly_accession"],
-                    analysis_dir: "${it["species_dir"]}/analysis/${it["assembly_name"]}",
-                ],
-                file("${it["assembly_path"]}/${it["assembly_accession"]}.fa.gz", checkIfExists: true),
+                (it["outdir"].startsWith("/") ? "" : outdir + "/") + it["outdir"],
+                it["fasta"],
             ] }
             .set { ch_inputs }
 
         ch_versions = ch_versions.mix(SAMPLESHEET_CHECK.out.versions)
 
     } else {
+        // Add the other input channel in, as it's expected to have all the parameters in the right order
+        ch_inputs = ch_inputs.mix(cli_params.map { [outdir] + it } )
+    }
 
+    ch_input_files = ch_inputs.map { outdir, fasta ->
         file_fasta = file(fasta, checkIfExists: true)
-        ch_inputs = Channel.of(
+        // Trick to strip the Fasta extension for gzipped files too, without having to list all possible extensions
+        id = file(fasta.replace(".gz", "")).baseName
+        return [
             [
-                [
-                    id: file_fasta.baseName,
-                    analysis_dir: outdir,
-                ],
-                file_fasta,
-            ]
-        )
-
+                id: id,
+                outdir: outdir,
+            ],
+            file_fasta,
+        ]
     }
 
     // Only flow to gunzip when required
-    ch_parsed_fasta_name = ch_inputs.branch {
+    ch_parsed_fasta_name = ch_input_files.branch {
         meta, filename ->
             compressed : filename.getExtension().equals('gz')
             uncompressed : true

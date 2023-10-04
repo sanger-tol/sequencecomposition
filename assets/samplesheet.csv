@@ -1,4 +1,5 @@
-species_dir,assembly_name
-25g/data/insects/Osmia_bicornis,iOsmBic2.1
-25g/data/insects/Osmia_bicornis,iOsmBic2.1_alternate_haplotype
-darwin/data/fungi/Laetiporus_sulphureus,gfLaeSulp1.1
+outdir,fasta
+Asterias_rubens/eAstRub1.3,https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/902/459/465/GCA_902459465.3_eAstRub1.3/GCA_902459465.3_eAstRub1.3_genomic.fna.gz
+Osmia_bicornis/iOsmBic2.1,https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/907/164/935/GCA_907164935.1_iOsmBic2.1/GCA_907164935.1_iOsmBic2.1_genomic.fna.gz
+Osmia_bicornis/iOsmBic2.1_alternate_haplotype,https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/907/164/925/GCA_907164925.1_iOsmBic2.1_alternate_haplotype/GCA_907164925.1_iOsmBic2.1_alternate_haplotype_genomic.fna.gz
+Noctua_fimbriata/ilNocFimb1.1,https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/905/163/415/GCA_905163415.1_ilNocFimb1.1/GCA_905163415.1_ilNocFimb1.1_genomic.fna.gz

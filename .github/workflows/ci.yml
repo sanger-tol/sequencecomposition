@@ -39,11 +39,6 @@ jobs:
         run: |
           nextflow run ${GITHUB_WORKSPACE} -profile test,docker --outdir ./results
 
-      - name: Run the full test profile of the pipeline (requires sanger-tol/insdcdownload)
+      - name: Run the full test profile of the pipeline
         run: |
-          mkdir ${GITHUB_WORKSPACE}/data
-          cd ${GITHUB_WORKSPACE}/data
-          nextflow run sanger-tol/insdcdownload -revision 1.1.0 -profile docker --assembly_name iOsmBic2.1 --assembly_accession GCA_907164935.1 --outdir 25g/data/insects/Osmia_bicornis
-          nextflow run sanger-tol/insdcdownload -revision 1.1.0 -profile docker --assembly_name iOsmBic2.1_alternate_haplotype --assembly_accession GCA_907164925.1 --outdir 25g/data/insects/Osmia_bicornis
-          nextflow run sanger-tol/insdcdownload -revision 1.1.0 -profile docker --assembly_name gfLaeSulp1.1 --assembly_accession GCA_927399515.1 --outdir darwin/data/fungi/Laetiporus_sulphureus
-          nextflow run ${GITHUB_WORKSPACE} -profile test_full,docker
+          nextflow run ${GITHUB_WORKSPACE} -profile test_full,docker --outdir ./results_full
