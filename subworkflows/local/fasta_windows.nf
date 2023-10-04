@@ -11,7 +11,7 @@ include { TABIX_TABIX as TABIX_TABIX_TBI   } from '../../modules/nf-core/tabix/t
 workflow FASTA_WINDOWS {
 
     take:
-    fasta               // file: /path/to/genome.fa
+    fasta_fai           // [file: /path/to/genome.fa, file: /path/to/genome.fai]
     output_selection    // file: /path/to/fasta_windows.csv
     window_size_info    // value, used to build meta.id and name files
 
@@ -20,7 +20,7 @@ workflow FASTA_WINDOWS {
     ch_versions = Channel.empty()
 
     // Run fasta_windows
-    FASTAWINDOWS ( fasta )
+    FASTAWINDOWS ( fasta_fai.map { meta, fasta, fai -> [meta, fasta] } )
     ch_versions       = ch_versions.mix(FASTAWINDOWS.out.versions.first())
 
     // List of:
@@ -53,6 +53,7 @@ workflow FASTA_WINDOWS {
         // column number
         ch_freq_bed_input.map { it[2] }
     ).bedgraph
+
     ch_versions       = ch_versions.mix(EXTRACT_COLUMN.out.versions.first())
 
     // Add meta information to the tsv files
@@ -67,10 +68,17 @@ workflow FASTA_WINDOWS {
     ch_compressed_bed = TABIX_BGZIP ( ch_freq_bed.mix(ch_tsv) ).output
     ch_versions       = ch_versions.mix(TABIX_BGZIP.out.versions.first())
 
-    // Index the BED file in two formats for maximum compatibility
-    ch_indexed_bed_csi= TABIX_TABIX_CSI ( ch_compressed_bed ).csi
+    // Try indexing the BED file in two formats for maximum compatibility
+    // but each has its own limitations
+    tabix_selector      = ch_compressed_bed.branch { meta, bed ->
+        tbi_and_csi: meta.max_length < 2**29
+        only_csi:    meta.max_length < 2**32
+    }
+
+    // Do the indexing on the compatible bedGraph files
+    ch_indexed_bed_csi= TABIX_TABIX_CSI ( tabix_selector.tbi_and_csi.mix(tabix_selector.only_csi) ).csi
     ch_versions       = ch_versions.mix(TABIX_TABIX_CSI.out.versions.first())
-    ch_indexed_bed_tbi= TABIX_TABIX_TBI ( ch_compressed_bed ).tbi
+    ch_indexed_bed_tbi= TABIX_TABIX_TBI ( tabix_selector.tbi_and_csi ).tbi
     ch_versions       = ch_versions.mix(TABIX_TABIX_TBI.out.versions.first())
 
 
@@ -78,3 +86,4 @@ workflow FASTA_WINDOWS {
     bedgraph = ch_compressed_bed
     versions = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
 }
+
