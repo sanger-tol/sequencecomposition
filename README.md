@@ -55,6 +55,7 @@ sanger-tol/sequencecomposition was originally written by [Matthieu Muffato](http
 We thank the following people for their assistance in the development of this pipeline:
 
 - [Priyanka Surana](https://github.com/priyanka-surana) for providing reviews.
+- [Tyler Chafin](https://github.com/tkchafin) for updates.
 
 ## Contributions and Support
 
