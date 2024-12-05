@@ -37,6 +37,7 @@ Note, since the pipeline is using Nextflow DSL2, each process will be run with i
 | Dependency    | Old version | New version |
 | ------------- | ----------- | ----------- |
 | fasta_windows |             | 0.2.4       |
+| MultiQC       |             | 1.13        |
 | Python        |             | 3.8.3,3.9   |
 | tabix         |             | 1.11        |
 
