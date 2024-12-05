@@ -2,7 +2,7 @@
 # Visit https://bit.ly/cffinit to generate yours today!
 
 cff-version: 1.2.0
-title: sanger-tol/sequencecomposition v1.1.0 - Polite Platyfish
+title: sanger-tol/sequencecomposition
 message: >-
     If you use this software, please cite it using the
     metadata from this file.
@@ -26,5 +26,5 @@ identifiers:
 repository-code: "https://github.com/sanger-tol/sequencecomposition"
 license: MIT
 commit: TODO
-version: 1.0.0
+version: 2.0.0
 date-released: "2022-10-08"
