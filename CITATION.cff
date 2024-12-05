@@ -16,6 +16,10 @@ authors:
       family-names: Surana
       orcid: "https://orcid.org/0000-0002-7167-0875"
       affiliation: Wellcome Sanger Institute
+    - given-names: Tyler
+      family-names: Chafin
+      orcid: "https://orcid.org/0000-0001-8687-5905"
+      affiliation: Wellcome Sanger Institute
 identifiers:
     - type: doi
       value: 10.5281/zenodo.7155168
