@@ -15,8 +15,8 @@ Note, since the pipeline is using Nextflow DSL2, each process will be run with i
 
 | Dependency | Old version | New version |
 | ---------- | ----------- | ----------- |
-| Python      |  3.8.3,3.9      | 3.9.1       |
-| tabix      |  1.11      | 1.20       |
+| Python     | 3.8.3,3.9   | 3.9.1       |
+| tabix      | 1.11        | 1.20        |
 
 > **NB:** Dependency has been **updated** if both old and new version information is present. </br> **NB:** Dependency has been **added** if just the new version information is present. </br> **NB:** Dependency has been **removed** if version information isn't present.
 
@@ -34,19 +34,19 @@ Initial release of sanger-tol/sequencecomposition, created with the [nf-core](ht
 
 Note, since the pipeline is using Nextflow DSL2, each process will be run with its own [Biocontainer](https://biocontainers.pro/#/registry). This means that on occasion it is entirely possible for the pipeline to be using different versions of the same tool. However, the overall software dependency changes compared to the last release have been listed below for reference.
 
-| Dependency | Old version | New version |
-| ---------- | ----------- | ----------- |
-| fasta_windows      |        | 0.2.4       |
-| Python      |        | 3.8.3,3.9       |
-| tabix      |        | 1.11       |
+| Dependency    | Old version | New version |
+| ------------- | ----------- | ----------- |
+| fasta_windows |             | 0.2.4       |
+| Python        |             | 3.8.3,3.9   |
+| tabix         |             | 1.11        |
 
 > **NB:** Dependency has been **updated** if both old and new version information is present. </br> **NB:** Dependency has been **added** if just the new version information is present. </br> **NB:** Dependency has been **removed** if version information isn't present.
 
 ### Parameters
 
-| Old parameter | New parameter |
-| ------------- | ------------- |
-|               | --input  |
-|               | --fasta  |
-|               | --window_size_info  |
-|               | --selected_fw_output   |
+| Old parameter | New parameter        |
+| ------------- | -------------------- |
+|               | --input              |
+|               | --fasta              |
+|               | --window_size_info   |
+|               | --selected_fw_output |
