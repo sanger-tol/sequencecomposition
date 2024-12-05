@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Enhancements & fixes
 
+- Upgrade to the version 2.8 of the nf-core template.
 - nf-core module updates to remove Anaconda references
+- Updated configuration of the GitHub CI to improve testing.
+- Simpler samplesheet format, with just the path to the Fasta file and the output directory.
 
 ### Software dependencies
 
@@ -15,8 +18,10 @@ Note, since the pipeline is using Nextflow DSL2, each process will be run with i
 
 | Dependency | Old version | New version |
 | ---------- | ----------- | ----------- |
+| htslib     |             | 1.20        |
+| MultiQC    | 1.13        | 1.20        |
 | Python     | 3.8.3,3.9   | 3.9.1       |
-| tabix      | 1.11        | 1.20        |
+| samtools   |             | 1.21        |
 
 > **NB:** Dependency has been **updated** if both old and new version information is present. </br> **NB:** Dependency has been **added** if just the new version information is present. </br> **NB:** Dependency has been **removed** if version information isn't present.
 
