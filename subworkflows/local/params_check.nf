@@ -2,84 +2,113 @@
 // Check and parse the input parameters
 //
 
-include { GUNZIP            } from '../../modules/nf-core/modules/gunzip/main'
-include { SAMPLESHEET_CHECK } from '../../modules/local/samplesheet_check'
+include { CUSTOM_GETCHROMSIZES } from '../../modules/nf-core/custom/getchromsizes/main'
+include { GUNZIP               } from '../../modules/nf-core/gunzip/main'
+include { SAMPLESHEET_CHECK    } from '../../modules/local/samplesheet_check'
 
 workflow PARAMS_CHECK {
 
     take:
-    inputs          // tuple, see below
+    samplesheet  // file
+    cli_params   // tuple, see below
+    outdir       // file output directory
 
 
     main:
-
-    def (samplesheet, fasta, outdir) = inputs
-
     ch_versions = Channel.empty()
 
     ch_inputs = Channel.empty()
     if (samplesheet) {
-
         SAMPLESHEET_CHECK ( file(samplesheet, checkIfExists: true) )
             .csv
-            // Provides species_dir and assembly_name
+            // Provides outdir and fasta
             .splitCsv ( header:true, sep:',' )
-            // Add assembly_path, following the Tree of Life directory structure
-            .map {
-                it + [
-                    assembly_path: "${it["species_dir"]}/assembly/release/${it["assembly_name"]}/insdc",
-                    ]
-            }
-            .map {
-                // If assembly_accession is missing, load the accession number from file, following the Tree of Life directory structure
-                it["assembly_accession"] ? it : it + [
-                    assembly_accession: file("${it["assembly_path"]}/ACCESSION", checkIfExists: true).text.trim(),
-                ]
-            }
-            // Convert to tuple(meta,file) as required by GUNZIP and FASTAWINDOWS
             .map { [
-                [
-                    id: it["assembly_accession"],
-                    analysis_dir: "${it["species_dir"]}/analysis/${it["assembly_name"]}",
-                ],
-                file("${it["assembly_path"]}/${it["assembly_accession"]}.fa.gz", checkIfExists: true),
+                (it["outdir"].startsWith("/") ? "" : outdir + "/") + it["outdir"],
+                it["fasta"],
             ] }
             .set { ch_inputs }
 
         ch_versions = ch_versions.mix(SAMPLESHEET_CHECK.out.versions)
 
     } else {
+        // Add the other input channel in, as it's expected to have all the parameters in the right order
+        ch_inputs = ch_inputs.mix(cli_params.map { [outdir] + it } )
+    }
 
+    ch_input_files = ch_inputs.map { outdir, fasta ->
         file_fasta = file(fasta, checkIfExists: true)
-        ch_inputs = Channel.of(
+        // Trick to strip the Fasta extension for gzipped files too, without having to list all possible extensions
+        id = file(fasta.replace(".gz", "")).baseName
+        return [
             [
-                [
-                    id: file_fasta.baseName,
-                    analysis_dir: outdir,
-                ],
-                file_fasta,
-            ]
-        )
-
+                id: id,
+                outdir: outdir,
+            ],
+            file_fasta,
+            file(fasta + ".fai"),
+        ]
     }
 
-    // Only flow to gunzip when required
-    ch_parsed_fasta_name = ch_inputs.branch {
-        meta, filename ->
-            compressed : filename.getExtension().equals('gz')
-            uncompressed : true
+    // Identify the Fasta files that are compressed
+    ch_parsed_fasta_name = ch_input_files.branch {
+        meta, fasta, fai ->
+            compressed : fasta.getExtension().equals('gz')      // (meta, fasta_gz, fai)
+            uncompressed : true                                 // (meta, fasta, fai)
     }
 
-    // gunzip .fa.gz files
-    ch_unzipped_fasta   = GUNZIP ( ch_parsed_fasta_name.compressed ).gunzip
+    // uncompress them, with some channel manipulations to maintain the triplet (meta, fasta, fai)
+    gunzip_input        = ch_parsed_fasta_name.compressed.map { meta, fasta_gz, fai -> [meta, fasta_gz] }
+    ch_unzipped_fasta   = GUNZIP(gunzip_input).gunzip                   // (meta, fasta)
+                            .join(ch_parsed_fasta_name.compressed)      // joined with (meta, fasta_gz, fai) makes (meta, fasta, fasta_gz, fai)
+                            .map { meta, fasta, fasta_gz, fai -> [meta, fasta, fai] }
     ch_versions         = ch_versions.mix(GUNZIP.out.versions.first())
 
-    // Combine with preexisting .fa files
-    ch_plain_fasta      = ch_parsed_fasta_name.uncompressed.mix(ch_unzipped_fasta)
+    // Check if the faidx index is present
+    ch_parsed_fasta_name.uncompressed.mix(ch_unzipped_fasta).branch {
+        meta, fasta, fai ->
+            indexed : fai.exists()
+            notindexed : true
+                return [meta, fasta]    // remove fai from the channel because it will be added by CUSTOM_GETCHROMSIZES below
+    } . set { ch_inputs_checked }
 
+    // Generate Samtools index and chromosome sizes file, again with some channel manipulations
+    ch_samtools_faidx   = ch_inputs_checked.notindexed                                          // (meta, fasta)
+                            .join( CUSTOM_GETCHROMSIZES (ch_inputs_checked.notindexed).fai )    // joined with (meta, fai) makes (meta, fasta, fai)
+    ch_versions         = ch_versions.mix(CUSTOM_GETCHROMSIZES.out.versions)
+
+    // Read the .fai file, extract sequence statistics, and make an extended meta map
+    ch_fasta_fai = ch_inputs_checked.indexed.mix(ch_samtools_faidx).map {
+        meta, fasta, fai -> [meta + get_sequence_map(fai), fasta, fai]
+    }
 
     emit:
-    plain_fasta = ch_plain_fasta       // channel: [ val(meta), path/to/fasta ]
-    versions    = ch_versions          // channel: versions.yml
+    fasta_fai = ch_fasta_fai       // channel: [ val(meta), path/to/fasta, path/to/fai ]
+    versions  = ch_versions        // channel: versions.yml
 }
 
+// Read the .fai file to extract the number of sequences, the maximum and total sequence length
+// Inspired from https://github.com/nf-core/rnaseq/blob/3.10.1/lib/WorkflowRnaseq.groovy
+def get_sequence_map(fai_file) {
+    def n_sequences = 0
+    def max_length = 0
+    def total_length = 0
+    fai_file.eachLine { line ->
+        def lspl   = line.split('\t')
+        def chrom  = lspl[0]
+        def length = lspl[1].toInteger()
+        n_sequences ++
+        total_length += length
+        if (length > max_length) {
+            max_length = length
+        }
+    }
+
+    def sequence_map = [:]
+    sequence_map.n_sequences = n_sequences
+    sequence_map.total_length = total_length
+    if (n_sequences) {
+        sequence_map.max_length = max_length
+    }
+    return sequence_map
+}

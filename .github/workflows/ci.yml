@@ -11,6 +11,10 @@ on:
 env:
   NXF_ANSI_LOG: false
 
+concurrency:
+  group: "${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}"
+  cancel-in-progress: true
+
 jobs:
   test:
     name: Run pipeline with test data
@@ -20,11 +24,11 @@ jobs:
     strategy:
       matrix:
         NXF_VER:
-          - "22.04.0"
+          - "22.10.1"
           - "latest-everything"
     steps:
       - name: Check out pipeline code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install Nextflow
         uses: nf-core/setup-nextflow@v1
@@ -35,9 +39,6 @@ jobs:
         run: |
           nextflow run ${GITHUB_WORKSPACE} -profile test,docker --outdir ./results
 
-      - name: Run the full test profile of the pipeline (requires sanger-tol/insdcdownload)
+      - name: Run the full test profile of the pipeline
         run: |
-          mkdir ${GITHUB_WORKSPACE}/data
-          cd ${GITHUB_WORKSPACE}/data
-          nextflow run sanger-tol/insdcdownload -revision 1.1.0 -profile test_full,docker --outdir ./results_full
           nextflow run ${GITHUB_WORKSPACE} -profile test_full,docker --outdir ./results_full
