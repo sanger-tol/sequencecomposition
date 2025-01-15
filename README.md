@@ -3,7 +3,7 @@
 [![GitHub Actions CI Status](https://github.com/sanger-tol/sequencecomposition/workflows/nf-core%20CI/badge.svg)](https://github.com/sanger-tol/sequencecomposition/actions?query=workflow%3A%22nf-core+CI%22)
 [![GitHub Actions Linting Status](https://github.com/sanger-tol/sequencecomposition/workflows/nf-core%20linting/badge.svg)](https://github.com/sanger-tol/sequencecomposition/actions?query=workflow%3A%22nf-core+linting%22)
 
-[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.7155168-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.7155168)
+[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.14358108-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.14358108)
 
 [![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A522.10.1-23aa62.svg)](https://www.nextflow.io/)
 [![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=conda)](https://docs.conda.io/en/latest/)
@@ -65,7 +65,7 @@ For further information or help, don't hesitate to get in touch on the [Slack `#
 
 ## Citations
 
-If you use sanger-tol/sequencecomposition for your analysis, please cite it using the following doi: [10.5281/zenodo.7155168](https://doi.org/10.5281/zenodo.7155168)
+If you use sanger-tol/sequencecomposition for your analysis, please cite it using the following doi: [10.5281/zenodo.14358108](https://doi.org/10.5281/zenodo.14358108)
 
 An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
 
