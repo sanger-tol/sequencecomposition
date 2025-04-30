@@ -1,11 +1,9 @@
 #!/usr/bin/env nextflow
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    nf-core/sequencecomposition
+    sanger-tol/sequencecomposition
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Github : https://github.com/nf-core/sequencecomposition
-    Website: https://nf-co.re/sequencecomposition
-    Slack  : https://nfcore.slack.com/channels/sequencecomposition
+    Github : https://github.com/sanger-tol/sequencecomposition
 ----------------------------------------------------------------------------------------
 */
 
@@ -40,7 +38,7 @@ params.fasta = getGenomeAttribute('fasta')
 //
 // WORKFLOW: Run main analysis pipeline depending on type of input
 //
-workflow NFCORE_SEQUENCECOMPOSITION {
+workflow SANGERTOL_SEQUENCECOMPOSITION {
 
     take:
     samplesheet // channel: samplesheet read in from --input
@@ -80,7 +78,7 @@ workflow {
     //
     // WORKFLOW: Run main workflow
     //
-    NFCORE_SEQUENCECOMPOSITION (
+    SANGERTOL_SEQUENCECOMPOSITION (
         PIPELINE_INITIALISATION.out.samplesheet
     )
     //
@@ -93,7 +91,7 @@ workflow {
         params.outdir,
         params.monochrome_logs,
         params.hook_url,
-        NFCORE_SEQUENCECOMPOSITION.out.multiqc_report
+        SANGERTOL_SEQUENCECOMPOSITION.out.multiqc_report
     )
 }
 

@@ -1,5 +1,5 @@
 //
-// Subworkflow with functionality specific to the nf-core/sequencecomposition pipeline
+// Subworkflow with functionality specific to the sanger-tol/sequencecomposition pipeline
 //
 
 /*

@@ -1,4 +1,4 @@
-# nf-core/sequencecomposition: Output
+# sanger-tol/sequencecomposition: Output
 
 ## Introduction
 
