@@ -2,60 +2,104 @@
 
 ## Introduction
 
-This document describes the output produced by the pipeline. Most of the plots are taken from the MultiQC report, which summarises results at the end of the pipeline.
+This document describes the output produced by the pipeline.
 
 The directories listed below will be created in the results directory after the pipeline has finished. All paths are relative to the top-level results directory.
 
-<!-- TODO nf-core: Write this documentation describing your workflow's output -->
+The directories comply with Tree of Life's canonical directory structure.
 
 ## Pipeline overview
 
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
 
-- [FastQC](#fastqc) - Raw read QC
-- [MultiQC](#multiqc) - Aggregate report describing results and QC from the whole pipeline
+- [Sequence composition files](#sequence-composition-files) - Files with various statistics about sequence composition
 - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
 
-### FastQC
+### Sequence composition files
 
-<details markdown="1">
-<summary>Output files</summary>
+Here are the files you can expect in the `analysis/` sub-directory.
 
-- `fastqc/`
-  - `*_fastqc.html`: FastQC report containing quality metrics.
-  - `*_fastqc.zip`: Zip archive containing the FastQC report, tab-delimited data file and plot images.
+```text
+analysis
+└── gfLaeSulp1.1
+    └── base_content
+        ├── k1
+        │   ├── GCA_927399515.1.A.1k.bedGraph.gz
+        │   ├── GCA_927399515.1.A.1k.bedGraph.gz.csi
+        │   ├── GCA_927399515.1.A.1k.bedGraph.gz.tbi
+        │   ├── GCA_927399515.1.AT_skew.1k.bedGraph.gz
+        │   ├── GCA_927399515.1.AT_skew.1k.bedGraph.gz.csi
+        │   ├── GCA_927399515.1.AT_skew.1k.bedGraph.gz.tbi
+        │   ├── GCA_927399515.1.C.1k.bedGraph.gz
+        │   ├── GCA_927399515.1.C.1k.bedGraph.gz.csi
+        │   ├── GCA_927399515.1.C.1k.bedGraph.gz.tbi
+        │   ├── GCA_927399515.1.G.1k.bedGraph.gz
+        │   ├── GCA_927399515.1.G.1k.bedGraph.gz.csi
+        │   ├── GCA_927399515.1.G.1k.bedGraph.gz.tbi
+        │   ├── GCA_927399515.1.GC.1k.bedGraph.gz
+        │   ├── GCA_927399515.1.GC.1k.bedGraph.gz.csi
+        │   ├── GCA_927399515.1.GC.1k.bedGraph.gz.tbi
+        │   ├── GCA_927399515.1.GC_skew.1k.bedGraph.gz
+        │   ├── GCA_927399515.1.GC_skew.1k.bedGraph.gz.csi
+        │   ├── GCA_927399515.1.GC_skew.1k.bedGraph.gz.tbi
+        │   ├── GCA_927399515.1.mononuc.1k.tsv.gz
+        │   ├── GCA_927399515.1.mononuc.1k.tsv.gz.csi
+        │   ├── GCA_927399515.1.mononuc.1k.tsv.gz.tbi
+        │   ├── GCA_927399515.1.N.1k.bedGraph.gz
+        │   ├── GCA_927399515.1.N.1k.bedGraph.gz.csi
+        │   ├── GCA_927399515.1.N.1k.bedGraph.gz.tbi
+        │   ├── GCA_927399515.1.nucShannon.1k.bedGraph.gz
+        │   ├── GCA_927399515.1.nucShannon.1k.bedGraph.gz.csi
+        │   ├── GCA_927399515.1.nucShannon.1k.bedGraph.gz.tbi
+        │   ├── GCA_927399515.1.T.1k.bedGraph.gz
+        │   ├── GCA_927399515.1.T.1k.bedGraph.gz.csi
+        │   └── GCA_927399515.1.T.1k.bedGraph.gz.tbi
+        ├── k2
+        │   ├── GCA_927399515.1.CpG.1k.bedGraph.gz
+        │   ├── GCA_927399515.1.CpG.1k.bedGraph.gz.csi
+        │   ├── GCA_927399515.1.CpG.1k.bedGraph.gz.tbi
+        │   ├── GCA_927399515.1.dinuc.1k.tsv.gz
+        │   ├── GCA_927399515.1.dinuc.1k.tsv.gz.csi
+        │   ├── GCA_927399515.1.dinuc.1k.tsv.gz.tbi
+        │   ├── GCA_927399515.1.dinucShannon.1k.bedGraph.gz
+        │   ├── GCA_927399515.1.dinucShannon.1k.bedGraph.gz.csi
+        │   └── GCA_927399515.1.dinucShannon.1k.bedGraph.gz.tbi
+        ├── k3
+        │   ├── GCA_927399515.1.trinuc.1k.tsv.gz
+        │   ├── GCA_927399515.1.trinuc.1k.tsv.gz.csi
+        │   ├── GCA_927399515.1.trinuc.1k.tsv.gz.tbi
+        │   ├── GCA_927399515.1.trinucShannon.1k.bedGraph.gz
+        │   ├── GCA_927399515.1.trinucShannon.1k.bedGraph.gz.csi
+        │   └── GCA_927399515.1.trinucShannon.1k.bedGraph.gz.tbi
+        └── k4
+            ├── GCA_927399515.1.tetranuc.1k.tsv.gz
+            ├── GCA_927399515.1.tetranuc.1k.tsv.gz.csi
+            ├── GCA_927399515.1.tetranuc.1k.tsv.gz.tbi
+            ├── GCA_927399515.1.tetranucShannon.1k.bedGraph.gz
+            ├── GCA_927399515.1.tetranucShannon.1k.bedGraph.gz.csi
+            └── GCA_927399515.1.tetranucShannon.1k.bedGraph.gz.tbi
+```
 
-</details>
+They all correspond to the various results of the pipelines. Following the convention,
+the directory structure includes the assembly name, e.g. `gfLaeSulp1.1`, and all files are named after the assembly accession, e.g. `GCA_927399515.1`.
 
-[FastQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/) gives general quality metrics about your sequenced reads. It provides information about the quality score distribution across your reads, per base sequence content (%A/T/G/C), adapter contamination and overrepresented sequences. For further reading and documentation see the [FastQC help pages](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/).
+All outputs are in bedGraph and TSV (BED3+) formats, compressed with `bgzip` and indexed with `tabix` (`.csi` and `.tbi` indices).
 
-### MultiQC
+For each _k_ from 1 to 4, the _k_-mer counts are in `k${k}/GCA_*.*nuc.1k.tsv.gz`,
+and the resulting Shannon diversity metrics in `k${k}/GCA_*.*nucShannon.1k.bedGraph.gz`.
 
-<details markdown="1">
-<summary>Output files</summary>
+Additionally, these frequencies are extracted in bedGraph files:
 
-- `multiqc/`
-  - `multiqc_report.html`: a standalone HTML file that can be viewed in your web browser.
-  - `multiqc_data/`: directory containing parsed statistics from the different tools used in the pipeline.
-  - `multiqc_plots/`: directory containing static images from the report in various formats.
-
-</details>
-
-[MultiQC](http://multiqc.info) is a visualization tool that generates a single HTML report summarising all samples in your project. Most of the pipeline QC results are visualised in the report and further statistics are available in the report data directory.
-
-Results generated by MultiQC collate pipeline QC from supported tools e.g. FastQC. The pipeline has special steps which also allow the software versions to be reported in the MultiQC output for future traceability. For more information about how to use MultiQC reports, see <http://multiqc.info>.
+- each nucleotide, and N
+- GC content, GC skew, and AT skew
+- CpG
 
 ### Pipeline information
 
-<details markdown="1">
-<summary>Output files</summary>
-
-- `pipeline_info/`
+- `pipeline_info/sequencecomposition/`
   - Reports generated by Nextflow: `execution_report.html`, `execution_timeline.html`, `execution_trace.txt` and `pipeline_dag.dot`/`pipeline_dag.svg`.
   - Reports generated by the pipeline: `pipeline_report.html`, `pipeline_report.txt` and `software_versions.yml`. The `pipeline_report*` files will only be present if the `--email` / `--email_on_fail` parameter's are used when running the pipeline.
   - Reformatted samplesheet files used as input to the pipeline: `samplesheet.valid.csv`.
   - Parameters used by the pipeline run: `params.json`.
-
-</details>
 
 [Nextflow](https://www.nextflow.io/docs/latest/tracing.html) provides excellent functionality for generating various reports relevant to the running and execution of the pipeline. This will allow you to troubleshoot errors with the running of the pipeline, and also provide you with other information such as launch commands, run times and resource usage.
