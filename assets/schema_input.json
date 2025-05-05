@@ -8,13 +8,14 @@
         "type": "object",
         "properties": {
             "outdir": {
-                "type": "dir-path",
+                "type": "string",
+                "format": "dir-path",
                 "pattern": "^\\S+$",
                 "errorMessage": "Species directory must be provided and exist"
             },
             "fasta": {
-                "type": "file-path",
-                "exists": true,
+                "type": "string",
+                "format": "file-path",
                 "pattern": "^\\S+$",
                 "errorMessage": "Assembly path is mandatory"
             }
