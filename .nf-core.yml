@@ -2,6 +2,8 @@ lint:
   files_exist:
     - assets/multiqc_config.yml
     - assets/nf-core-sequencecomposition_logo_light.png
+    - conf/igenomes.config
+    - conf/igenomes_ignored.config
     - docs/images/nf-core-sequencecomposition_logo_light.png
     - docs/images/nf-core-sequencecomposition_logo_dark.png
     - .github/ISSUE_TEMPLATE/config.yml
