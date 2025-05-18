@@ -29,7 +29,7 @@ license: MIT
 message: If you use this software, please cite it using the metadata from this file
   and all references from CITATIONS.md .
 repository-code: https://github.com/sanger-tol/sequencecomposition
-title: sanger-tol/sequencecomposition v1.1.0 - Polite Platyfish
+title: sanger-tol/sequencecomposition v1.2.0dev
 type: software
 url: https://pipelines.tol.sanger.ac.uk/sequencecomposition
-version: 1.1.0
+version: 1.2.0dev
