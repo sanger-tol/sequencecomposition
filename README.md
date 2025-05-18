@@ -1,18 +1,15 @@
 # ![sanger-tol/sequencecomposition](docs/images/sanger-tol-sequencecomposition_logo.png)
 
-[![GitHub Actions CI Status](https://github.com/sanger-tol/sequencecomposition/workflows/nf-core%20CI/badge.svg)](https://github.com/sanger-tol/sequencecomposition/actions?query=workflow%3A%22nf-core+CI%22)
-[![GitHub Actions Linting Status](https://github.com/sanger-tol/sequencecomposition/workflows/nf-core%20linting/badge.svg)](https://github.com/sanger-tol/sequencecomposition/actions?query=workflow%3A%22nf-core+linting%22)
+[![GitHub Actions CI Status](https://github.com/sanger-tol/sequencecomposition/actions/workflows/ci.yml/badge.svg)](https://github.com/sanger-tol/sequencecomposition/actions/workflows/ci.yml)
+[![GitHub Actions Linting Status](https://github.com/sanger-tol/sequencecomposition/actions/workflows/linting.yml/badge.svg)](https://github.com/sanger-tol/sequencecomposition/actions/workflows/linting.yml)
 
 [![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.14358108-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.14358108)
 
-[![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A522.10.1-23aa62.svg)](https://www.nextflow.io/)
+[![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A524.04.2-23aa62.svg)](https://www.nextflow.io/)
 [![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=conda)](https://docs.conda.io/en/latest/)
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
-
-[![Get help on Slack](http://img.shields.io/badge/slack-SangerTreeofLife%20%23pipelines-4A154B?labelColor=000000&logo=slack)](https://SangerTreeofLife.slack.com/channels/pipelines)
-[![Follow on Twitter](http://img.shields.io/badge/twitter-%40sangertol-1DA1F2?labelColor=000000&logo=twitter)](https://twitter.com/sangertol)
-[![Watch on YouTube](http://img.shields.io/badge/youtube-tree--of--life-FF0000?labelColor=000000&logo=youtube)](https://www.youtube.com/channel/UCFeDpvjU58SA9V0ycRXejhA)
+[![Launch on Seqera Platform](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Seqera%20Platform-%234256e7)](https://cloud.seqera.io/launch?pipeline=https://github.com/sanger-tol/sequencecomposition)
 
 ## Introduction
 
@@ -29,10 +26,8 @@ Steps involved:
 
 ## Usage
 
-> **Note**
-> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how
-> to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline)
-> with `-profile test` before running the workflow on actual data.
+> [!NOTE]
+> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
 
 The easiest is to provide the path of the Fasta file to analyse like this:
 
@@ -40,10 +35,8 @@ The easiest is to provide the path of the Fasta file to analyse like this:
 nextflow run sanger-tol/sequencecomposition --fasta /path/to/genome.fa
 ```
 
-> **Warning:**
-> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those
-> provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_;
-> see [docs](https://nf-co.re/usage/configuration#custom-configuration-files).
+> [!WARNING]
+> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/usage/getting_started/configuration#custom-configuration-files).
 
 The pipeline also supports bulk downloads through a sample-sheet.
 More information about this mode on our [pipeline website](https://pipelines.tol.sanger.ac.uk/sequencecomposition/usage).
@@ -52,7 +45,7 @@ More information about this mode on our [pipeline website](https://pipelines.tol
 
 sanger-tol/sequencecomposition was originally written by [Matthieu Muffato](https://github.com/muffato).
 
-We thank the following people for their assistance in the development of this pipeline:
+We thank the following people for their extensive assistance in the development of this pipeline:
 
 - [Priyanka Surana](https://github.com/priyanka-surana) for providing reviews.
 - [Tyler Chafin](https://github.com/tkchafin) for updates.
@@ -69,7 +62,7 @@ If you use sanger-tol/sequencecomposition for your analysis, please cite it usin
 
 An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
 
-This pipeline uses code and infrastructure developed and maintained by the [nf-core](https://nf-co.re) community, reused here under the [MIT license](https://github.com/nf-core/tools/blob/master/LICENSE).
+This pipeline uses code and infrastructure developed and maintained by the [nf-core](https://nf-co.re) community, reused here under the [MIT license](https://github.com/nf-core/tools/blob/main/LICENSE).
 
 > **The nf-core framework for community-curated bioinformatics pipelines.**
 >

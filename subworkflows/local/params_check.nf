@@ -4,58 +4,34 @@
 
 include { CUSTOM_GETCHROMSIZES } from '../../modules/nf-core/custom/getchromsizes/main'
 include { GUNZIP               } from '../../modules/nf-core/gunzip/main'
-include { SAMPLESHEET_CHECK    } from '../../modules/local/samplesheet_check'
 
 workflow PARAMS_CHECK {
 
     take:
-    samplesheet  // file
-    cli_params   // tuple, see below
-    outdir       // file output directory
-
+    samplesheet  // tuple (outdir, fasta) -- parsed samplesheet
 
     main:
     ch_versions = Channel.empty()
 
-    ch_inputs = Channel.empty()
-    if (samplesheet) {
-        SAMPLESHEET_CHECK ( file(samplesheet, checkIfExists: true) )
-            .csv
-            // Provides outdir and fasta
-            .splitCsv ( header:true, sep:',' )
-            .map { [
-                (it["outdir"].startsWith("/") ? "" : outdir + "/") + it["outdir"],
-                it["fasta"],
-            ] }
-            .set { ch_inputs }
-
-        ch_versions = ch_versions.mix(SAMPLESHEET_CHECK.out.versions)
-
-    } else {
-        // Add the other input channel in, as it's expected to have all the parameters in the right order
-        ch_inputs = ch_inputs.mix(cli_params.map { [outdir] + it } )
-    }
-
-    ch_input_files = ch_inputs.map { outdir, fasta ->
-        file_fasta = file(fasta, checkIfExists: true)
-        // Trick to strip the Fasta extension for gzipped files too, without having to list all possible extensions
-        id = file(fasta.replace(".gz", "")).baseName
-        return [
-            [
-                id: id,
-                outdir: outdir,
-            ],
-            file_fasta,
-            file(fasta + ".fai"),
-        ]
-    }
-
-    // Identify the Fasta files that are compressed
-    ch_parsed_fasta_name = ch_input_files.branch {
-        meta, fasta, fai ->
-            compressed : fasta.getExtension().equals('gz')      // (meta, fasta_gz, fai)
-            uncompressed : true                                 // (meta, fasta, fai)
-    }
+    samplesheet
+        .map { outdir, fasta ->
+            // Trick to strip the Fasta extension for gzipped files too, without having to list all possible extensions
+            id = file(fasta.name.replace(".gz", "")).baseName
+            return [
+                [
+                    id: id,
+                    outdir: outdir,
+                ],
+                fasta,
+                file(fasta.toUriString() + ".fai"),
+            ]
+        }
+        .branch {
+            meta, fasta, fai ->
+                compressed : fasta.getExtension().equals('gz')      // (meta, fasta_gz, fai)
+                uncompressed : true                                 // (meta, fasta, fai)
+        }
+        .set { ch_parsed_fasta_name }
 
     // uncompress them, with some channel manipulations to maintain the triplet (meta, fasta, fai)
     gunzip_input        = ch_parsed_fasta_name.compressed.map { meta, fasta_gz, fai -> [meta, fasta_gz] }
