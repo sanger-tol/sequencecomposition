@@ -22,7 +22,7 @@ lint:
     - manifest.homePage
     - config_defaults:
         - params.selected_fw_output
-nf_core_version: 3.2.1
+nf_core_version: 3.2.0
 repository_type: pipeline
 template:
   author: "@muffato"
