@@ -3,6 +3,25 @@
     IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    IMPORT LOCAL MODULES/SUBWORKFLOWS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+//
+// SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
+//
+include { PARAMS_CHECK  } from '../subworkflows/local/params_check'
+include { FASTA_WINDOWS } from '../subworkflows/local/fasta_windows'
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    IMPORT NF-CORE MODULES/SUBWORKFLOWS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
 include { paramsSummaryMap       } from 'plugin/nf-schema'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_sequencecomposition_pipeline'
@@ -20,6 +39,19 @@ workflow SEQUENCECOMPOSITION {
     main:
 
     ch_versions = Channel.empty()
+
+    PARAMS_CHECK (
+        ch_samplesheet,
+    )
+    ch_versions         = ch_versions.mix(PARAMS_CHECK.out.versions)
+
+    // Statistics extraction
+    FASTA_WINDOWS (
+        PARAMS_CHECK.out.fasta_fai,
+        file(params.selected_fw_output, checkExists: true),
+        params.window_size_info,
+    )
+    ch_versions         = ch_versions.mix(FASTA_WINDOWS.out.versions)
 
     //
     // Collate and save software versions

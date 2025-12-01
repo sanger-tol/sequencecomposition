@@ -13,7 +13,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { SEQUENCECOMPOSITION  } from './workflows/sequencecomposition'
+include { SEQUENCECOMPOSITION     } from './workflows/sequencecomposition'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_sequencecomposition_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_sequencecomposition_pipeline'
 /*

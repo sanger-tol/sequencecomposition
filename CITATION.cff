@@ -1,0 +1,35 @@
+authors:
+  - affiliation: Wellcome Sanger Institute
+    email: tc25@sanger.ac.uk
+    family-names: Chafin
+    given-names: Tyler
+    orcid: https://orcid.org/0000-0001-8687-5905
+    website: https://github.com/tkchafin
+  - affiliation: Wellcome Sanger Institute
+    email: jd42@sanger.ac.uk
+    family-names: Downie
+    given-names: Jim
+    orcid: https://orcid.org/0000-0002-7175-0533
+    website: https://github.com/prototaxites
+  - affiliation: Wellcome Sanger Institute
+    email: mm49@sanger.ac.uk
+    family-names: Muffato
+    given-names: Matthieu
+    orcid: https://orcid.org/0000-0002-7860-3560
+    website: https://github.com/muffato
+  - affiliation: Wellcome Sanger Institute
+    family-names: Surana
+    given-names: Priyanka
+    orcid: https://orcid.org/0000-0002-7167-0875
+    website: https://github.com/priyanka-surana
+cff-version: 1.2.0
+date-released: "2025-05-18"
+doi: 10.5281/zenodo.14358108
+license: MIT
+message: If you use this software, please cite it using the metadata from this file
+  and all references from CITATIONS.md .
+repository-code: https://github.com/sanger-tol/sequencecomposition
+title: sanger-tol/sequencecomposition v1.2.0dev
+type: software
+url: https://pipelines.tol.sanger.ac.uk/sequencecomposition
+version: 1.2.0dev
