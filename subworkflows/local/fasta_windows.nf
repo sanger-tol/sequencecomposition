@@ -86,4 +86,3 @@ workflow FASTA_WINDOWS {
     bedgraph = ch_compressed_bed
     versions = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
 }
-
