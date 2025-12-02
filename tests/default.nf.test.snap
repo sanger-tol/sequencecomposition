@@ -3,9 +3,6 @@
         "content": [
             67,
             {
-                "CUSTOM_GETCHROMSIZES": {
-                    "getchromsizes": 1.21
-                },
                 "EXTRACT_COLUMN": {
                     "python": "3.9.5"
                 },
@@ -13,16 +10,19 @@
                     "fasta_windows": "0.2.4"
                 },
                 "GUNZIP": {
-                    "gunzip": 1.1
+                    "gunzip": 1.13
+                },
+                "SAMTOOLS_FAIDX": {
+                    "samtools": "1.22.1"
                 },
                 "TABIX_BGZIP": {
-                    "tabix": 1.2
+                    "tabix": 1.21
                 },
                 "TABIX_TABIX_CSI": {
-                    "tabix": 1.2
+                    "tabix": 1.21
                 },
                 "TABIX_TABIX_TBI": {
-                    "tabix": 1.2
+                    "tabix": 1.21
                 },
                 "Workflow": {
                     "sanger-tol/sequencecomposition": "v1.2.0dev"
@@ -180,6 +180,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-01T20:19:08.331871664"
+        "timestamp": "2025-12-02T10:22:58.692820548"
     }
 }
