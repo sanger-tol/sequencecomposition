@@ -2,7 +2,7 @@
 // Check and parse the input parameters
 //
 
-include { CUSTOM_GETCHROMSIZES } from '../../modules/nf-core/custom/getchromsizes/main'
+include { SAMTOOLS_FAIDX       } from '../../modules/nf-core/samtools/faidx/main'
 include { GUNZIP               } from '../../modules/nf-core/gunzip/main'
 
 workflow PARAMS_CHECK {
@@ -45,13 +45,13 @@ workflow PARAMS_CHECK {
         meta, fasta, fai ->
             indexed : fai.exists()
             notindexed : true
-                return [meta, fasta]    // remove fai from the channel because it will be added by CUSTOM_GETCHROMSIZES below
+                return [meta, fasta]    // remove fai from the channel because it will be added by SAMTOOLS_FAIDX below
     } . set { ch_inputs_checked }
 
     // Generate Samtools index and chromosome sizes file, again with some channel manipulations
     ch_samtools_faidx   = ch_inputs_checked.notindexed                                          // (meta, fasta)
-                            .join( CUSTOM_GETCHROMSIZES (ch_inputs_checked.notindexed).fai )    // joined with (meta, fai) makes (meta, fasta, fai)
-    ch_versions         = ch_versions.mix(CUSTOM_GETCHROMSIZES.out.versions)
+                            .join( SAMTOOLS_FAIDX (ch_inputs_checked.notindexed, [[], []], true).fai )    // joined with (meta, fai) makes (meta, fasta, fai)
+    ch_versions         = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
 
     // Read the .fai file, extract sequence statistics, and make an extended meta map
     ch_fasta_fai = ch_inputs_checked.indexed.mix(ch_samtools_faidx).map {
