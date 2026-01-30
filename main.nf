@@ -26,7 +26,6 @@ include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_sequ
 // WORKFLOW: Run main analysis pipeline depending on type of input
 //
 workflow SANGERTOL_SEQUENCECOMPOSITION {
-
     take:
     samplesheet // channel: samplesheet read in from --input
 
@@ -35,7 +34,7 @@ workflow SANGERTOL_SEQUENCECOMPOSITION {
     //
     // WORKFLOW: Run pipeline
     //
-    SEQUENCECOMPOSITION (
+    SEQUENCECOMPOSITION(
         samplesheet
     )
 }
@@ -46,12 +45,10 @@ workflow SANGERTOL_SEQUENCECOMPOSITION {
 */
 
 workflow {
-
-    main:
     //
     // SUBWORKFLOW: Run initialisation tasks
     //
-    PIPELINE_INITIALISATION (
+    PIPELINE_INITIALISATION(
         params.version,
         params.validate_params,
         params.monochrome_logs,
@@ -67,13 +64,13 @@ workflow {
     //
     // WORKFLOW: Run main workflow
     //
-    SANGERTOL_SEQUENCECOMPOSITION (
-        PIPELINE_INITIALISATION.out.samplesheet,
+    SANGERTOL_SEQUENCECOMPOSITION(
+        PIPELINE_INITIALISATION.out.samplesheet
     )
     //
     // SUBWORKFLOW: Run completion tasks
     //
-    PIPELINE_COMPLETION (
+    PIPELINE_COMPLETION(
         params.email,
         params.email_on_fail,
         params.plaintext_email,
