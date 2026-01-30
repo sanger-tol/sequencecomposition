@@ -44,7 +44,7 @@ workflow PARAMS_CHECK {
             indexed: fai.exists()
             notindexed: true
             // remove fai from the channel because it will be added by SAMTOOLS_FAIDX below
-            return [meta, fasta]
+            [meta, fasta]
         }
 
     // Generate Samtools index and chromosome sizes file, again with some channel manipulations

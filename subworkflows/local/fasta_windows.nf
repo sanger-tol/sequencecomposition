@@ -30,15 +30,15 @@ workflow FASTA_WINDOWS {
         .splitCsv(header: false)
         .branch { channel_name, column_number, outdir, filename ->
             freq: channel_name == "freq"
-            return [column_number, outdir, filename]
+            [column_number, outdir, filename]
             mononuc: channel_name == "mononuc"
-            return [outdir, filename]
+            [outdir, filename]
             dinuc: channel_name == "dinuc"
-            return [outdir, filename]
+            [outdir, filename]
             trinuc: channel_name == "trinuc"
-            return [outdir, filename]
+            [outdir, filename]
             tetranuc: channel_name == "tetranuc"
-            return [outdir, filename]
+            [outdir, filename]
         }
 
     ch_freq_bed_input = FASTAWINDOWS.out.freq
