@@ -11,12 +11,12 @@ workflow PARAMS_CHECK {
     samplesheet  // tuple (outdir, fasta) -- parsed samplesheet
 
     main:
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
-    samplesheet
+    ch_parsed_fasta_name = samplesheet
         .map { outdir, fasta ->
             // Trick to strip the Fasta extension for gzipped files too, without having to list all possible extensions
-            id = file(fasta.name.replace(".gz", "")).baseName
+            def id = file(fasta.name.replace(".gz", "")).baseName
             return [
                 [
                     id: id,
@@ -27,26 +27,25 @@ workflow PARAMS_CHECK {
             ]
         }
         .branch {
-            meta, fasta, fai ->
+            _meta, fasta, _fai ->
                 compressed : fasta.getExtension().equals('gz')      // (meta, fasta_gz, fai)
                 uncompressed : true                                 // (meta, fasta, fai)
         }
-        .set { ch_parsed_fasta_name }
 
     // uncompress them, with some channel manipulations to maintain the triplet (meta, fasta, fai)
-    gunzip_input        = ch_parsed_fasta_name.compressed.map { meta, fasta_gz, fai -> [meta, fasta_gz] }
+    gunzip_input        = ch_parsed_fasta_name.compressed.map { meta, fasta_gz, _fai -> [meta, fasta_gz] }
     ch_unzipped_fasta   = GUNZIP(gunzip_input).gunzip                   // (meta, fasta)
                             .join(ch_parsed_fasta_name.compressed)      // joined with (meta, fasta_gz, fai) makes (meta, fasta, fasta_gz, fai)
-                            .map { meta, fasta, fasta_gz, fai -> [meta, fasta, fai] }
+                            .map { meta, fasta, _fasta_gz, fai -> [meta, fasta, fai] }
     ch_versions         = ch_versions.mix(GUNZIP.out.versions.first())
 
     // Check if the faidx index is present
-    ch_parsed_fasta_name.uncompressed.mix(ch_unzipped_fasta).branch {
+    ch_inputs_checked = ch_parsed_fasta_name.uncompressed.mix(ch_unzipped_fasta).branch {
         meta, fasta, fai ->
             indexed : fai.exists()
             notindexed : true
                 return [meta, fasta]    // remove fai from the channel because it will be added by SAMTOOLS_FAIDX below
-    } . set { ch_inputs_checked }
+    }
 
     // Generate Samtools index and chromosome sizes file, again with some channel manipulations
     ch_samtools_faidx   = ch_inputs_checked.notindexed                                          // (meta, fasta)
@@ -71,9 +70,9 @@ def get_sequence_map(fai_file) {
     def total_length = 0
     fai_file.eachLine { line ->
         def lspl   = line.split('\t')
-        def chrom  = lspl[0]
+        // def chrom  = lspl[0]
         def length = lspl[1].toLong()
-        n_sequences ++
+        n_sequences += 1
         total_length += length
         if (length > max_length) {
             max_length = length

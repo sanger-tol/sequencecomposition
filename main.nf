@@ -60,14 +60,15 @@ workflow {
         params.input,
         params.help,
         params.help_full,
-        params.show_hidden
+        params.show_hidden,
+        params.fasta,
     )
 
     //
     // WORKFLOW: Run main workflow
     //
     SANGERTOL_SEQUENCECOMPOSITION (
-        PIPELINE_INITIALISATION.out.samplesheet
+        PIPELINE_INITIALISATION.out.samplesheet,
     )
     //
     // SUBWORKFLOW: Run completion tasks

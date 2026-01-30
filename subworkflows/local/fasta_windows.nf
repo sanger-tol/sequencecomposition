@@ -17,10 +17,10 @@ workflow FASTA_WINDOWS {
 
 
     main:
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     // Run fasta_windows
-    FASTAWINDOWS ( fasta_fai.map { meta, fasta, fai -> [meta, fasta] } )
+    FASTAWINDOWS ( fasta_fai.map { meta, fasta, _fai -> [meta, fasta] } )
     ch_versions       = ch_versions.mix(FASTAWINDOWS.out.versions.first())
 
     // List of:
@@ -28,41 +28,46 @@ workflow FASTA_WINDOWS {
     //    with the subdirectory name and the relevant part of the file name.
     // 2) the kmer-count files we want to load (the "column_number" column is
     //    ignored).
-    Channel.of(output_selection)
+    ch_config = channel.of(output_selection)
         .splitCsv ( header: false )
-        // tuple (channel_name,column_number,outdir,filename)
         .branch {
-            freq: it[0] == "freq"
-                return [it[1], it[2], it[3]]
-            mononuc: it[0] == "mononuc"
-                return [it[2], it[3]]
-            dinuc: it[0] == "dinuc"
-                return [it[2], it[3]]
-            trinuc: it[0] == "trinuc"
-                return [it[2], it[3]]
-            tetranuc: it[0] == "tetranuc"
-                return [it[2], it[3]]
+            channel_name, column_number, outdir, filename ->
+            freq: channel_name == "freq"
+                return [column_number, outdir, filename]
+            mononuc: channel_name == "mononuc"
+                return [outdir, filename]
+            dinuc: channel_name == "dinuc"
+                return [outdir, filename]
+            trinuc: channel_name == "trinuc"
+                return [outdir, filename]
+            tetranuc: channel_name == "tetranuc"
+                return [outdir, filename]
         }
-        .set { ch_config }
 
-    // Make a combined channel: tuple(meta, freq_file_tsv, column_number, output_dir, filename),
     ch_freq_bed_input = FASTAWINDOWS.out.freq.combine(ch_config.freq)
+        .multiMap { meta, freq_file_tsv, column_number, outdir, filename ->
+            path:
+            // Extend meta.id to name output files appropriately, and add meta.analysis_subdir
+            [meta + [id: meta.id + "." + filename + window_size_info, analysis_subdir: outdir], freq_file_tsv]
+            column_number:
+            column_number
+        }
+
+
     ch_freq_bed       = EXTRACT_COLUMN (
-        // Extend meta.id to name output files appropriately, and add meta.analysis_subdir
-        ch_freq_bed_input.map { [it[0] + [id: it[0].id + "." + it[4] + window_size_info, analysis_subdir: it[3]], it[1]] },
-        // column number
-        ch_freq_bed_input.map { it[2] }
+        ch_freq_bed_input.path,
+        ch_freq_bed_input.column_number
     ).bedgraph
 
     ch_versions       = ch_versions.mix(EXTRACT_COLUMN.out.versions.first())
 
     // Add meta information to the tsv files
-    ch_tsv = Channel.empty()
+    ch_tsv = channel.empty()
         .mix( FASTAWINDOWS.out.mononuc .combine(ch_config.mononuc) )
         .mix( FASTAWINDOWS.out.dinuc   .combine(ch_config.dinuc) )
         .mix( FASTAWINDOWS.out.trinuc  .combine(ch_config.trinuc) )
         .mix( FASTAWINDOWS.out.tetranuc.combine(ch_config.tetranuc) )
-        .map { [it[0] + [id: it[0].id + "." + it[3] + window_size_info, analysis_subdir: it[2]], it[1]] }
+        .map { meta, path, outdir, filename -> [meta + [id: meta.id + "." + filename + window_size_info, analysis_subdir: outdir], path] }
 
     // Compress the BED file
     ch_compressed_bed = TABIX_BGZIP ( ch_freq_bed.mix(ch_tsv) ).output
@@ -70,7 +75,7 @@ workflow FASTA_WINDOWS {
 
     // Try indexing the BED file in two formats for maximum compatibility
     // but each has its own limitations
-    tabix_selector      = ch_compressed_bed.branch { meta, bed ->
+    tabix_selector      = ch_compressed_bed.branch { meta, _bed ->
         tbi_and_csi: meta.max_length < 2**29
         only_csi:    meta.max_length < 2**32
     }
@@ -84,5 +89,6 @@ workflow FASTA_WINDOWS {
 
     emit:
     bedgraph = ch_compressed_bed
+    index = ch_indexed_bed_csi.mix(ch_indexed_bed_tbi)
     versions = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
 }

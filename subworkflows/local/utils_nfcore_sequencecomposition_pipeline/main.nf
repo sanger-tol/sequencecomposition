@@ -29,13 +29,14 @@ workflow PIPELINE_INITIALISATION {
     take:
     version           // boolean: Display version and exit
     validate_params   // boolean: Boolean whether to validate parameters against the schema at runtime
-    monochrome_logs   // boolean: Do not use coloured log outputs
+    _monochrome_logs   // boolean: Do not use coloured log outputs
     nextflow_cli_args //   array: List of positional nextflow CLI args
     outdir            //  string: The output directory where the results will be saved
     input             //  string: Path to input samplesheet
     help              // boolean: Display help message and exit
     help_full         // boolean: Show the full help message
     show_hidden       // boolean: Show hidden parameters in the help message
+    fasta             //  path: Path to the Fasta file to analyze
 
     main:
 
@@ -100,22 +101,18 @@ workflow PIPELINE_INITIALISATION {
     // Create channel from input file provided through params.input
     //
 
+    if ( input ) {
 
-    if ( params.input ) {
-
-        Channel
-            .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
-            .map { outdir, fasta -> [
-                (outdir.startsWith("/") ? "" : params.outdir + "/") + outdir,
-                fasta,
+        ch_samplesheet = channel
+            .fromList(samplesheetToList(input, "${projectDir}/assets/schema_input.json"))
+            .map { this_outdir, this_fasta -> [
+                (this_outdir.startsWith("/") ? "" : outdir + "/") + this_outdir,
+                this_fasta,
             ] }
-            .set { ch_samplesheet }
 
     } else {
 
-        Channel
-            .of( [params.outdir, file(params.fasta, checkExists: true)] )
-            .set { ch_samplesheet }
+        ch_samplesheet = channel.of( [outdir, file(fasta, checkExists: true)] )
 
     }
 

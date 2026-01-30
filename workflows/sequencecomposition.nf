@@ -56,7 +56,7 @@ workflow SEQUENCECOMPOSITION {
     //
     // Collate and save software versions
     //
-    def topic_versions = Channel.topic("versions")
+    def topic_versions = channel.topic("versions")
         .distinct()
         .branch { entry ->
             versions_file: entry instanceof Path
@@ -84,7 +84,7 @@ workflow SEQUENCECOMPOSITION {
 
 
     emit:
-    versions       = ch_versions                 // channel: [ path(versions.yml) ]
+    versions       = ch_collated_versions        // channel: [ path(versions.yml) ]
 
 }
 
