@@ -15,6 +15,7 @@
                 "fasta": {
                     "type": "string",
                     "format": "file-path",
+                    "exists": true,
                     "description": "Path to the Fasta file to analyze. Can be a remote location.",
                     "help_text": "This file can also be compressed with Gzip.",
                     "fa_icon": "fas fa-dna"
