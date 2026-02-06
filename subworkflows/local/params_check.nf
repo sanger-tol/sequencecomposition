@@ -35,7 +35,6 @@ workflow PARAMS_CHECK {
     ch_unzipped_fasta = GUNZIP(gunzip_input).gunzip
         .join(ch_parsed_fasta_name.compressed)
         .map { meta, fasta, _fasta_gz, fai -> [meta, fasta, fai] }
-    ch_versions = ch_versions.mix(GUNZIP.out.versions.first())
 
     // Check if the faidx index is present
     ch_inputs_checked = ch_parsed_fasta_name.uncompressed
