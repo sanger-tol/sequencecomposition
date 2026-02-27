@@ -1,14 +1,15 @@
 {
     "-profile test": {
         "content": [
-            33,
+            20,
             {
-                "BGZIPTABIX": {
+                "BGZIPTABIX_ALL": {
                     "bgzip": 1.21,
                     "tabix": 1.21
                 },
-                "EXTRACT_COLUMN": {
-                    "python": "3.9.5"
+                "BGZIPTABIX_COL": {
+                    "bgzip": 1.21,
+                    "tabix": 1.21
                 },
                 "FASTAWINDOWS": {
                     "fasta_windows": "0.2.4"
@@ -175,6 +176,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2026-02-27T22:08:47.254961857"
+        "timestamp": "2026-03-02T17:23:57.476763846"
     }
 }
