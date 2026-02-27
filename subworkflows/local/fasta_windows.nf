@@ -2,11 +2,9 @@
 // Run fasta_windows and prepare all the output files
 //
 
-include { EXTRACT_COLUMN                 } from '../../modules/local/extract_column'
-include { FASTAWINDOWS                   } from '../../modules/nf-core/fastawindows/main'
-include { TABIX_BGZIP                    } from '../../modules/nf-core/tabix/bgzip/main'
-include { TABIX_TABIX as TABIX_TABIX_CSI } from '../../modules/nf-core/tabix/tabix/main'
-include { TABIX_TABIX as TABIX_TABIX_TBI } from '../../modules/nf-core/tabix/tabix/main'
+include { EXTRACT_COLUMN } from '../../modules/local/extract_column'
+include { FASTAWINDOWS   } from '../../modules/nf-core/fastawindows/main'
+include { BGZIPTABIX     } from '../../modules/sanger-tol/bgziptabix/main'
 
 workflow FASTA_WINDOWS {
     take:
@@ -64,26 +62,17 @@ workflow FASTA_WINDOWS {
         .mix(FASTAWINDOWS.out.trinuc.combine(ch_config.trinuc))
         .mix(FASTAWINDOWS.out.tetranuc.combine(ch_config.tetranuc))
         .map { meta, path, outdir, filename -> [meta + [id: meta.id + "." + filename + window_size_info, analysis_subdir: outdir], path] }
+        .mix(ch_freq_bed)
 
     // Compress the BED file
-    ch_compressed_bed = TABIX_BGZIP(ch_freq_bed.mix(ch_tsv)).output
-    ch_versions = ch_versions.mix(TABIX_BGZIP.out.versions.first())
+    ch_tsv_with_seq_length = ch_tsv.map { meta, tsv -> [meta, tsv, meta.max_length] }
+    BGZIPTABIX(ch_tsv_with_seq_length)
 
-    // Try indexing the BED file in two formats for maximum compatibility
-    // but each has its own limitations
-    tabix_selector = ch_compressed_bed.branch { meta, _bed ->
-        tbi_and_csi: meta.max_length < 2 ** 29
-        only_csi: meta.max_length < 2 ** 32
-    }
-
-    // Do the indexing on the compatible bedGraph files
-    ch_indexed_bed_csi = TABIX_TABIX_CSI(tabix_selector.tbi_and_csi.mix(tabix_selector.only_csi)).index
-    ch_versions = ch_versions.mix(TABIX_TABIX_CSI.out.versions.first())
-    ch_indexed_bed_tbi = TABIX_TABIX_TBI(tabix_selector.tbi_and_csi).index
-    ch_versions = ch_versions.mix(TABIX_TABIX_TBI.out.versions.first())
+    ch_bedgraph = BGZIPTABIX.out.gz_index
+        .join(BGZIPTABIX.out.tbi, by: 0, remainder: true)
+        .join(BGZIPTABIX.out.csi, by: 0, remainder: true)
 
     emit:
-    bedgraph = ch_compressed_bed
-    index    = ch_indexed_bed_csi.mix(ch_indexed_bed_tbi)
+    bedgraph = ch_bedgraph
     versions = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
 }

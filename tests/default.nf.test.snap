@@ -1,8 +1,12 @@
 {
     "-profile test": {
         "content": [
-            67,
+            33,
             {
+                "BGZIPTABIX": {
+                    "bgzip": 1.21,
+                    "tabix": 1.21
+                },
                 "EXTRACT_COLUMN": {
                     "python": "3.9.5"
                 },
@@ -14,15 +18,6 @@
                 },
                 "SAMTOOLS_FAIDX": {
                     "samtools": "1.22.1"
-                },
-                "TABIX_BGZIP": {
-                    "tabix": 1.21
-                },
-                "TABIX_TABIX_CSI": {
-                    "tabix": 1.21
-                },
-                "TABIX_TABIX_TBI": {
-                    "tabix": 1.21
                 },
                 "Workflow": {
                     "sanger-tol/sequencecomposition": "v1.2.0dev"
@@ -180,6 +175,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-02T10:22:58.692820548"
+        "timestamp": "2026-02-27T22:08:47.254961857"
     }
 }
