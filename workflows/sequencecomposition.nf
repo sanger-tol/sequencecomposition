@@ -50,7 +50,6 @@ workflow SEQUENCECOMPOSITION {
         file(params.selected_fw_output, checkExists: true),
         params.window_size_info,
     )
-    ch_versions = ch_versions.mix(FASTA_WINDOWS.out.versions)
 
     //
     // Collate and save software versions

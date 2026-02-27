@@ -13,11 +13,9 @@ workflow FASTA_WINDOWS {
     window_size_info // value, used to build meta.id and name files
 
     main:
-    ch_versions = channel.empty()
 
     // Run fasta_windows
     FASTAWINDOWS(fasta_fai.map { meta, fasta, _fai -> [meta, fasta] })
-    ch_versions = ch_versions.mix(FASTAWINDOWS.out.versions.first())
 
     // List of:
     // 1) the columns we want to extract as bedGraph from the frequency files,
@@ -73,5 +71,4 @@ workflow FASTA_WINDOWS {
 
     emit:
     bedgraph = ch_bedgraph
-    versions = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
 }

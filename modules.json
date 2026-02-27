@@ -7,7 +7,7 @@
                 "nf-core": {
                     "fastawindows": {
                         "branch": "master",
-                        "git_sha": "5c9f8d5b7671237c906abadc9ff732b301ca15ca",
+                        "git_sha": "a3a12a5bf8fb088f5bc68bbb053811b51762abea",
                         "installed_by": ["modules"]
                     },
                     "gunzip": {
