@@ -43,7 +43,6 @@ workflow SEQUENCECOMPOSITION {
     PARAMS_CHECK(
         ch_samplesheet
     )
-    ch_versions = ch_versions.mix(PARAMS_CHECK.out.versions)
 
     // Statistics extraction
     FASTA_WINDOWS(
