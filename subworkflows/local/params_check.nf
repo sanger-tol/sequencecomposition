@@ -40,7 +40,6 @@ workflow PARAMS_CHECK {
         .branch { meta, fasta, fai ->
             indexed: fai.exists()
             notindexed: true
-            // remove fai from the channel because it will be added by SAMTOOLS_FAIDX below
             [meta, fasta, []]
         }
 
