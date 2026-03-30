@@ -41,7 +41,7 @@ workflow FASTA_WINDOWS {
         .combine(ch_config.freq)
         .multiMap { meta, freq_file_tsv, column_number, outdir, filename ->
             path: [meta + [id: meta.id + "." + filename + window_size_info, analysis_subdir: outdir], freq_file_tsv, meta.max_length]
-            column_number: column_number
+            column_number: ["1-3,${column_number}", 1, "bedGraph"]
         }
 
     BGZIPTABIX_COL(
@@ -62,7 +62,7 @@ workflow FASTA_WINDOWS {
 
     // Compress the BED file
     ch_tsv_with_seq_length = ch_tsv.map { meta, tsv -> [meta, tsv, meta.max_length] }
-    BGZIPTABIX_ALL(ch_tsv_with_seq_length, false)
+    BGZIPTABIX_ALL(ch_tsv_with_seq_length, [false, 0, false])
 
     ch_bedgraph = BGZIPTABIX_ALL.out.gz_index
         .join(BGZIPTABIX_ALL.out.tbi, by: 0, remainder: true)

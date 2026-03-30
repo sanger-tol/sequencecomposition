@@ -1,4 +1,93 @@
 {
+    "tsv to bed": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.bed.gz:md5,1280050828c9d0401871239fb267a63f",
+                        "test.bed.gz.gzi:md5,7dea362b3fac8e00956a4952a3d4f474"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.bed.gz.tbi:md5,8fc7bc9e739aacaed7a26d7bf56844d2"
+                    ]
+                ],
+                "2": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.bed.gz.csi:md5,8d36d8571b898909ff148b75ceae0f76"
+                    ]
+                ],
+                "3": [
+                    [
+                        "BGZIPTABIX",
+                        "bgzip",
+                        "1.21"
+                    ]
+                ],
+                "4": [
+                    [
+                        "BGZIPTABIX",
+                        "tabix",
+                        "1.21"
+                    ]
+                ],
+                "csi": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.bed.gz.csi:md5,8d36d8571b898909ff148b75ceae0f76"
+                    ]
+                ],
+                "gz_index": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.bed.gz:md5,1280050828c9d0401871239fb267a63f",
+                        "test.bed.gz.gzi:md5,7dea362b3fac8e00956a4952a3d4f474"
+                    ]
+                ],
+                "tbi": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.bed.gz.tbi:md5,8fc7bc9e739aacaed7a26d7bf56844d2"
+                    ]
+                ],
+                "versions_bgzip": [
+                    [
+                        "BGZIPTABIX",
+                        "bgzip",
+                        "1.21"
+                    ]
+                ],
+                "versions_tabix": [
+                    [
+                        "BGZIPTABIX",
+                        "tabix",
+                        "1.21"
+                    ]
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.2"
+        },
+        "timestamp": "2026-03-04T10:58:07.794595226"
+    },
     "stub": {
         "content": [
             {

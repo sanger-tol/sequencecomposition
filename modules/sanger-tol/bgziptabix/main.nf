@@ -9,7 +9,7 @@ process BGZIPTABIX {
 
     input:
     tuple val(meta), path(input), val(max_seq_length)
-    val column_number
+    tuple val(column_numbers), val(header_lines), val(extension)
 
     output:
     tuple val(meta), path("*.gz"), path("*.gzi"), emit: gz_index
@@ -25,8 +25,8 @@ process BGZIPTABIX {
     def args = task.ext.args ?: ''
     def args2 = task.ext.args2 ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def input_data = column_number ? "<(cut -f1-3,${column_number} ${input} | tail -n+2)" : input
-    def extension = column_number ? "bedGraph" : "tsv"
+    def input_data = column_numbers ? "<(cut -f${column_numbers} ${input} | tail -n+${header_lines + 1})" : input
+    extension ?= input.extension
     """
     bgzip --threads ${task.cpus} --index ${args} ${input_data} --output ${prefix}.${extension}.gz
     [[ ${max_seq_length} -lt \$(( 2 ** 29 )) ]] && tabix --threads ${task.cpus} ${args2} ${prefix}.${extension}.gz
@@ -35,7 +35,7 @@ process BGZIPTABIX {
 
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def extension = column_number ? "bedGraph" : "tsv"
+    extension ?= input.extension
     """
     echo "" | gzip > ${prefix}.${extension}.gz
     touch ${prefix}.${extension}.gz.gzi
