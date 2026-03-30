@@ -43,7 +43,6 @@ workflow SEQUENCECOMPOSITION {
     PARAMS_CHECK(
         ch_samplesheet
     )
-    ch_versions = ch_versions.mix(PARAMS_CHECK.out.versions)
 
     // Statistics extraction
     FASTA_WINDOWS(
@@ -51,7 +50,6 @@ workflow SEQUENCECOMPOSITION {
         file(params.selected_fw_output, checkExists: true),
         params.window_size_info,
     )
-    ch_versions = ch_versions.mix(FASTA_WINDOWS.out.versions)
 
     //
     // Collate and save software versions
@@ -86,9 +84,3 @@ workflow SEQUENCECOMPOSITION {
     emit:
     versions = ch_collated_versions // channel: [ path(versions.yml) ]
 }
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    THE END
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/

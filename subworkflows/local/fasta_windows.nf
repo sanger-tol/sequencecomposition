@@ -2,11 +2,9 @@
 // Run fasta_windows and prepare all the output files
 //
 
-include { EXTRACT_COLUMN                 } from '../../modules/local/extract_column'
-include { FASTAWINDOWS                   } from '../../modules/nf-core/fastawindows/main'
-include { TABIX_BGZIP                    } from '../../modules/nf-core/tabix/bgzip/main'
-include { TABIX_TABIX as TABIX_TABIX_CSI } from '../../modules/nf-core/tabix/tabix/main'
-include { TABIX_TABIX as TABIX_TABIX_TBI } from '../../modules/nf-core/tabix/tabix/main'
+include { FASTAWINDOWS                 } from '../../modules/nf-core/fastawindows/main'
+include { BGZIPTABIX as BGZIPTABIX_ALL } from '../../modules/sanger-tol/bgziptabix/main'
+include { BGZIPTABIX as BGZIPTABIX_COL } from '../../modules/sanger-tol/bgziptabix/main'
 
 workflow FASTA_WINDOWS {
     take:
@@ -15,11 +13,9 @@ workflow FASTA_WINDOWS {
     window_size_info // value, used to build meta.id and name files
 
     main:
-    ch_versions = channel.empty()
 
     // Run fasta_windows
     FASTAWINDOWS(fasta_fai.map { meta, fasta, _fai -> [meta, fasta] })
-    ch_versions = ch_versions.mix(FASTAWINDOWS.out.versions.first())
 
     // List of:
     // 1) the columns we want to extract as bedGraph from the frequency files,
@@ -44,18 +40,17 @@ workflow FASTA_WINDOWS {
     ch_freq_bed_input = FASTAWINDOWS.out.freq
         .combine(ch_config.freq)
         .multiMap { meta, freq_file_tsv, column_number, outdir, filename ->
-            // Extend meta.id to name output files appropriately, and add meta.analysis_subdir
-            path: [meta + [id: meta.id + "." + filename + window_size_info, analysis_subdir: outdir], freq_file_tsv]
-            column_number: column_number
+            path: [meta + [id: meta.id + "." + filename + window_size_info, analysis_subdir: outdir], freq_file_tsv, meta.max_length]
+            column_number: ["1-3,${column_number}", 1, "bedGraph"]
         }
 
-
-    ch_freq_bed = EXTRACT_COLUMN(
+    BGZIPTABIX_COL(
         ch_freq_bed_input.path,
         ch_freq_bed_input.column_number,
-    ).bedgraph
-
-    ch_versions = ch_versions.mix(EXTRACT_COLUMN.out.versions.first())
+    )
+    ch_freq_bedgraph = BGZIPTABIX_COL.out.gz_index
+        .join(BGZIPTABIX_COL.out.tbi, by: 0, remainder: true)
+        .join(BGZIPTABIX_COL.out.csi, by: 0, remainder: true)
 
     // Add meta information to the tsv files
     ch_tsv = channel.empty()
@@ -66,24 +61,14 @@ workflow FASTA_WINDOWS {
         .map { meta, path, outdir, filename -> [meta + [id: meta.id + "." + filename + window_size_info, analysis_subdir: outdir], path] }
 
     // Compress the BED file
-    ch_compressed_bed = TABIX_BGZIP(ch_freq_bed.mix(ch_tsv)).output
-    ch_versions = ch_versions.mix(TABIX_BGZIP.out.versions.first())
+    ch_tsv_with_seq_length = ch_tsv.map { meta, tsv -> [meta, tsv, meta.max_length] }
+    BGZIPTABIX_ALL(ch_tsv_with_seq_length, [false, 0, false])
 
-    // Try indexing the BED file in two formats for maximum compatibility
-    // but each has its own limitations
-    tabix_selector = ch_compressed_bed.branch { meta, _bed ->
-        tbi_and_csi: meta.max_length < 2 ** 29
-        only_csi: meta.max_length < 2 ** 32
-    }
-
-    // Do the indexing on the compatible bedGraph files
-    ch_indexed_bed_csi = TABIX_TABIX_CSI(tabix_selector.tbi_and_csi.mix(tabix_selector.only_csi)).index
-    ch_versions = ch_versions.mix(TABIX_TABIX_CSI.out.versions.first())
-    ch_indexed_bed_tbi = TABIX_TABIX_TBI(tabix_selector.tbi_and_csi).index
-    ch_versions = ch_versions.mix(TABIX_TABIX_TBI.out.versions.first())
+    ch_bedgraph = BGZIPTABIX_ALL.out.gz_index
+        .join(BGZIPTABIX_ALL.out.tbi, by: 0, remainder: true)
+        .join(BGZIPTABIX_ALL.out.csi, by: 0, remainder: true)
+        .mix(ch_freq_bedgraph)
 
     emit:
-    bedgraph = ch_compressed_bed
-    index    = ch_indexed_bed_csi.mix(ch_indexed_bed_tbi)
-    versions = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
+    bedgraph = ch_bedgraph
 }

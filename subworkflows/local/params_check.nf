@@ -10,8 +10,6 @@ workflow PARAMS_CHECK {
     samplesheet // tuple (outdir, fasta) -- parsed samplesheet
 
     main:
-    ch_versions = channel.empty()
-
     ch_parsed_fasta_name = samplesheet
         .map { outdir, fasta ->
             // Trick to strip the Fasta extension for gzipped files too, without having to list all possible extensions
@@ -42,25 +40,23 @@ workflow PARAMS_CHECK {
         .branch { meta, fasta, fai ->
             indexed: fai.exists()
             notindexed: true
-            // remove fai from the channel because it will be added by SAMTOOLS_FAIDX below
-            [meta, fasta]
+            [meta, fasta, []]
         }
 
-    // Generate Samtools index and chromosome sizes file, again with some channel manipulations
-    ch_samtools_faidx = ch_inputs_checked.notindexed.join(SAMTOOLS_FAIDX(ch_inputs_checked.notindexed, [[], []], true).fai)
-    // joined with (meta, fai) makes (meta, fasta, fai)
-    ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
+    // Generate Samtools index
+    SAMTOOLS_FAIDX(ch_inputs_checked.notindexed, false)
 
-    // Read the .fai file, extract sequence statistics, and make an extended meta map
-    ch_fasta_fai = ch_inputs_checked.indexed
-        .mix(ch_samtools_faidx)
+    // Reconstruct the triplet (meta, fasta, fai)
+    ch_fasta_fai = ch_inputs_checked.notindexed
+        .join(SAMTOOLS_FAIDX.out.fai)
+        .map { meta, fasta, _fai, fai -> [meta, fasta, fai] }
+        .mix(ch_inputs_checked.indexed)
         .map { meta, fasta, fai ->
             [meta + get_sequence_map(fai), fasta, fai]
         }
 
     emit:
     fasta_fai = ch_fasta_fai // channel: [ val(meta), path/to/fasta, path/to/fai ]
-    versions  = ch_versions // channel: versions.yml
 }
 
 // Read the .fai file to extract the number of sequences, the maximum and total sequence length
