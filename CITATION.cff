@@ -1,5 +1,6 @@
 authors:
   - affiliation: Wellcome Sanger Institute
+    email: tc25@sanger.ac.uk
     family-names: Chafin
     given-names: Tyler
     orcid: https://orcid.org/0000-0001-8687-5905
@@ -22,13 +23,13 @@ authors:
     orcid: https://orcid.org/0000-0002-7167-0875
     website: https://github.com/priyanka-surana
 cff-version: 1.2.0
-date-released: "2025-12-02"
+date-released: "2026-04-14"
 doi: 10.5281/zenodo.14358108
 license: MIT
 message: If you use this software, please cite it using the metadata from this file
   and all references from CITATIONS.md .
 repository-code: https://github.com/sanger-tol/sequencecomposition
-title: sanger-tol/sequencecomposition v1.2.0dev
+title: sanger-tol/sequencecomposition v1.2.0
 type: software
 url: https://pipelines.tol.sanger.ac.uk/sequencecomposition
-version: 1.2.0dev
+version: 1.2.0
