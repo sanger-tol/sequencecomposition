@@ -1,0 +1,38 @@
+%%metro title: Sequence Composition pipeline
+%%metro style: dark
+%%metro line_order: span
+%%metro line: fasta_windows | Fasta Windows | #e63946
+%%metro file: bgziptabix_col | BedGraph
+%%metro file: bgziptabix_all | TSV
+%%metro file: input| Fasta
+
+graph LR
+    subgraph params_check [Prepare genome]
+
+        input[ ]
+        gunzip([Gunzip])
+        _no_gunzip
+        _uncompressed
+        samtools_faidx([Samtools Faidx])
+        _no_faidx
+
+        input -->|fasta_windows| _no_gunzip
+        _no_gunzip -->|fasta_windows| _uncompressed
+        input -->|fasta_windows| gunzip
+        gunzip -->|fasta_windows| _uncompressed
+        _uncompressed  -->|fasta_windows| _no_faidx
+        _uncompressed -->|fasta_windows| samtools_faidx
+    end
+
+    subgraph fasta_windows [Fasta Windows]
+        fastawindows([Fasta Windows])
+        bgziptabix_col([Bgzip + Tabix])
+        bgziptabix_all([Bgzip + Tabix])
+
+        fastawindows -->|fasta_windows| bgziptabix_col
+        fastawindows -->|fasta_windows| bgziptabix_all
+    end
+
+    %% Inter-section edges
+    _no_faidx -->|fasta_windows| fastawindows
+    samtools_faidx -->|fasta_windows| fastawindows

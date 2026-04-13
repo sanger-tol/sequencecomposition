@@ -1,4 +1,9 @@
-# ![sanger-tol/sequencecomposition](docs/images/sanger-tol-sequencecomposition_logo_light.png)
+<h1>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/sanger-tol-sequencecomposition_logo_dark.png">
+    <img alt="sanger-tol/sequencecomposition" src="docs/images/sanger-tol-sequencecomposition_logo_light.png">
+  </picture>
+</h1>
 
 [![Open in GitHub Codespaces](https://img.shields.io/badge/Open_In_GitHub_Codespaces-black?labelColor=grey&logo=github)](https://github.com/codespaces/new/sanger-tol/sequencecomposition)
 [![GitHub Actions CI Status](https://github.com/sanger-tol/sequencecomposition/actions/workflows/nf-test.yml/badge.svg)](https://github.com/sanger-tol/sequencecomposition/actions/workflows/nf-test.yml)
@@ -16,6 +21,11 @@
 ## Introduction
 
 **sanger-tol/sequencecomposition** is a bioinformatics analysis pipeline that extracts statistics from a genome about its sequence composition.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/sanger-tol-sequencecomposition_metro_map_dark.png">
+  <img alt="sanger-tol/sequencecomposition" src="docs/images/sanger-tol-sequencecomposition_metro_map_light.png">
+</picture>
 
 The pipeline takes an assembly Fasta file (possibly compressed), runs `fasta_windows` on it, and transforms the outputs into files more practical for downstream use.
 
