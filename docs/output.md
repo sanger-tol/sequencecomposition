@@ -13,6 +13,11 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [Sequence composition files](#sequence-composition-files) - Files with various statistics about sequence composition
 - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
 
+Outputs are deposited in the main output directory (`--outdir`) and under the per-genome output directory
+described in the samplesheet.
+Both are combined with the current working directory under the usual absolute-vs-relative rules for joining
+directories.
+
 ### Sequence composition files
 
 Here are the files you can expect in the output directory.
