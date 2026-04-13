@@ -26,6 +26,8 @@ Note, since the pipeline is using Nextflow DSL2, each process will be run with i
 | samtools   | 1.21        | 1.23.1      |
 | tabix      | 1.20        | 1.21        |
 
+> **NB:** Dependency has been **updated** if both old and new version information is present. </br> **NB:** Dependency has been **added** if just the new version information is present. </br> **NB:** Dependency has been **removed** if version information isn't present.
+
 ## [[1.1.0](https://github.com/sanger-tol/sequencecomposition/releases/tag/1.1.0)] – Polite Platyfish – [2024-12-10]
 
 ### Enhancements & fixes
