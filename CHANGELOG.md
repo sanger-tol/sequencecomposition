@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgrade to the version 3.5.2 of the nf-core template
 - Compatible with Nextflow's strict parser
 - All modules updated
+- The directories comply with [Tree of Life's canonical directory structure](https://pipelines.tol.sanger.ac.uk/docs/usage/gap_conventions).
+- New logo, with Sanger colours
+- Pipeline diagram, thanks to [nf-metro](https://pinin4fjords.github.io/nf-metro)
 
 ### Software dependencies
 
