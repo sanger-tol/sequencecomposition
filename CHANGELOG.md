@@ -25,10 +25,11 @@ Note, since the pipeline is using Nextflow DSL2, each process will be run with i
 
 | Dependency | Old version | New version |
 | ---------- | ----------- | ----------- |
-| htslib     |             | 1.20        |
+| bgzip      | 1.11        | 1.20        |
 | MultiQC    | 1.13        | 1.20        |
 | Python     | 3.8.3,3.9   | 3.9.1       |
 | samtools   |             | 1.21        |
+| tabix      | 1.11        | 1.20        |
 
 > **NB:** Dependency has been **updated** if both old and new version information is present. </br> **NB:** Dependency has been **added** if just the new version information is present. </br> **NB:** Dependency has been **removed** if version information isn't present.
 
@@ -48,6 +49,7 @@ Note, since the pipeline is using Nextflow DSL2, each process will be run with i
 
 | Dependency    | Old version | New version |
 | ------------- | ----------- | ----------- |
+| bgzip         |             | 1.11        |
 | fasta_windows |             | 0.2.4       |
 | MultiQC       |             | 1.13        |
 | Python        |             | 3.8.3,3.9   |
