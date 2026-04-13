@@ -3,9 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v1.2.0dev - [date]
+## [[1.2.0](https://github.com/sanger-tol/sequencecomposition/releases/tag/1.2.0)] – Easter Bells – [2026-04-14]
 
 ### Enhancements & fixes
+
+- Upgrade to the version 3.5.2 of the nf-core template
+- Compatible with Nextflow's strict parser
 
 ## [[1.1.0](https://github.com/sanger-tol/sequencecomposition/releases/tag/1.1.0)] – Polite Platyfish – [2024-12-10]
 
