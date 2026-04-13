@@ -23,5 +23,6 @@ repos:
               .*ro-crate-metadata.json$|
               modules/(?!local/).*|
               subworkflows/(?!local/).*|
+              .*_logo_.*\.svg$|
               .*\.snap$
           )$
