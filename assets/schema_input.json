@@ -16,7 +16,6 @@
             "fasta": {
                 "type": "string",
                 "format": "file-path",
-                "exists": true,
                 "pattern": "^\\S+$",
                 "errorMessage": "Assembly path is mandatory"
             }
