@@ -1,7 +1,7 @@
 <h1>
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/images/sanger-tol-sequencecomposition_logo_dark.png">
-    <img alt="sanger-tol/sequencecomposition" src="docs/images/sanger-tol-sequencecomposition_logo_light.png">
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/sanger-tol-sequencecomposition_logo_dark.svg">
+    <img alt="sanger-tol/sequencecomposition" src="docs/images/sanger-tol-sequencecomposition_logo_light.svg">
   </picture>
 </h1>
 
@@ -23,8 +23,8 @@
 **sanger-tol/sequencecomposition** is a bioinformatics analysis pipeline that extracts statistics from a genome about its sequence composition.
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/images/sanger-tol-sequencecomposition_metro_map_dark.png">
-  <img alt="sanger-tol/sequencecomposition" src="docs/images/sanger-tol-sequencecomposition_metro_map_light.png">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/sanger-tol-sequencecomposition_metro_map_dark.svg">
+  <img alt="sanger-tol/sequencecomposition" src="docs/images/sanger-tol-sequencecomposition_metro_map_light.svg">
 </picture>
 
 The pipeline takes an assembly Fasta file (possibly compressed), runs `fasta_windows` on it, and transforms the outputs into files more practical for downstream use.
