@@ -1,4 +1,4 @@
-# ![sanger-tol/sequencecomposition](docs/images/sanger-tol-sequencecomposition_logo.png)
+# ![sanger-tol/sequencecomposition](docs/images/sanger-tol-sequencecomposition_logo_light.png)
 
 [![Open in GitHub Codespaces](https://img.shields.io/badge/Open_In_GitHub_Codespaces-black?labelColor=grey&logo=github)](https://github.com/codespaces/new/sanger-tol/sequencecomposition)
 [![GitHub Actions CI Status](https://github.com/sanger-tol/sequencecomposition/actions/workflows/nf-test.yml/badge.svg)](https://github.com/sanger-tol/sequencecomposition/actions/workflows/nf-test.yml)
