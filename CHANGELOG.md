@@ -9,6 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Upgrade to the version 3.5.2 of the nf-core template
 - Compatible with Nextflow's strict parser
+- All modules updated
+
+### Software dependencies
+
+Note, since the pipeline is using Nextflow DSL2, each process will be run with its own [Biocontainer](https://biocontainers.pro/#/registry). This means that on occasion it is entirely possible for the pipeline to be using different versions of the same tool. However, the overall software dependency changes compared to the last release have been listed below for reference.
+
+| Dependency | Old version | New version |
+| ---------- | ----------- | ----------- |
+| bgzip      | 1.20        | 1.21        |
+| MultiQC    | 1.20        |             |
+| Python     | 3.9.1       |             |
+| samtools   | 1.21        | 1.23.1      |
+| tabix      | 1.20        | 1.21        |
 
 ## [[1.1.0](https://github.com/sanger-tol/sequencecomposition/releases/tag/1.1.0)] – Polite Platyfish – [2024-12-10]
 
