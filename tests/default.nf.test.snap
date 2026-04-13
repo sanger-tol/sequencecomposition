@@ -18,7 +18,7 @@
                     "gunzip": 1.13
                 },
                 "SAMTOOLS_FAIDX": {
-                    "samtools": "1.22.1"
+                    "samtools": "1.23.1"
                 },
                 "Workflow": {
                     "sanger-tol/sequencecomposition": "v1.2.0"
@@ -176,6 +176,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2026-03-02T17:25:57.275306663"
+        "timestamp": "2026-04-11T13:13:29.588694947"
     }
 }
