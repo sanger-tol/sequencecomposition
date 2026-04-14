@@ -1,6 +1,6 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "https://raw.githubusercontent.com/sanger-tol/sequencecomposition/master/assets/schema_input.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/sanger-tol/sequencecomposition/main/assets/schema_input.json",
     "title": "sanger-tol/sequencecomposition pipeline - params.input schema",
     "description": "Schema for the file provided with params.input",
     "type": "array",
@@ -9,11 +9,13 @@
         "properties": {
             "outdir": {
                 "type": "string",
+                "format": "directory-path",
                 "pattern": "^\\S+$",
                 "errorMessage": "Species directory must be provided and exist"
             },
             "fasta": {
                 "type": "string",
+                "format": "file-path",
                 "pattern": "^\\S+$",
                 "errorMessage": "Assembly path is mandatory"
             }

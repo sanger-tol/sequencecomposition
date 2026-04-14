@@ -4,9 +4,7 @@
 
 This document describes the output produced by the pipeline.
 
-The directories listed below will be created in the results directory after the pipeline has finished. All paths are relative to the top-level results directory.
-
-The directories comply with Tree of Life's canonical directory structure.
+The directories comply with [Tree of Life's canonical directory structure](https://pipelines.tol.sanger.ac.uk/docs/usage/gap_conventions).
 
 ## Pipeline overview
 
@@ -15,78 +13,80 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [Sequence composition files](#sequence-composition-files) - Files with various statistics about sequence composition
 - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
 
+Outputs are deposited in the main output directory (`--outdir`) and under the per-genome output directory
+described in the samplesheet.
+Both are combined with the current working directory under the usual absolute-vs-relative rules for joining
+directories.
+
 ### Sequence composition files
 
-Here are the files you can expect in the `analysis/` sub-directory.
+Here are the files you can expect in the output directory.
 
 ```text
-analysis
-└── gfLaeSulp1.1
-    └── base_content
-        ├── k1
-        │   ├── GCA_927399515.1.A.1k.bedGraph.gz
-        │   ├── GCA_927399515.1.A.1k.bedGraph.gz.csi
-        │   ├── GCA_927399515.1.A.1k.bedGraph.gz.tbi
-        │   ├── GCA_927399515.1.AT_skew.1k.bedGraph.gz
-        │   ├── GCA_927399515.1.AT_skew.1k.bedGraph.gz.csi
-        │   ├── GCA_927399515.1.AT_skew.1k.bedGraph.gz.tbi
-        │   ├── GCA_927399515.1.C.1k.bedGraph.gz
-        │   ├── GCA_927399515.1.C.1k.bedGraph.gz.csi
-        │   ├── GCA_927399515.1.C.1k.bedGraph.gz.tbi
-        │   ├── GCA_927399515.1.G.1k.bedGraph.gz
-        │   ├── GCA_927399515.1.G.1k.bedGraph.gz.csi
-        │   ├── GCA_927399515.1.G.1k.bedGraph.gz.tbi
-        │   ├── GCA_927399515.1.GC.1k.bedGraph.gz
-        │   ├── GCA_927399515.1.GC.1k.bedGraph.gz.csi
-        │   ├── GCA_927399515.1.GC.1k.bedGraph.gz.tbi
-        │   ├── GCA_927399515.1.GC_skew.1k.bedGraph.gz
-        │   ├── GCA_927399515.1.GC_skew.1k.bedGraph.gz.csi
-        │   ├── GCA_927399515.1.GC_skew.1k.bedGraph.gz.tbi
-        │   ├── GCA_927399515.1.mononuc.1k.tsv.gz
-        │   ├── GCA_927399515.1.mononuc.1k.tsv.gz.csi
-        │   ├── GCA_927399515.1.mononuc.1k.tsv.gz.tbi
-        │   ├── GCA_927399515.1.N.1k.bedGraph.gz
-        │   ├── GCA_927399515.1.N.1k.bedGraph.gz.csi
-        │   ├── GCA_927399515.1.N.1k.bedGraph.gz.tbi
-        │   ├── GCA_927399515.1.nucShannon.1k.bedGraph.gz
-        │   ├── GCA_927399515.1.nucShannon.1k.bedGraph.gz.csi
-        │   ├── GCA_927399515.1.nucShannon.1k.bedGraph.gz.tbi
-        │   ├── GCA_927399515.1.T.1k.bedGraph.gz
-        │   ├── GCA_927399515.1.T.1k.bedGraph.gz.csi
-        │   └── GCA_927399515.1.T.1k.bedGraph.gz.tbi
-        ├── k2
-        │   ├── GCA_927399515.1.CpG.1k.bedGraph.gz
-        │   ├── GCA_927399515.1.CpG.1k.bedGraph.gz.csi
-        │   ├── GCA_927399515.1.CpG.1k.bedGraph.gz.tbi
-        │   ├── GCA_927399515.1.dinuc.1k.tsv.gz
-        │   ├── GCA_927399515.1.dinuc.1k.tsv.gz.csi
-        │   ├── GCA_927399515.1.dinuc.1k.tsv.gz.tbi
-        │   ├── GCA_927399515.1.dinucShannon.1k.bedGraph.gz
-        │   ├── GCA_927399515.1.dinucShannon.1k.bedGraph.gz.csi
-        │   └── GCA_927399515.1.dinucShannon.1k.bedGraph.gz.tbi
-        ├── k3
-        │   ├── GCA_927399515.1.trinuc.1k.tsv.gz
-        │   ├── GCA_927399515.1.trinuc.1k.tsv.gz.csi
-        │   ├── GCA_927399515.1.trinuc.1k.tsv.gz.tbi
-        │   ├── GCA_927399515.1.trinucShannon.1k.bedGraph.gz
-        │   ├── GCA_927399515.1.trinucShannon.1k.bedGraph.gz.csi
-        │   └── GCA_927399515.1.trinucShannon.1k.bedGraph.gz.tbi
-        └── k4
-            ├── GCA_927399515.1.tetranuc.1k.tsv.gz
-            ├── GCA_927399515.1.tetranuc.1k.tsv.gz.csi
-            ├── GCA_927399515.1.tetranuc.1k.tsv.gz.tbi
-            ├── GCA_927399515.1.tetranucShannon.1k.bedGraph.gz
-            ├── GCA_927399515.1.tetranucShannon.1k.bedGraph.gz.csi
-            └── GCA_927399515.1.tetranucShannon.1k.bedGraph.gz.tbi
+base_content
+├── k1
+│   ├── <genome_name>.A.1k.bedGraph.gz
+│   ├── <genome_name>.A.1k.bedGraph.gz.csi
+│   ├── <genome_name>.A.1k.bedGraph.gz.tbi
+│   ├── <genome_name>.AT_skew.1k.bedGraph.gz
+│   ├── <genome_name>.AT_skew.1k.bedGraph.gz.csi
+│   ├── <genome_name>.AT_skew.1k.bedGraph.gz.tbi
+│   ├── <genome_name>.C.1k.bedGraph.gz
+│   ├── <genome_name>.C.1k.bedGraph.gz.csi
+│   ├── <genome_name>.C.1k.bedGraph.gz.tbi
+│   ├── <genome_name>.G.1k.bedGraph.gz
+│   ├── <genome_name>.G.1k.bedGraph.gz.csi
+│   ├── <genome_name>.G.1k.bedGraph.gz.tbi
+│   ├── <genome_name>.GC.1k.bedGraph.gz
+│   ├── <genome_name>.GC.1k.bedGraph.gz.csi
+│   ├── <genome_name>.GC.1k.bedGraph.gz.tbi
+│   ├── <genome_name>.GC_skew.1k.bedGraph.gz
+│   ├── <genome_name>.GC_skew.1k.bedGraph.gz.csi
+│   ├── <genome_name>.GC_skew.1k.bedGraph.gz.tbi
+│   ├── <genome_name>.mononuc.1k.tsv.gz
+│   ├── <genome_name>.mononuc.1k.tsv.gz.csi
+│   ├── <genome_name>.mononuc.1k.tsv.gz.tbi
+│   ├── <genome_name>.N.1k.bedGraph.gz
+│   ├── <genome_name>.N.1k.bedGraph.gz.csi
+│   ├── <genome_name>.N.1k.bedGraph.gz.tbi
+│   ├── <genome_name>.nucShannon.1k.bedGraph.gz
+│   ├── <genome_name>.nucShannon.1k.bedGraph.gz.csi
+│   ├── <genome_name>.nucShannon.1k.bedGraph.gz.tbi
+│   ├── <genome_name>.T.1k.bedGraph.gz
+│   ├── <genome_name>.T.1k.bedGraph.gz.csi
+│   └── <genome_name>.T.1k.bedGraph.gz.tbi
+├── k2
+│   ├── <genome_name>.CpG.1k.bedGraph.gz
+│   ├── <genome_name>.CpG.1k.bedGraph.gz.csi
+│   ├── <genome_name>.CpG.1k.bedGraph.gz.tbi
+│   ├── <genome_name>.dinuc.1k.tsv.gz
+│   ├── <genome_name>.dinuc.1k.tsv.gz.csi
+│   ├── <genome_name>.dinuc.1k.tsv.gz.tbi
+│   ├── <genome_name>.dinucShannon.1k.bedGraph.gz
+│   ├── <genome_name>.dinucShannon.1k.bedGraph.gz.csi
+│   └── <genome_name>.dinucShannon.1k.bedGraph.gz.tbi
+├── k3
+│   ├── <genome_name>.trinuc.1k.tsv.gz
+│   ├── <genome_name>.trinuc.1k.tsv.gz.csi
+│   ├── <genome_name>.trinuc.1k.tsv.gz.tbi
+│   ├── <genome_name>.trinucShannon.1k.bedGraph.gz
+│   ├── <genome_name>.trinucShannon.1k.bedGraph.gz.csi
+│   └── <genome_name>.trinucShannon.1k.bedGraph.gz.tbi
+└── k4
+    ├── <genome_name>.tetranuc.1k.tsv.gz
+    ├── <genome_name>.tetranuc.1k.tsv.gz.csi
+    ├── <genome_name>.tetranuc.1k.tsv.gz.tbi
+    ├── <genome_name>.tetranucShannon.1k.bedGraph.gz
+    ├── <genome_name>.tetranucShannon.1k.bedGraph.gz.csi
+    └── <genome_name>.tetranucShannon.1k.bedGraph.gz.tbi
 ```
 
-They all correspond to the various results of the pipelines. Following the convention,
-the directory structure includes the assembly name, e.g. `gfLaeSulp1.1`, and all files are named after the assembly accession, e.g. `GCA_927399515.1`.
+where `<genome_name>` is the name of the input genome file.
 
 All outputs are in bedGraph and TSV (BED3+) formats, compressed with `bgzip` and indexed with `tabix` (`.csi` and `.tbi` indices).
 
-For each _k_ from 1 to 4, the _k_-mer counts are in `k${k}/GCA_*.*nuc.1k.tsv.gz`,
-and the resulting Shannon diversity metrics in `k${k}/GCA_*.*nucShannon.1k.bedGraph.gz`.
+For each _k_ from 1 to 4, the _k_-mer counts are in `k${k}/<genome_name>.*nuc.1k.tsv.gz`,
+and the resulting Shannon diversity metrics in `k${k}/<genome_name>.*nucShannon.1k.bedGraph.gz`.
 
 Additionally, these frequencies are extracted in bedGraph files:
 
@@ -96,9 +96,15 @@ Additionally, these frequencies are extracted in bedGraph files:
 
 ### Pipeline information
 
-- `pipeline_info/sequencecomposition/`
+<details markdown="1">
+<summary>Output files</summary>
+
+- `pipeline_info/`
   - Reports generated by Nextflow: `execution_report.html`, `execution_timeline.html`, `execution_trace.txt` and `pipeline_dag.dot`/`pipeline_dag.svg`.
   - Reports generated by the pipeline: `pipeline_report.html`, `pipeline_report.txt` and `software_versions.yml`. The `pipeline_report*` files will only be present if the `--email` / `--email_on_fail` parameter's are used when running the pipeline.
   - Reformatted samplesheet files used as input to the pipeline: `samplesheet.valid.csv`.
+  - Parameters used by the pipeline run: `params.json`.
+
+</details>
 
 [Nextflow](https://www.nextflow.io/docs/latest/tracing.html) provides excellent functionality for generating various reports relevant to the running and execution of the pipeline. This will allow you to troubleshoot errors with the running of the pipeline, and also provide you with other information such as launch commands, run times and resource usage.
