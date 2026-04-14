@@ -9,7 +9,7 @@
         "properties": {
             "outdir": {
                 "type": "string",
-                "format": "dir-path",
+                "format": "directory-path",
                 "pattern": "^\\S+$",
                 "errorMessage": "Species directory must be provided and exist"
             },
