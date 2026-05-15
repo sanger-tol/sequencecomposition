@@ -9,15 +9,14 @@
         "properties": {
             "outdir": {
                 "type": "string",
-                "format": "directory-path",
                 "pattern": "^\\S+$",
-                "errorMessage": "Species directory must be provided and exist"
+                "errorMessage": "Output directory must be provided and must not contain whitespace"
             },
             "fasta": {
                 "type": "string",
                 "format": "file-path",
                 "pattern": "^\\S+$",
-                "errorMessage": "Assembly path is mandatory"
+                "errorMessage": "Assembly path is mandatory and must not contain whitespace"
             }
         },
         "required": ["outdir", "fasta"]
