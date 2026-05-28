@@ -5,6 +5,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [[1.3.0](https://github.com/sanger-tol/sequencecomposition/releases/tag/1.3.0)] – –
 
+### Enhancements & fixes
+
+- New `--window_size` parameter to select the size of the windows to compute statistics on.
+  It replaces `--window_size_info` parameter which was only affecting the naming of the
+  outputs.
+
+### Parameters
+
+| Old parameter        | New parameter   |
+| -------------------- | --------------- |
+| `--window_size_info` |                 |
+|                      | `--window_size` |
+
+> **NB:** Parameter has been **updated** if both old and new parameter information is present. </br> **NB:** Parameter has been **added** if just the new parameter information is present. </br> **NB:** Parameter has been **removed** if new parameter information isn't present.
+
 ## [[1.2.1](https://github.com/sanger-tol/sequencecomposition/releases/tag/1.2.1)] – Easter Bells (patch 1) – [2026-05-15]
 
 ### Enhancements & fixes
