@@ -41,6 +41,8 @@
                 "selected_fw_output": {
                     "type": "string",
                     "default": "${projectDir}/assets/fasta_windows.csv",
+                    "format": "file-path",
+                    "exists": true,
                     "description": "Path to comma-separated file containing information about the statistics to select from fasta_windows' output.",
                     "hidden": true,
                     "fa_icon": "fas fa-barcode"

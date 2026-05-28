@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New `--window_size` parameter to select the size of the windows to compute statistics on.
   It replaces `--window_size_info` parameter which was only affecting the naming of the
   outputs.
+- Better validation of the `--selected_fw_output` parameter.
 
 ### Parameters
 
