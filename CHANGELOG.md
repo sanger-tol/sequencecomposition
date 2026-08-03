@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [[1.2.2](https://github.com/sanger-tol/sequencecomposition/releases/tag/1.2.2)] – Easter Bells (patch 2) – [2026-08-03]
+
+### Enhancements & fixes
+
+- Increased runtime rule to allow runs on large genomes
+
 ## [[1.2.1](https://github.com/sanger-tol/sequencecomposition/releases/tag/1.2.1)] – Easter Bells (patch 1) – [2026-05-15]
 
 ### Enhancements & fixes
