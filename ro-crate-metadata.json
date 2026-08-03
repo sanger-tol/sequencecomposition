@@ -124,7 +124,7 @@
                 }
             ],
             "dateCreated": "",
-            "dateModified": "2026-04-12T12:38:28Z",
+            "dateModified": "2026-08-03T15:53:07Z",
             "dct:conformsTo": "https://bioschemas.org/profiles/ComputationalWorkflow/1.0-RELEASE/",
             "image": {
                 "@id": "docs/images/sanger-tol-sequencecomposition_metro_map_dark.png"
@@ -156,10 +156,10 @@
             },
             "url": [
                 "https://github.com/sanger-tol/sequencecomposition",
-                "https://pipelines.tol.sanger.ac.uk//sequencecomposition/1.2.0/"
+                "https://pipelines.tol.sanger.ac.uk//sequencecomposition/1.2.2/"
             ],
             "version": [
-                "1.2.0"
+                "1.2.2"
             ]
         },
         {
