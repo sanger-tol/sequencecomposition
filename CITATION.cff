@@ -29,7 +29,7 @@ license: MIT
 message: If you use this software, please cite it using the metadata from this file
   and all references from CITATIONS.md .
 repository-code: https://github.com/sanger-tol/sequencecomposition
-title: sanger-tol/sequencecomposition v1.2.1 - Easter Bells (patch 1)
+title: sanger-tol/sequencecomposition v1.2.2 - Easter Bells (patch 2)
 type: software
 url: https://pipelines.tol.sanger.ac.uk/sequencecomposition
-version: 1.2.1
+version: 1.2.2
