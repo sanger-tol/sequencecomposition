@@ -1,64 +1,32 @@
 # sanger-tol/sequencecomposition: Usage
 
+## :warning: Please read this documentation on our website: [https://pipelines.tol.sanger.ac.uk/sequencecomposition/usage](https://pipelines.tol.sanger.ac.uk/sequencecomposition/usage)
+
 > _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
 
 ## Introduction
 
-<!-- TODO nf-core: Add documentation about anything specific to running your pipeline. For general topics, please point to (and add to) the main nf-core website. -->
-
-## Samplesheet input
-
-You will need to create a samplesheet with information about the samples you would like to analyse before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row as shown in the examples below.
-
-```bash
---input '[path to samplesheet file]'
-```
-
-### Multiple runs of the same sample
-
-The `sample` identifiers have to be the same when you have re-sequenced the same sample more than once e.g. to increase sequencing depth. The pipeline will concatenate the raw reads before performing any downstream analysis. Below is an example for the same sample sequenced across 3 lanes:
-
-```csv title="samplesheet.csv"
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
-CONTROL_REP1,AEG588A1_S1_L003_R1_001.fastq.gz,AEG588A1_S1_L003_R2_001.fastq.gz
-CONTROL_REP1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz
-```
-
-### Full samplesheet
-
-The pipeline will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The samplesheet can have as many columns as you desire, however, there is a strict requirement for the first 3 columns to match those defined in the table below.
-
-A final samplesheet file consisting of both single- and paired-end data may look something like the one below. This is for 6 samples, where `TREATMENT_REP3` has been sequenced twice.
-
-```csv title="samplesheet.csv"
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
-CONTROL_REP2,AEG588A2_S2_L002_R1_001.fastq.gz,AEG588A2_S2_L002_R2_001.fastq.gz
-CONTROL_REP3,AEG588A3_S3_L002_R1_001.fastq.gz,AEG588A3_S3_L002_R2_001.fastq.gz
-TREATMENT_REP1,AEG588A4_S4_L003_R1_001.fastq.gz,
-TREATMENT_REP2,AEG588A5_S5_L003_R1_001.fastq.gz,
-TREATMENT_REP3,AEG588A6_S6_L003_R1_001.fastq.gz,
-TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,
-```
-
-| Column    | Description                                                                                                                                                                            |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sample`  | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
-| `fastq_1` | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
-| `fastq_2` | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
-
-An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
+The pipeline takes a Fasta file, and computes all the sequence composition metrics on it.
+It also builds a set of common indices (such as `tabix`) to make search faster.
 
 ## Running the pipeline
 
 The typical command for running the pipeline is as follows:
 
 ```bash
-nextflow run sanger-tol/sequencecomposition --input ./samplesheet.csv --outdir ./results  -profile docker
+nextflow run sanger-tol/sequencecomposition --fasta path/to/GCA_927399515.1_gfLaeSulp1.1_genomic.fa --outdir <OUTDIR> --profile docker
 ```
 
-This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
+This will launch the pipeline and run the sequence composition analysis on the Fasta file into the `<OUTDIR>/` directory,
+which will be created if needed.
+
+The pipeline can read Fasta files compressed by gzip, and also accepts remote files (Nextflow automatically download these), e.g.:
+
+```bash
+nextflow run sanger-tol/sequencecomposition --fasta https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/927/399/515/GCA_927399515.1_gfLaeSulp1.1/GCA_927399515.1_gfLaeSulp1.1_genomic.fna.gz --outdir <OUTDIR> --profile docker
+```
+
+Both will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
 
 Note that the pipeline will create the following files in your working directory:
 
@@ -85,12 +53,36 @@ nextflow run sanger-tol/sequencecomposition -profile docker -params-file params.
 with:
 
 ```yaml title="params.yaml"
-input: './samplesheet.csv'
-outdir: './results/'
+fasta: "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/927/399/515/GCA_927399515.1_gfLaeSulp1.1/GCA_927399515.1_gfLaeSulp1.1_genomic.fna.gz"
+outdir: "./results/"
 <...>
 ```
 
 You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-co.re/launch).
+
+## Bulk processing
+
+The pipeline can process multiple assemblies at once, by providing them in a `.csv` file through the `--input` parameter.
+It has to be a comma-separated file with 2 columns, and a header row as shown in the examples below.
+
+```bash
+nextflow run sanger-tol/sequencecomposition --input '[path to samplesheet file]' --outdir <OUTDIR>
+```
+
+The values in the file are used to make up the `--fasta` and `--outdir` parameters.
+
+```csv
+outdir,fasta
+Laetiporus_sulphureus/gfLaeSulp1.1,/path/to/gfLaeSulp1.1.fasta
+Meles_meles/mMelMel3.2_paternal_haplotype,/path/to/mMelMel3.2_paternal_haplotype.fasta
+```
+
+| Column   | Description                                                                                                                                     |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `outdir` | Output directory for this pipeline (evaluated from `--outdir` if a relative path). Analysis results are in a sub-directory `gene/base_content`. |
+| `fasta`  | Path to the Fasta file of this assembly (can be a remote file).                                                                                 |
+
+An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
 
 ### Updating the pipeline
 
@@ -135,8 +127,13 @@ They are loaded in sequence, so later profiles can overwrite earlier profiles.
 If `-profile` is not specified, the pipeline will run locally and expect all software to be installed and available on the `PATH`. This is _not_ recommended, since it can lead to different results on different machines dependent on the computer environment.
 
 - `test`
+  - A profile with a minimal configuration for automated testing
+  - Includes links to test data so needs no other parameters
+  - Corresponds to defining the assembly to download as command-line parameters
+- `test_full`
   - A profile with a complete configuration for automated testing
   - Includes links to test data so needs no other parameters
+  - Corresponds to defining the assembly to download as a CSV file
 - `docker`
   - A generic configuration profile to be used with [Docker](https://docker.com/)
 - `singularity`

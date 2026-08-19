@@ -15,6 +15,8 @@ repos:
               .*ro-crate-metadata.json$|
               modules/(?!local/).*|
               subworkflows/(?!local/).*|
+              modules/(?!local/).*|
+              subworkflows/(?!local/).*|
               .*\.snap$
           )$
       - id: end-of-file-fixer
@@ -23,6 +25,7 @@ repos:
               .*ro-crate-metadata.json$|
               modules/(?!local/).*|
               subworkflows/(?!local/).*|
+              .*_logo_.*\.svg$|
               .*\.snap$
           )$
       - id: check-added-large-files

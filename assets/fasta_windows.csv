@@ -1,0 +1,17 @@
+freq,4,base_content/k1,GC
+freq,5,base_content/k1,GC_skew
+freq,6,base_content/k1,AT_skew
+freq,7,base_content/k1,nucShannon
+freq,8,base_content/k1,G
+freq,9,base_content/k1,C
+freq,10,base_content/k1,A
+freq,11,base_content/k1,T
+freq,12,base_content/k1,N
+freq,13,base_content/k2,CpG
+freq,14,base_content/k2,dinucShannon
+freq,15,base_content/k3,trinucShannon
+freq,16,base_content/k4,tetranucShannon
+mononuc,,base_content/k1,mononuc
+dinuc,,base_content/k2,dinuc
+trinuc,,base_content/k3,trinuc
+tetranuc,,base_content/k4,tetranuc
