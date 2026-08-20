@@ -1,7 +1,7 @@
 outdir,fasta
-Asterias_rubens/eAstRub1.3,https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/902/459/465/GCA_902459465.3_eAstRub1.3/GCA_902459465.3_eAstRub1.3_genomic.fna.gz
-Osmia_bicornis/iOsmBic2.1,https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/907/164/935/GCA_907164935.1_iOsmBic2.1/GCA_907164935.1_iOsmBic2.1_genomic.fna.gz
-Osmia_bicornis/iOsmBic2.1_alternate_haplotype,https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/907/164/925/GCA_907164925.1_iOsmBic2.1_alternate_haplotype/GCA_907164925.1_iOsmBic2.1_alternate_haplotype_genomic.fna.gz
-Noctua_fimbriata/ilNocFimb1.1,https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/905/163/415/GCA_905163415.1_ilNocFimb1.1/GCA_905163415.1_ilNocFimb1.1_genomic.fna.gz
-Laetiporus_sulphureus/GCA_927399515.2,https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/927/399/515/GCA_927399515.2_gfLaeSulp1.2/GCA_927399515.2_gfLaeSulp1.2_genomic.fna.gz
-Meles_meles/GCA_922984935.2,https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/922/984/935/GCA_922984935.2_mMelMel3.2_paternal_haplotype/GCA_922984935.2_mMelMel3.2_paternal_haplotype_genomic.fna.gz
+Asterias_rubens/eAstRub1.3,/lustre/scratch122/tol/data/6/c/a/f/8/8/Asterias_rubens/assembly/release/GCA_902459465.3/insdc/GCA_902459465.3.fa.gz
+Osmia_bicornis/iOsmBic2.1,/lustre/scratch122/tol/data/8/0/6/d/3/7/Osmia_bicornis/assembly/release/GCA_907164935.1/insdc/GCA_907164935.1.fa.gz
+Osmia_bicornis/iOsmBic2.1_alternate_haplotype,/lustre/scratch122/tol/data/8/0/6/d/3/7/Osmia_bicornis/assembly/release/GCA_907164925.1/insdc/GCA_907164925.1.fa.gz
+Noctua_fimbriata/ilNocFimb1.1,/lustre/scratch122/tol/data/c/9/5/e/2/8/Noctua_fimbriata/assembly/release/GCA_905163415.1/insdc/GCA_905163415.1.fa.gz
+Laetiporus_sulphureus/GCA_927399515.2,/lustre/scratch122/tol/data/f/8/4/d/4/6/Laetiporus_sulphureus/assembly/release/GCA_927399515.2/insdc/GCA_927399515.2.fa.gz
+Meles_meles/GCA_922984935.2,/lustre/scratch122/tol/data/9/9/f/1/6/d/Meles_meles/assembly/release/GCA_922984935.2/insdc/GCA_922984935.2.fa.gz
