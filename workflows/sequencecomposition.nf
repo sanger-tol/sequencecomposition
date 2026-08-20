@@ -35,10 +35,11 @@ include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_sequ
 workflow SEQUENCECOMPOSITION {
     take:
     ch_samplesheet // channel: samplesheet read in from --input
+    outdir
 
     main:
 
-    ch_versions = channel.empty()
+    def ch_versions = channel.empty()
 
     PARAMS_CHECK(
         ch_samplesheet
@@ -70,16 +71,20 @@ workflow SEQUENCECOMPOSITION {
             "${process}:\n${tool_versions.join('\n')}"
         }
 
-    softwareVersionsToYAML(ch_versions.mix(topic_versions.versions_file))
+    def ch_collated_versions = softwareVersionsToYAML(ch_versions.mix(topic_versions.versions_file))
         .mix(topic_versions_string)
         .collectFile(
-            storeDir: "${params.outdir}/pipeline_info",
-            name: 'sequencecomposition_software_' + 'versions.yml',
+            storeDir: "${outdir}/pipeline_info",
+            name:  'sequencecomposition_software_'  + 'versions.yml',
             sort: true,
-            newLine: true,
+            newLine: true
         )
-        .set { ch_collated_versions }
-
     emit:
-    versions = ch_collated_versions // channel: [ path(versions.yml) ]
+    versions       = ch_versions                 // channel: [ path(versions.yml) ]
 }
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    THE END
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
