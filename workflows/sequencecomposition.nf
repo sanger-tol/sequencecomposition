@@ -3,6 +3,25 @@
     IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    IMPORT LOCAL MODULES/SUBWORKFLOWS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+//
+// SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
+//
+include { PARAMS_CHECK           } from '../subworkflows/local/params_check'
+include { FASTA_WINDOWS          } from '../subworkflows/local/fasta_windows'
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    IMPORT NF-CORE MODULES/SUBWORKFLOWS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
 include { paramsSummaryMap       } from 'plugin/nf-schema'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_sequencecomposition_pipeline'
@@ -14,7 +33,6 @@ include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_sequ
 */
 
 workflow SEQUENCECOMPOSITION {
-
     take:
     ch_samplesheet // channel: samplesheet read in from --input
     outdir
@@ -22,6 +40,16 @@ workflow SEQUENCECOMPOSITION {
     main:
 
     def ch_versions = channel.empty()
+
+    PARAMS_CHECK(
+        ch_samplesheet
+    )
+
+    // Statistics extraction
+    FASTA_WINDOWS(
+        PARAMS_CHECK.out.fasta_fai,
+        file(params.selected_fw_output, checkExists: true),
+    )
 
     //
     // Collate and save software versions
@@ -35,9 +63,9 @@ workflow SEQUENCECOMPOSITION {
 
     def topic_versions_string = topic_versions.versions_tuple
         .map { process, tool, version ->
-            [ process[process.lastIndexOf(':')+1..-1], "  ${tool}: ${version}" ]
+            [process[process.lastIndexOf(':') + 1..-1], "  ${tool}: ${version}"]
         }
-        .groupTuple(by:0)
+        .groupTuple(by: 0)
         .map { process, tool_versions ->
             tool_versions.unique().sort()
             "${process}:\n${tool_versions.join('\n')}"

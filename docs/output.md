@@ -4,15 +4,95 @@
 
 This document describes the output produced by the pipeline.
 
-The directories listed below will be created in the results directory after the pipeline has finished. All paths are relative to the top-level results directory.
-
-<!-- TODO nf-core: Write this documentation describing your workflow's output -->
+The directories comply with [Tree of Life's canonical directory structure](https://pipelines.tol.sanger.ac.uk/docs/usage/gap_conventions).
 
 ## Pipeline overview
 
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
 
+- [Sequence composition files](#sequence-composition-files) - Files with various statistics about sequence composition
 - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
+
+Outputs are deposited in the main output directory (`--outdir`) and under the per-genome output directory
+described in the samplesheet.
+Both are combined with the current working directory under the usual absolute-vs-relative rules for joining
+directories.
+
+### Sequence composition files
+
+Here are the files you can expect in the output directory.
+
+```text
+base_content
+├── k1
+│   ├── <genome_name>.A.1k.bedGraph.gz
+│   ├── <genome_name>.A.1k.bedGraph.gz.csi
+│   ├── <genome_name>.A.1k.bedGraph.gz.tbi
+│   ├── <genome_name>.AT_skew.1k.bedGraph.gz
+│   ├── <genome_name>.AT_skew.1k.bedGraph.gz.csi
+│   ├── <genome_name>.AT_skew.1k.bedGraph.gz.tbi
+│   ├── <genome_name>.C.1k.bedGraph.gz
+│   ├── <genome_name>.C.1k.bedGraph.gz.csi
+│   ├── <genome_name>.C.1k.bedGraph.gz.tbi
+│   ├── <genome_name>.G.1k.bedGraph.gz
+│   ├── <genome_name>.G.1k.bedGraph.gz.csi
+│   ├── <genome_name>.G.1k.bedGraph.gz.tbi
+│   ├── <genome_name>.GC.1k.bedGraph.gz
+│   ├── <genome_name>.GC.1k.bedGraph.gz.csi
+│   ├── <genome_name>.GC.1k.bedGraph.gz.tbi
+│   ├── <genome_name>.GC_skew.1k.bedGraph.gz
+│   ├── <genome_name>.GC_skew.1k.bedGraph.gz.csi
+│   ├── <genome_name>.GC_skew.1k.bedGraph.gz.tbi
+│   ├── <genome_name>.mononuc.1k.tsv.gz
+│   ├── <genome_name>.mononuc.1k.tsv.gz.csi
+│   ├── <genome_name>.mononuc.1k.tsv.gz.tbi
+│   ├── <genome_name>.N.1k.bedGraph.gz
+│   ├── <genome_name>.N.1k.bedGraph.gz.csi
+│   ├── <genome_name>.N.1k.bedGraph.gz.tbi
+│   ├── <genome_name>.nucShannon.1k.bedGraph.gz
+│   ├── <genome_name>.nucShannon.1k.bedGraph.gz.csi
+│   ├── <genome_name>.nucShannon.1k.bedGraph.gz.tbi
+│   ├── <genome_name>.T.1k.bedGraph.gz
+│   ├── <genome_name>.T.1k.bedGraph.gz.csi
+│   └── <genome_name>.T.1k.bedGraph.gz.tbi
+├── k2
+│   ├── <genome_name>.CpG.1k.bedGraph.gz
+│   ├── <genome_name>.CpG.1k.bedGraph.gz.csi
+│   ├── <genome_name>.CpG.1k.bedGraph.gz.tbi
+│   ├── <genome_name>.dinuc.1k.tsv.gz
+│   ├── <genome_name>.dinuc.1k.tsv.gz.csi
+│   ├── <genome_name>.dinuc.1k.tsv.gz.tbi
+│   ├── <genome_name>.dinucShannon.1k.bedGraph.gz
+│   ├── <genome_name>.dinucShannon.1k.bedGraph.gz.csi
+│   └── <genome_name>.dinucShannon.1k.bedGraph.gz.tbi
+├── k3
+│   ├── <genome_name>.trinuc.1k.tsv.gz
+│   ├── <genome_name>.trinuc.1k.tsv.gz.csi
+│   ├── <genome_name>.trinuc.1k.tsv.gz.tbi
+│   ├── <genome_name>.trinucShannon.1k.bedGraph.gz
+│   ├── <genome_name>.trinucShannon.1k.bedGraph.gz.csi
+│   └── <genome_name>.trinucShannon.1k.bedGraph.gz.tbi
+└── k4
+    ├── <genome_name>.tetranuc.1k.tsv.gz
+    ├── <genome_name>.tetranuc.1k.tsv.gz.csi
+    ├── <genome_name>.tetranuc.1k.tsv.gz.tbi
+    ├── <genome_name>.tetranucShannon.1k.bedGraph.gz
+    ├── <genome_name>.tetranucShannon.1k.bedGraph.gz.csi
+    └── <genome_name>.tetranucShannon.1k.bedGraph.gz.tbi
+```
+
+where `<genome_name>` is the name of the input genome file.
+
+All outputs are in bedGraph and TSV (BED3+) formats, compressed with `bgzip` and indexed with `tabix` (`.csi` and `.tbi` indices).
+
+For each _k_ from 1 to 4, the _k_-mer counts are in `k${k}/<genome_name>.*nuc.1k.tsv.gz`,
+and the resulting Shannon diversity metrics in `k${k}/<genome_name>.*nucShannon.1k.bedGraph.gz`.
+
+Additionally, these frequencies are extracted in bedGraph files:
+
+- each nucleotide, and N
+- GC content, GC skew, and AT skew
+- CpG
 
 ### Pipeline information
 

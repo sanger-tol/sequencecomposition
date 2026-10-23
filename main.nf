@@ -13,7 +13,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { SEQUENCECOMPOSITION  } from './workflows/sequencecomposition'
+include { SEQUENCECOMPOSITION     } from './workflows/sequencecomposition'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_sequencecomposition_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_sequencecomposition_pipeline'
 /*
@@ -26,7 +26,6 @@ include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_sequ
 // WORKFLOW: Run main analysis pipeline depending on type of input
 //
 workflow SANGERTOL_SEQUENCECOMPOSITION {
-
     take:
     samplesheet // channel: samplesheet read in from --input
 
@@ -35,9 +34,9 @@ workflow SANGERTOL_SEQUENCECOMPOSITION {
     //
     // WORKFLOW: Run pipeline
     //
-    SEQUENCECOMPOSITION (
+    SEQUENCECOMPOSITION(
         samplesheet,
-        params.outdir,
+        params.outdir
     )
 }
 /*
@@ -47,12 +46,10 @@ workflow SANGERTOL_SEQUENCECOMPOSITION {
 */
 
 workflow {
-
-    main:
     //
     // SUBWORKFLOW: Run initialisation tasks
     //
-    PIPELINE_INITIALISATION (
+    PIPELINE_INITIALISATION(
         params.version,
         params.validate_params,
         params.monochrome_logs,
@@ -61,19 +58,20 @@ workflow {
         params.input,
         params.help,
         params.help_full,
-        params.show_hidden
+        params.show_hidden,
+        params.fasta,
     )
 
     //
     // WORKFLOW: Run main workflow
     //
-    SANGERTOL_SEQUENCECOMPOSITION (
-        PIPELINE_INITIALISATION.out.samplesheet
+    SANGERTOL_SEQUENCECOMPOSITION(
+        PIPELINE_INITIALISATION.out.samplesheet,
     )
     //
     // SUBWORKFLOW: Run completion tasks
     //
-    PIPELINE_COMPLETION (
+    PIPELINE_COMPLETION(
         params.email,
         params.email_on_fail,
         params.plaintext_email,
@@ -81,9 +79,3 @@ workflow {
         params.monochrome_logs,
     )
 }
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    THE END
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
