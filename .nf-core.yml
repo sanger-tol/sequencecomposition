@@ -13,6 +13,7 @@ lint:
     - LICENSE
     - .github/CONTRIBUTING.md
     - .github/ISSUE_TEMPLATE/bug_report.yml
+    - .github/ISSUE_TEMPLATE/config.yml
     - .github/PULL_REQUEST_TEMPLATE.md
     - .github/workflows/linting.yml
     - assets/sendmail_template.txt
@@ -22,8 +23,8 @@ lint:
     - manifest.name
     - manifest.homePage
     - config_defaults:
-        - params.selected_fw_output
-nf_core_version: 3.5.2
+        - params.selected_fasta_windows_outputs
+nf_core_version: 4.2.0
 repository_type: pipeline
 template:
   author: "@muffato"
@@ -38,4 +39,4 @@ template:
     - igenomes
     - multiqc
     - fastqc
-  version: 1.2.1
+  version: 1.3.0

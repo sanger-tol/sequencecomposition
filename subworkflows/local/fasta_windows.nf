@@ -10,7 +10,6 @@ workflow FASTA_WINDOWS {
     take:
     fasta_fai // [file: /path/to/genome.fa, file: /path/to/genome.fai]
     output_selection // file: /path/to/fasta_windows.csv
-    window_size_info // value, used to build meta.id and name files
 
     main:
 
@@ -40,7 +39,7 @@ workflow FASTA_WINDOWS {
     ch_freq_bed_input = FASTAWINDOWS.out.freq
         .combine(ch_config.freq)
         .multiMap { meta, freq_file_tsv, column_number, outdir, filename ->
-            path: [meta + [id: meta.id + "." + filename + window_size_info, analysis_subdir: outdir], freq_file_tsv, meta.max_length]
+            path: [meta + [id: meta.id + "." + filename, analysis_subdir: outdir], freq_file_tsv, meta.max_length]
             column_number: ["1-3,${column_number}", 1, "bedGraph"]
         }
 
@@ -58,7 +57,7 @@ workflow FASTA_WINDOWS {
         .mix(FASTAWINDOWS.out.dinuc.combine(ch_config.dinuc))
         .mix(FASTAWINDOWS.out.trinuc.combine(ch_config.trinuc))
         .mix(FASTAWINDOWS.out.tetranuc.combine(ch_config.tetranuc))
-        .map { meta, path, outdir, filename -> [meta + [id: meta.id + "." + filename + window_size_info, analysis_subdir: outdir], path] }
+        .map { meta, path, outdir, filename -> [meta + [id: meta.id + "." + filename, analysis_subdir: outdir], path] }
 
     // Compress the BED file
     ch_tsv_with_seq_length = ch_tsv.map { meta, tsv -> [meta, tsv, meta.max_length] }

@@ -35,7 +35,8 @@ workflow SANGERTOL_SEQUENCECOMPOSITION {
     // WORKFLOW: Run pipeline
     //
     SEQUENCECOMPOSITION(
-        samplesheet
+        samplesheet,
+        params.outdir
     )
 }
 /*
@@ -65,7 +66,7 @@ workflow {
     // WORKFLOW: Run main workflow
     //
     SANGERTOL_SEQUENCECOMPOSITION(
-        PIPELINE_INITIALISATION.out.samplesheet
+        PIPELINE_INITIALISATION.out.samplesheet,
     )
     //
     // SUBWORKFLOW: Run completion tasks
@@ -76,6 +77,5 @@ workflow {
         params.plaintext_email,
         params.outdir,
         params.monochrome_logs,
-        params.hook_url,
     )
 }
