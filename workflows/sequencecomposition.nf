@@ -48,7 +48,7 @@ workflow SEQUENCECOMPOSITION {
     // Statistics extraction
     FASTA_WINDOWS(
         PARAMS_CHECK.out.fasta_fai,
-        file(params.selected_fw_output, checkExists: true),
+        file(params.selected_fasta_windows_outputs, checkExists: true),
     )
 
     //

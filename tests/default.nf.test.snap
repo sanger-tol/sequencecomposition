@@ -21,7 +21,7 @@
                     "samtools": "1.23.1"
                 },
                 "Workflow": {
-                    "sanger-tol/sequencecomposition": "v1.3.0dev"
+                    "sanger-tol/sequencecomposition": "v1.3.0"
                 }
             },
             [
